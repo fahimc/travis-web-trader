@@ -4,7 +4,7 @@ const Storage = {
 		balance:'balance',
 		wins:'wins',
 		loses:'loses',
-		streaks:'streaks'
+		streaks:'streaks',
 	},
 	streaks:{
 
@@ -35,11 +35,16 @@ const Storage = {
 		if(str)this.loses = Number(str);
 	},
 	get(key){
+		if(Tester.isTesting||TestModel.ENABLED) {
+			key = 'test_' + key;
+		}
 		let content = localStorage.getItem(key);
 		return content ;
 	},
 	set(key, value){
-		if(Tester.isTesting||TestModel.ENABLED)return;
+		if(Tester.isTesting||TestModel.ENABLED) {
+			key = 'test_' + key;
+		}
 		localStorage.setItem(key,value);
 	},
 	setStreak(key){
@@ -74,4 +79,3 @@ const Storage = {
 		location.reload();
 	}
 }
-Storage.init();

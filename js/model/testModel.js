@@ -7,7 +7,7 @@ const TestModel = {
     speed:1000,
     balance: 700,
     assets: [],
-    strategy:'LOSE',
+    strategy:'HISTORY',
     history: {
         prices: [
             "11054.80",
@@ -62,6 +62,11 @@ const TestModel = {
     transactionType:'',
     purchasedTick:0,
     trend:'RAISE',
+    getBalance(){
+        let balance = Storage.get('test_balance');
+        if(balance == undefined) balance = this.balance;
+        return balance;
+    },
     getTick(){
       this.currentTick =  this.getTickByTrend();
       return  this.currentTick ;
@@ -91,7 +96,7 @@ const TestModel = {
             return '0.00';
             break;
             case this.STRATEGIES.HISTORY:
-            return transactionType == 'CALL' && this.purchasedTick < this.currentTick ? winAmount : '0.00';
+            return this.transactionType == 'CALL' && this.purchasedTick < this.currentTick ? winAmount : '0.00';
             break;
         }
     }

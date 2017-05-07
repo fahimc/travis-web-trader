@@ -36,6 +36,7 @@ class FakeWebSocket {
             case 'proposal':
                 obj.id = 12121212212121;
                 obj.payout = all.amount + (all.amount * 0.94);
+                TestModel.transactionType = all.contract_type;
                 TestModel.currentStake = all.amount;
                 TestModel.tickDuration = Number(all.duration);
                 break;

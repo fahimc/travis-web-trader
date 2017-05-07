@@ -108,13 +108,15 @@ const Main = {
             this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + Config.appID);
             this.addListener();
         }
+        Storage.init();
 
     },
     checkQuery() {
         let isTestMode = this.getQueryVariable('testing');
         if(isTestMode)
         {
-            TestModel.ENABLE = true;
+            TestModel.ENABLED = true;
+            console.log('TESTING ENABLED');
             window.WebSocket = FakeWebSocket;
         }
     },
@@ -191,6 +193,16 @@ const Main = {
         View.ended(true);
         Storage.setWins(this.winCount, this.lossCount);
         Tester.storeBalance();
+        
+        if(this.isTarget)
+        {
+            let startBalance = Storage.get('startbalance');
+            if(startBalance != undefined) {
+                startBalance = Number(startBalance );
+                if(this.accountBalance - startBalance >= this.profitLimit)ignoreReload = true;
+            } 
+        }
+
         this.ws.send(JSON.stringify({
             "forget_all": "ticks"
         }));
