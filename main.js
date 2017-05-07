@@ -192,6 +192,7 @@ const Main = {
         clearTimeout(this.volatileTimer);
         View.ended(true);
         Storage.setWins(this.winCount, this.lossCount);
+        Storage.setBalance(this.accountBalance);
         Tester.storeBalance();
         
         if(this.isTarget)

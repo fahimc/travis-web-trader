@@ -20,7 +20,7 @@ class FakeWebSocket {
         let obj = {};
         switch (key) {
             case 'balance':
-                obj.balance = TestModel.balance;
+                obj.balance = TestModel.getBalance();
                 break;
             case 'asset_index':
                 obj = TestModel.assets;

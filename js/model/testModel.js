@@ -63,9 +63,16 @@ const TestModel = {
     purchasedTick:0,
     trend:'RAISE',
     getBalance(){
-        let balance = Storage.get('test_balance');
+        let balance = Storage.get(Storage.keys.balance);
+        console.log('test balance',balance);
         if(balance == undefined) balance = this.balance;
+        this.balance = balance;
         return balance;
+    },
+    setBalance(balance)
+    {
+        Storage.set(Storage.testPrefix + Storage.keys.balance,balance);
+        this.balance = balance;
     },
     getTick(){
       this.currentTick =  this.getTickByTrend();

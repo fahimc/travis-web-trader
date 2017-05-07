@@ -6,6 +6,7 @@ const Storage = {
 		loses:'loses',
 		streaks:'streaks',
 	},
+	testPrefix:'test_',
 	streaks:{
 
 	},
@@ -13,8 +14,10 @@ const Storage = {
 	loses:0,
 	init(){
 		let str = this.get(this.keys.streaks);
+		let startbalance = this.get(Storage.keys.startbalance);
+		let balance = this.get(Storage.keys.balance);
 		console.log('loss streak',JSON.parse(str));
-		console.log('start balance',this.get(Storage.keys.startbalance));
+		console.log('start balance',startbalance);
 		let wins = this.get(Storage.keys.wins)
 		let loses = this.get(Storage.keys.loses)
 		console.log('total wins',wins);
@@ -24,6 +27,9 @@ const Storage = {
 			console.log('total win difference',Number(wins)- Number(loses));
 			let percentage = ((Number(wins)/(Number(wins)+Number(loses))) * 100).toFixed(2) + '%';
 			console.log('total win percentage',percentage);
+		}
+		if(startbalance && balance){
+			console.log('current profit £', Number(balance)  - Number(startbalance) )
 		}
 
 		if(str)this.streaks = JSON.parse(str);
@@ -36,14 +42,14 @@ const Storage = {
 	},
 	get(key){
 		if(Tester.isTesting||TestModel.ENABLED) {
-			key = 'test_' + key;
+			key = this.testPrefix + key;
 		}
 		let content = localStorage.getItem(key);
 		return content ;
 	},
 	set(key, value){
 		if(Tester.isTesting||TestModel.ENABLED) {
-			key = 'test_' + key;
+			key = this.testPrefix + key;
 		}
 		localStorage.setItem(key,value);
 	},
@@ -76,6 +82,12 @@ const Storage = {
 	},
 	clear(){
 		localStorage.clear();
+		location.reload();
+	},
+	clearTest(){
+		for(key in this.keys){
+			localStorage.setItem(this.testPrefix + key,undefined);
+		}
 		location.reload();
 	}
 }
