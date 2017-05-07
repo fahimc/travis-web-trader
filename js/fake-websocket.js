@@ -1,5 +1,6 @@
 class FakeWebSocket {
     constructor(url) {
+        console.log('FakeWebSocket is RUNNING');
         this.onopen = null;
         this.onmessage = null;
         this.onclose = null;
@@ -77,7 +78,7 @@ class FakeWebSocket {
                 if (TestModel.transactionCount >= TestModel.tickDuration) {
                     this.message('transaction', {
                         action: 'sell',
-                        amount: TestModel.strategy == 'LOSE' ? '0.00' : TestModel.currentStake + (TestModel.currentStake * 0.94)
+                        amount: TestModel.getResult()
                     });
                     TestModel.transactionCount = 0;
                     TestModel.isBuy = 0;

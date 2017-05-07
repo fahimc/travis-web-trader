@@ -1,14 +1,16 @@
 const Main = {
     isVirtual: true,
-    disableMartingale: true,
+    isTarget: true,
+    disableFahimgale: false,
     stakeTicks: 6,
-    profitLimit: 0.01, //DEBUG
-    lossLimit: -50,
+    profitLimit: 200, //DEBUG
+    lossLimit: -500,
+    lossStreakLimit: 5,
     stake: 0.5,
     currentStake: 0.5,
     chanelPrediction: false,
-    bullishPrediction: false,
-    trendPrediction: true,
+    bullishPrediction: true,
+    trendPrediction: false,
     trendingUpPrediction: false,
     trendUpDuration: 10,
     trendUpLongDuration: 300,
@@ -63,15 +65,16 @@ const Main = {
     volatilatyCap: 30,
     proposalTickCount: 0,
     lastBalance: 0,
-    //breakDuration: 1000,
     breakDuration: 120000, //LIVE
     longBreakDuration: 300000, //LIVE
+    breakDuration: 1000, //BULL
+    longBreakDuration: 10000, //BULL
     idleStartTime: 0,
     volatileChecker: true,
     martingaleStakeLevel: 8,
-    transactionTimer:null,
-    transactionTimerDuration:30000,
-    isTransaction:false,
+    transactionTimer: null,
+    transactionTimerDuration: 30000,
+    isTransaction: false,
     log: {
 
     },
@@ -95,17 +98,35 @@ const Main = {
 
     },
     onLoaded() {
+        this.checkQuery();
         ChartComponent.create();
         View.init();
         View.updateStake(this.currentStake, this.lossLimit, this.profitLimit);
 
-         Tester.start();
-         if (!Tester.isTesting) 
-         {
+        Tester.start();
+        if (!Tester.isTesting) {
             this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + Config.appID);
             this.addListener();
-         }
-        
+        }
+
+    },
+    checkQuery() {
+        let isTestMode = this.getQueryVariable('testing');
+        if(isTestMode)
+        {
+            TestModel.ENABLE = true;
+            window.WebSocket = FakeWebSocket;
+        }
+    },
+    getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) {
+                return pair[1]; }
+        }
+        return (false);
     },
     onClose(event) {
         this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + Config.appID);
@@ -259,7 +280,7 @@ const Main = {
     onMessage(event) {
         if (this.ended) return;
         var data = JSON.parse(event.data);
-        if (data.msg_type != 'tick') console.log('onMessage', data);
+        //if (data.msg_type != 'tick') console.log('onMessage', data);
         switch (data.msg_type) {
             case 'authorize':
                 //this.addFunds();
@@ -275,10 +296,13 @@ const Main = {
                 this.getBalance();
                 break;
             case 'balance':
-                if (!this.startBalance) this.startBalance = data.balance.balance;
+                if (!this.startBalance) {
+                    this.startBalance = data.balance.balance;
+                    Storage.setStartBalance(this.startBalance);
+                }
                 //if transaction fails this will ensure we still set the correct profit
-                if(this.accountBalance != Number(data.balance.balance)) {
-                    this.balanceChanged(Number(data.balance.balance)-this.accountBalance);
+                if (this.accountBalance != Number(data.balance.balance)) {
+                    this.balanceChanged(Number(data.balance.balance) - this.accountBalance);
                 }
                 this.accountBalance = data.balance.balance;
                 this.setDefaultStake();
@@ -330,7 +354,7 @@ const Main = {
                     }
                     this.doTransaction(isLoss);
 
-                }else if (data.transaction && data.transaction.action && data.transaction.action == 'buy'){
+                } else if (data.transaction && data.transaction.action && data.transaction.action == 'buy') {
                     this.isTransaction = true;
                 }
                 break;
@@ -377,31 +401,27 @@ const Main = {
         }
 
     },
-    balanceChanged(change){
+    balanceChanged(change) {
         clearTimeout(this.transactionTimer);
-        this.transactionTimer = setTimeout(function(){
+        this.transactionTimer = setTimeout(function() {
             clearTimeout(this.transactionTimer);
-            if(this.isTransaction)
-            {
+            if (this.isTransaction) {
                 this.isTransaction = false;
-                let isLoss = change < 0 ? true: false;
-                console.log('balanceChanged triggered. is loss',isLoss);
+                let isLoss = change < 0 ? true : false;
+                console.log('balanceChanged triggered. is loss', isLoss);
                 this.doTransaction(isLoss);
                 clearTimeout(this.transactionTimer);
             }
         }.bind(this), this.transactionTimerDuration);
     },
-    doPrediction(){
-        if(this.trendPrediction)
-        {
+    doPrediction() {
+        if (this.trendPrediction) {
             TrendPrediction.predict(this.history);
         }
-        if(this.chanelPrediction)
-        {
+        if (this.chanelPrediction) {
             ChannelPrediction.predict(this.history);
         }
-        if(this.bullishPrediction)
-        {
+        if (this.bullishPrediction) {
             BullishPrediction.predict(this.history);
         }
 
@@ -455,7 +475,7 @@ const Main = {
             this.winCount++;
             this.setSuccess();
         }
-        
+
         if (this.lossStreak >= 4) {
             let isGreaterThanFive = this.lossStreak > this.longBreakLossCount;
             this.takeABreak(isGreaterThanFive);
@@ -467,10 +487,11 @@ const Main = {
         ChartComponent.updatePredictionChart([]);
         this.setStake(isLoss);
         View.updateCounts(this.winCount, this.lossCount, this.maxLossStreak);
-        if (profit <= this.lossLimit || this.accountBalance <= 0 || profit >= this.profitLimit) {
-            this.end(profit <= this.lossLimit);
+        if (this.lossStreak >= this.lossStreakLimit || profit <= this.lossLimit || this.accountBalance <= 0 || profit >= this.profitLimit) {
+            let ignore = this.isTarget ? profit >= this.profitLimit : profit <= this.lossLimit;
+            this.end(ignore);
         }
-        if(!isLoss) this.end();
+        if (!isLoss) this.end();
 
     },
     takeABreak(isLong) {
@@ -502,17 +523,16 @@ const Main = {
     setStake(isLoss) {
         if (isLoss && this.startMartingale) {
             let profit = Math.abs(this.profit);
-            if (!this.disableMartingale) {
-                this.currentStake = Math.ceil(Math.abs(this.profit) + (Math.abs(this.profit) * 0.06));
-            } else {
-                //// let newStake =(profit * 0.5) + ((profit * 0.5) * 0.07);
-                //  this.currentStake = Number((newStake * 2).toFixed(2));
+            if (!this.disableFahimgale) {
+                // this.currentStake = Math.ceil(Math.abs(this.profit) + (Math.abs(this.profit) * 0.06));//debug martingale remvoed to test
                 let cut = this.lossStreak > 3 ? 0.00 : 0.4;
-                if ( this.lossStreak  > 4) cut = 0.00;
+                if (this.lossStreak > 4) cut = 0.00;
                 let profitAbs = Math.abs(this.profit);
                 let newStake = (profitAbs * 0.5) + ((profitAbs * 0.5) * cut);
                 let _stake = Number((newStake * 2).toFixed(2));
                 this.currentStake = _stake;
+            } else {
+                //non fahimgale
             }
 
         } else {

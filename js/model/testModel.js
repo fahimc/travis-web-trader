@@ -1,4 +1,8 @@
 const TestModel = {
+    STRATEGIES:{
+        LOSE:'LOSE',
+        HISTORY:'HISTORY'
+    },
     ENABLED:false,
     speed:1000,
     balance: 700,
@@ -55,6 +59,7 @@ const TestModel = {
     isBuy:false,
     tickDuration:0,
     transactionCount:0,
+    transactionType:'',
     purchasedTick:0,
     trend:'RAISE',
     getTick(){
@@ -78,5 +83,16 @@ const TestModel = {
       let min = this.currentTick? this.currentTick - 20 : 10054.80;
       let max = this.currentTick? this.currentTick + 20 : 12054.80;
       return Math.floor(Math.random()*(max-min+1)+min);
+    },
+    getResult(){
+        let winAmount =  TestModel.currentStake + (TestModel.currentStake * 0.94);
+        switch(TestModel.strategy){
+            case this.STRATEGIES.LOSE:
+            return '0.00';
+            break;
+            case this.STRATEGIES.HISTORY:
+            return transactionType == 'CALL' && this.purchasedTick < this.currentTick ? winAmount : '0.00';
+            break;
+        }
     }
 };
