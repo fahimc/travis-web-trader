@@ -3,7 +3,7 @@ const Main = {
     isTarget: true,
     disableFahimgale: false,
     stakeTicks: 6,
-    profitLimit: 200, //DEBUG
+    profitLimit: 100, //DEBUG
     lossLimit: -500,
     lossStreakLimit: 5,
     stake: 0.5,
@@ -538,8 +538,8 @@ const Main = {
             let profit = Math.abs(this.profit);
             if (!this.disableFahimgale) {
                 // this.currentStake = Math.ceil(Math.abs(this.profit) + (Math.abs(this.profit) * 0.06));//debug martingale remvoed to test
-                let cut = this.lossStreak > 3 ? 0.00 : 0.4;
-                if (this.lossStreak > 4) cut = 0.00;
+                let cut = this.lossStreak > 5 ? 0.00 : 0.4;
+                if (this.lossStreak > 4) cut = 0.1;
                 let profitAbs = Math.abs(this.profit);
                 let newStake = (profitAbs * 0.5) + ((profitAbs * 0.5) * cut);
                 let _stake = Number((newStake * 2).toFixed(2));
