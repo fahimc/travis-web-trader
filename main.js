@@ -9,8 +9,8 @@ const Main = {
     stake: 0.5,
     currentStake: 0.5,
     chanelPrediction: false,
-    bullishPrediction: false,
-    trendPrediction: true,
+    bullishPrediction: true,
+    trendPrediction: false,
     trendingUpPrediction: false,
     maxPrediction: false,
     trendUpDuration: 10,
@@ -502,6 +502,7 @@ const Main = {
         if (isLoss == true) {
             //this.profit -= this.currentStake;
             this.lossStreak++;
+            if(this.lossStreak >=5 ) Volatility.changeLimit = Volatility.defaultChangeTightLimit;
             Storage.setStreak(this.lossStreak);
             this.startMartingale = true;
             this.lossCount++;
@@ -510,6 +511,7 @@ const Main = {
         } else if (isLoss == false) {
             //this.profit += (this.currentStake + (this.currentStake * 0.94));
             this.lossStreak = 0;
+             Volatility.changeLimit = Volatility.defaultChangeLimit;
             this.startMartingale = false;
             this.winCount++;
             this.setSuccess();
