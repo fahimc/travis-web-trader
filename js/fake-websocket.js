@@ -9,6 +9,7 @@ class FakeWebSocket {
         Main.breakDuration = Main.breakDuration / TestModel.speed;
         Main.longBreakDuration = Main.longBreakDuration / TestModel.speed;
         Volatility.duration = Volatility.duration / TestModel.speed;
+        
       this.getHistory();
     } else {
       this.start();
@@ -105,6 +106,10 @@ class FakeWebSocket {
             action: 'sell',
             amount: TestModel.getResult()
           });
+          TestModel.balance += TestModel.currentStake + (TestModel.currentStake * 0.94);
+          this.message('balance', {
+          balance: TestModel.balance
+        });
           TestModel.transactionCount = 0;
           TestModel.isBuy = 0;
           TestModel.purchasedTick = 0;

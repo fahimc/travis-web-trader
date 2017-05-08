@@ -113,8 +113,13 @@ const Main = {
     },
     checkQuery() {
         let isTestMode = this.getQueryVariable('testing');
+        let prediction = this.getQueryVariable('prediction');
         if(isTestMode)
         {
+            if(prediction){
+                this.resetPredictions();
+                this.setPredictionType(prediction);
+            }
             TestModel.ENABLED = true;
             console.log('TESTING ENABLED');
             window.WebSocket = FakeWebSocket;
@@ -128,7 +133,20 @@ const Main = {
             if (pair[0] == variable) {
                 return pair[1]; }
         }
-        return (false);
+        return false;
+    },
+    setPredictionType(prediction){
+        if(this[prediction + 'Prediction'] != undefined )
+        {
+            this[prediction + 'Prediction'] = true;
+        }
+        console.log(prediction + 'Prediction');
+    },
+    resetPredictions(){
+        this.chanelPrediction= false;
+        this.bullishPrediction= false;
+        this.trendPrediction= false;
+        this.trendingUpPrediction= false;
     },
     onClose(event) {
         this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + Config.appID);
@@ -188,9 +206,11 @@ const Main = {
         View.ended(false);
     },
     end(ignoreReload) {
+        if(this.ended)return;
         this.ended = true;
         clearTimeout(this.volatileTimer);
         View.ended(true);
+        console.log('end called',this.winCount, this.lossCount);
         Storage.setWins(this.winCount, this.lossCount);
         Storage.setBalance(this.accountBalance);
         Tester.storeBalance();
@@ -214,7 +234,9 @@ const Main = {
             "forget_all": "transaction"
         }));
         this.ws = null;
-        if (!ignoreReload) location.reload();
+        if (!ignoreReload)setTimeout(()=>{
+           location.reload();  
+       },10);
 
 
     },

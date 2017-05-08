@@ -63,14 +63,19 @@ const TestModel = {
   purchasedTick: 0,
   trend: 'RAISE',
   historicalTicks: [],
-  historicalItemIndex:0,
-  historicalIndex:0,
+  historicalItemIndex: 0,
+  historicalIndex: 0,
   getBalance() {
     let balance = Storage.get(Storage.keys.balance);
+    let startbalance = Storage.get(Storage.keys.startbalance);
+    if (Number(balance)) {
+      this.balance = Number(balance);
+    } else {
+      balance = this.balance;
+    }
     console.log('test balance', balance);
-    if (balance == null) balance = this.balance;
-    this.balance = Number(balance);
-    return balance;
+    if (Number(startbalance) == NaN || startbalance == 'undefined') Storage.set(Storage.keys.startbalance,this.balance);
+    return this.balance;
   },
   setBalance(balance) {
     Storage.set(Storage.testPrefix + Storage.keys.balance, balance);
@@ -78,26 +83,25 @@ const TestModel = {
   },
   setHistory(collection) {
     this.historicalTicks = collection;
-     let hItemIndex = Storage.get('historicalItemIndex');
-     let hIndex = Storage.get('historicalIndex');
-     if(hItemIndex)
-     {
-        this.historicalItemIndex = Number(hItemIndex);
-        this.historicalIndex = Number(hIndex);
-     }
+    let hItemIndex = Storage.get('historicalItemIndex');
+    let hIndex = Storage.get('historicalIndex');
+    if (!hIndex || hIndex != 'undefined') {
+      this.historicalItemIndex = Number(hItemIndex);
+      this.historicalIndex = Number(hIndex);
+    }
+    console.log('historicalIndex', this.historicalIndex);
   },
   getTick() {
     if (this.strategy == this.STRATEGIES.HISTORY) {
-        if(!this.historicalTicks[this.historicalItemIndex]) {
-            Main.end(true);
-            return null;
-        }
-        if(this.historicalIndex >= this.historicalTicks[this.historicalItemIndex].length)
-        {
-            this.historicalItemIndex++;
-        }
-        this.currentTick = this.historicalTicks[this.historicalItemIndex][this.historicalIndex];
-        this.historicalIndex++;
+      if (!this.historicalTicks[this.historicalItemIndex]) {
+        Main.end(true);
+        return null;
+      }
+      if (this.historicalIndex >= this.historicalTicks[this.historicalItemIndex].length) {
+        this.historicalItemIndex++;
+      }
+      this.currentTick = this.historicalTicks[this.historicalItemIndex][this.historicalIndex];
+      this.historicalIndex++;
     } else {
       this.currentTick = this.getTickByTrend();
     }
@@ -128,21 +132,22 @@ const TestModel = {
         return '0.00';
         break;
       case this.STRATEGIES.HISTORY:
-      let isWin  = false;
-        if(this.transactionType == 'CALL' && this.purchasedTick < this.currentTick || this.transactionType == 'PUT' && this.purchasedTick > this.currentTick) {
-            return winAmount;
-        }else {
-            winAmount = '0.00';
-            return winAmount;
-        } 
+        let isWin = false;
+        if (this.transactionType == 'CALL' && this.purchasedTick < this.currentTick || this.transactionType == 'PUT' && this.purchasedTick > this.currentTick) {
+          return winAmount;
+        } else {
+          winAmount = '0.00';
+          return winAmount;
+        }
         break;
     }
   },
-  end(){
-    if(this.strategy === this.STRATEGIES.HISTORY)
-    {
-        Storage.set('historicalItemIndex',this.historicalItemIndex);
-        Storage.set('historicalIndex',this.historicalIndex);
+  end() {
+    if (this.strategy === this.STRATEGIES.HISTORY) {
+      Storage.set('historicalItemIndex', this.historicalItemIndex);
+      Storage.set('historicalIndex', this.historicalIndex);
+      Storage.set('balance', this.balance);
+      console.log(this.historicalItemIndex,this.historicalIndex);
     }
   }
 };
