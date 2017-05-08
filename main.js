@@ -522,7 +522,7 @@ const Main = {
         ChartComponent.updatePredictionChart([]);
         this.setStake(isLoss);
         View.updateCounts(this.winCount, this.lossCount, this.maxLossStreak);
-        if (this.lossStreak >= this.lossStreakLimit || profit <= this.lossLimit || this.accountBalance <= 0 || profit >= this.profitLimit) {
+        if (this.isTarget && this.lossStreak >= this.lossStreakLimit || profit <= this.lossLimit || this.accountBalance <= 0 || profit >= this.profitLimit) {
             let ignore = this.isTarget ? profit >= this.profitLimit : profit <= this.lossLimit;
             this.end(ignore);
         }
