@@ -5,6 +5,8 @@ const Storage = {
 		wins:'wins',
 		loses:'loses',
 		streaks:'streaks',
+		historicalItemIndex:'historicalItemIndex',
+		historicalIndex:'historicalIndex',
 	},
 	testPrefix:'test_',
 	streaks:{
@@ -16,7 +18,7 @@ const Storage = {
 		let str = this.get(this.keys.streaks);
 		let startbalance = this.get(Storage.keys.startbalance);
 		let balance = this.get(Storage.keys.balance);
-		console.log('loss streak',JSON.parse(str));
+		if(str)console.log('loss streak',JSON.parse(str));
 		console.log('start balance',startbalance);
 		let wins = this.get(Storage.keys.wins)
 		let loses = this.get(Storage.keys.loses)
@@ -51,6 +53,7 @@ const Storage = {
 		if(Tester.isTesting||TestModel.ENABLED) {
 			key = this.testPrefix + key;
 		}
+		console.log(key,value);
 		localStorage.setItem(key,value);
 	},
 	setStreak(key){
@@ -85,9 +88,9 @@ const Storage = {
 		location.reload();
 	},
 	clearTest(){
+		Main.end(true);
 		for(key in this.keys){
 			localStorage.setItem(this.testPrefix + key,undefined);
 		}
-		location.reload();
 	}
 }
