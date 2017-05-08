@@ -18,6 +18,7 @@ const Simulator = {
         TrendUpPrediction: TrendUpPrediction,
         ChannelPrediction: ChannelPrediction,
         BullishPrediction: BullishPrediction,
+        MaxPrediction: MaxPrediction,
         TrendCombined: null
     },
     loseStreaks: {},

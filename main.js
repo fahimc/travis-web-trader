@@ -12,6 +12,7 @@ const Main = {
     bullishPrediction: false,
     trendPrediction: true,
     trendingUpPrediction: false,
+    maxPrediction: false,
     trendUpDuration: 10,
     trendUpLongDuration: 300,
     trendingUpBarrier: 10,
@@ -458,6 +459,9 @@ const Main = {
         }
         if (this.bullishPrediction) {
             BullishPrediction.predict(this.history);
+        }
+        if (this.maxPrediction) {
+            MaxPrediction.predict(this.history);
         }
 
     },
