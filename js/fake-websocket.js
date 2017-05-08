@@ -8,6 +8,7 @@ class FakeWebSocket {
     if (TestModel.strategy == TestModel.STRATEGIES.HISTORY) {
         Main.breakDuration = Main.breakDuration / TestModel.speed;
         Main.longBreakDuration = Main.longBreakDuration / TestModel.speed;
+        Volatility.duration = Volatility.duration / TestModel.speed;
       this.getHistory();
     } else {
       this.start();
