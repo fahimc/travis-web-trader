@@ -73,8 +73,8 @@
         },
         calculateNonMartingale(streak) {
             console.log(streak);
-            let cut = streak > 5 ? 0.00:0.4;
-            if(streak>4)cut = 0.1;
+            let cut = streak > 3 ? 0.00:0.4;
+            if(streak>4)cut = 0.00;
             let profitAbs = Math.abs(this.profit);
             let newStake = (profitAbs * 0.5) + ((profitAbs * 0.5) * cut);
             let _stake = Number((newStake * 2).toFixed(2));
