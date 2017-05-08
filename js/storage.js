@@ -5,6 +5,8 @@ const Storage = {
 		wins:'wins',
 		loses:'loses',
 		streaks:'streaks',
+		historicalItemIndex:'historicalItemIndex',
+		historicalIndex:'historicalIndex',
 	},
 	testPrefix:'test_',
 	streaks:{
@@ -16,7 +18,10 @@ const Storage = {
 		let str = this.get(this.keys.streaks);
 		let startbalance = this.get(Storage.keys.startbalance);
 		let balance = this.get(Storage.keys.balance);
-		console.log('loss streak',JSON.parse(str));
+		if(str && str !='undefined') { 
+			console.log('str',str);
+			console.log('loss streak',JSON.parse(str));
+		}
 		console.log('start balance',startbalance);
 		let wins = this.get(Storage.keys.wins)
 		let loses = this.get(Storage.keys.loses)
@@ -32,13 +37,13 @@ const Storage = {
 			console.log('current profit £', Number(balance)  - Number(startbalance) )
 		}
 
-		if(str)this.streaks = JSON.parse(str);
+		if(str && str !='undefined')this.streaks = JSON.parse(str);
 
 		str = this.get(this.keys.wins);
-		if(str)this.wins = Number(str);
+		if(str && str !='undefined') this.wins = Number(str);
 
 		str = this.get(this.keys.loses);
-		if(str)this.loses = Number(str);
+		if(str && str !='undefined') this.loses = Number(str);
 	},
 	get(key){
 		if(Tester.isTesting||TestModel.ENABLED) {
@@ -51,6 +56,7 @@ const Storage = {
 		if(Tester.isTesting||TestModel.ENABLED) {
 			key = this.testPrefix + key;
 		}
+		console.log(key,value);
 		localStorage.setItem(key,value);
 	},
 	setStreak(key){
@@ -85,9 +91,9 @@ const Storage = {
 		location.reload();
 	},
 	clearTest(){
+		Main.end(true);
 		for(key in this.keys){
 			localStorage.setItem(this.testPrefix + key,undefined);
 		}
-		location.reload();
 	}
 }

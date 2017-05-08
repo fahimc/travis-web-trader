@@ -1,6 +1,6 @@
 const Main = {
     isVirtual: true,
-    isTarget: true,
+    isTarget: false,
     disableFahimgale: false,
     stakeTicks: 6,
     profitLimit: 100, //DEBUG
@@ -9,8 +9,8 @@ const Main = {
     stake: 0.5,
     currentStake: 0.5,
     chanelPrediction: false,
-    bullishPrediction: true,
-    trendPrediction: false,
+    bullishPrediction: false,
+    trendPrediction: true,
     trendingUpPrediction: false,
     trendUpDuration: 10,
     trendUpLongDuration: 300,
@@ -67,8 +67,8 @@ const Main = {
     lastBalance: 0,
     breakDuration: 120000, //LIVE
     longBreakDuration: 300000, //LIVE
-    breakDuration: 1000, //BULL
-    longBreakDuration: 10000, //BULL
+    //breakDuration: 1000, //BULL
+    //longBreakDuration: 10000, //BULL
     idleStartTime: 0,
     volatileChecker: true,
     martingaleStakeLevel: 8,
@@ -113,8 +113,13 @@ const Main = {
     },
     checkQuery() {
         let isTestMode = this.getQueryVariable('testing');
+        let prediction = this.getQueryVariable('prediction');
         if(isTestMode)
         {
+            if(prediction){
+                this.resetPredictions();
+                this.setPredictionType(prediction);
+            }
             TestModel.ENABLED = true;
             console.log('TESTING ENABLED');
             window.WebSocket = FakeWebSocket;
@@ -128,7 +133,20 @@ const Main = {
             if (pair[0] == variable) {
                 return pair[1]; }
         }
-        return (false);
+        return false;
+    },
+    setPredictionType(prediction){
+        if(this[prediction + 'Prediction'] != undefined )
+        {
+            this[prediction + 'Prediction'] = true;
+        }
+        console.log(prediction + 'Prediction');
+    },
+    resetPredictions(){
+        this.chanelPrediction= false;
+        this.bullishPrediction= false;
+        this.trendPrediction= false;
+        this.trendingUpPrediction= false;
     },
     onClose(event) {
         this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + Config.appID);
@@ -188,13 +206,15 @@ const Main = {
         View.ended(false);
     },
     end(ignoreReload) {
+        if(this.ended)return;
         this.ended = true;
         clearTimeout(this.volatileTimer);
         View.ended(true);
+        console.log('end called',this.winCount, this.lossCount);
         Storage.setWins(this.winCount, this.lossCount);
         Storage.setBalance(this.accountBalance);
         Tester.storeBalance();
-        
+        TestModel.end();
         if(this.isTarget)
         {
             let startBalance = Storage.get('startbalance');
@@ -214,7 +234,9 @@ const Main = {
             "forget_all": "transaction"
         }));
         this.ws = null;
-        if (!ignoreReload) location.reload();
+        if (!ignoreReload)setTimeout(()=>{
+           location.reload();  
+       },10);
 
 
     },
@@ -500,7 +522,7 @@ const Main = {
         ChartComponent.updatePredictionChart([]);
         this.setStake(isLoss);
         View.updateCounts(this.winCount, this.lossCount, this.maxLossStreak);
-        if (this.lossStreak >= this.lossStreakLimit || profit <= this.lossLimit || this.accountBalance <= 0 || profit >= this.profitLimit) {
+        if (this.isTarget && this.lossStreak >= this.lossStreakLimit || profit <= this.lossLimit || this.accountBalance <= 0 || profit >= this.profitLimit) {
             let ignore = this.isTarget ? profit >= this.profitLimit : profit <= this.lossLimit;
             this.end(ignore);
         }
@@ -538,8 +560,8 @@ const Main = {
             let profit = Math.abs(this.profit);
             if (!this.disableFahimgale) {
                 // this.currentStake = Math.ceil(Math.abs(this.profit) + (Math.abs(this.profit) * 0.06));//debug martingale remvoed to test
-                let cut = this.lossStreak > 5 ? 0.00 : 0.4;
-                if (this.lossStreak > 4) cut = 0.1;
+                let cut = this.lossStreak > 3 ? 0.00 : 0.4;
+                if (this.lossStreak > 3) cut = 0.0;
                 let profitAbs = Math.abs(this.profit);
                 let newStake = (profitAbs * 0.5) + ((profitAbs * 0.5) * cut);
                 let _stake = Number((newStake * 2).toFixed(2));
