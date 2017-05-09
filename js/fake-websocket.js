@@ -4,6 +4,7 @@ class FakeWebSocket {
     this.onopen = null;
     this.onmessage = null;
     this.onclose = null;
+    this.tickInterval = null;
 
     if (TestModel.strategy == TestModel.STRATEGIES.HISTORY) {
         Main.breakDuration = Main.breakDuration / TestModel.speed;
@@ -82,8 +83,11 @@ class FakeWebSocket {
     message[key] = obj;
     if (this.onmessage) this.onmessage({ data: JSON.stringify(message) });
   }
+  close(){
+    clearInterval(this.tickInterval);
+  }
   startTicks() {
-    setInterval(() => {
+    this.tickInterval = setInterval(() => {
       let key = 'tick';
 
       let obj = {

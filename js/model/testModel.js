@@ -93,12 +93,15 @@ const TestModel = {
   },
   getTick() {
     if (this.strategy == this.STRATEGIES.HISTORY) {
-      if (!this.historicalTicks[this.historicalItemIndex]) {
-        Main.end(true);
-        return null;
-      }
       if (this.historicalIndex >= this.historicalTicks[this.historicalItemIndex].length) {
         this.historicalItemIndex++;
+      }
+      if (!this.historicalTicks[this.historicalItemIndex]) {
+        console.log('TEST ENDED')
+        Main.ws.close();
+        Storage.clearTest();
+        Main.end(true);
+        return null;
       }
       this.currentTick = this.historicalTicks[this.historicalItemIndex][this.historicalIndex];
       this.historicalIndex++;

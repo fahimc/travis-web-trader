@@ -87,8 +87,8 @@
         },
         setProfit(index) {
             this.lastProfit = this.profit;
-            this.profit -= this.stake;
             this.funds = Math.abs(this.profit) + this.stake;
+            this.profit -= this.stake;
         },
         updateTable(index, tableIndex) {
             let tr = document.createElement('tr');

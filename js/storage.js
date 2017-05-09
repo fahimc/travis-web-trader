@@ -23,6 +23,7 @@ const Storage = {
 			console.log('loss streak',JSON.parse(str));
 		}
 		console.log('start balance',startbalance);
+		console.log('current balance',balance);
 		let wins = this.get(Storage.keys.wins)
 		let loses = this.get(Storage.keys.loses)
 		console.log('total wins',wins);
@@ -74,7 +75,10 @@ const Storage = {
 	},
 	setBalance(balance){
 		let b = this.get(this.keys.balance);
-		if(b == undefined)this.set(this.keys.balance,balance);
+		if(!TestModel.ENABLED) {
+			console.log('set balance',balance);
+			this.set(this.keys.balance,balance);
+		}
 	},
 	setStartBalance(balance){
 		let b = this.get(this.keys.startbalance);

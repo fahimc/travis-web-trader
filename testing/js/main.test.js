@@ -6,7 +6,6 @@ const Main = {
     profitLimit: 100, //DEBUG
     lossLimit: -500,
     lossStreakLimit: 5,
-    volatilityLimit: 4,
     stake: 0.5,
     currentStake: 0.5,
     chanelPrediction: false,
@@ -503,7 +502,7 @@ const Main = {
         if (isLoss == true) {
             //this.profit -= this.currentStake;
             this.lossStreak++;
-            if(this.lossStreak >= this.volatilityLimit ) Volatility.changeLimit = Volatility.defaultChangeTightLimit;
+            if(this.lossStreak >=5 ) Volatility.changeLimit = Volatility.defaultChangeTightLimit;
             Storage.setStreak(this.lossStreak);
             this.startMartingale = true;
             this.lossCount++;
