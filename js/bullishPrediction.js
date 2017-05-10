@@ -1,7 +1,7 @@
 const BullishPrediction = {
     predict(ticks) {
         if ( Main.isProposal || Main.pauseTrading) return;
-        let previousTick = ticks[ticks.length-3];
+        let previousTick = ticks[ticks.length-2];
         let currentTick = ticks[ticks.length-1];
         let highest = currentTick;
         let lowest = currentTick;

@@ -6,7 +6,7 @@ const Main = {
     profitLimit: 100, //DEBUG
     lossLimit: -500,
     lossStreakLimit: 5,
-    volatilityLimit: 4,
+    volatilityLimit: 5,
     stake: 0.5,
     currentStake: 0.5,
     chanelPrediction: false,
