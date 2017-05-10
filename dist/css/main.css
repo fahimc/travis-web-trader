@@ -1,0 +1,38 @@
+.put {
+    background-color: red;
+    color: white;
+}
+
+.call {
+    background-color: green;
+    color: white;
+}
+
+.positive {
+    color: green;
+}
+
+.negative {
+    color: red;
+}
+
+@media (min-width: 1000px) {
+    .row.full {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .row.full > [class*='col-'] {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.panel {
+    height: 100%;
+}
+select {
+      color: #333;
+}
