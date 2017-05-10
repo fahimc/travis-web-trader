@@ -77,6 +77,7 @@ const Main = {
     transactionTimer: null,
     transactionTimerDuration: 30000,
     isTransaction: false,
+    config:null,
     log: {
 
     },
@@ -108,18 +109,24 @@ const Main = {
 
         Tester.start();
         if (!Tester.isTesting) {
-            this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + (this.isVirtual? Config.virtual.appID: Config.live.appID));
+            this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + (this.isVirtual? this.config.virtual.appID: this.config.live.appID));
             this.addListener();
         }
         Storage.init();
 
     },
     setConfig(){
+        if(this.config)return;
         if(Config.isVirtual !== undefined)this.isVirtual = Config.isVirtual;
+        this.config = Config;
     },
     checkQuery() {
         let isTestMode = this.getQueryVariable('testing');
         let prediction = this.getQueryVariable('prediction');
+        let isVirtual = this.getQueryVariable('virtual');
+        let apiKey = this.getQueryVariable('key');
+        let appID = this.getQueryVariable('id');
+        let stakeType = this.getQueryVariable('stake');
         if(isTestMode)
         {
             if(prediction){
@@ -130,6 +137,21 @@ const Main = {
             console.log('TESTING ENABLED');
             window.WebSocket = FakeWebSocket;
         }
+        if(apiKey && appID){
+            this.createConfig(isVirtual,apiKey,appID,stakeType);
+        }
+    },
+    createConfig(isVirtual,apiKey,appID,stakeType){
+        let cKey = 'live';
+        if(isVirtual)cKey = 'virtual';
+        this.config= {
+                isVirtual:isVirtual,
+                stakeType:stakeType
+            };
+            this.config[cKey] = {
+                appID:appID,
+                apiKey:apiKey
+            }
     },
     getQueryVariable(variable) {
         var query = window.location.search.substring(1);
@@ -155,7 +177,7 @@ const Main = {
         this.trendingUpPrediction= false;
     },
     onClose(event) {
-        this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + (this.isVirtual? Config.virtual.appID: Config.live.appID));
+        this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + (this.isVirtual? this.config.virtual.appID: this.config.live.appID));
         this.ws.onopen = this.onOpen.bind(this);
         this.ws.onclose = this.onClose.bind(this);
         this.ws.onmessage = this.onMessage.bind(this);
@@ -168,7 +190,7 @@ const Main = {
 
     },
     authorize() {
-        if (this.ws) this.ws.send(JSON.stringify({ "authorize": (this.isVirtual? Config.virtual.apiKey: Config.live.apiKey) }));
+        if (this.ws) this.ws.send(JSON.stringify({ "authorize": (this.isVirtual? this.config.virtual.apiKey: this.config.live.apiKey) }));
     },
     buyContract() {
         if (this.ws) this.ws.send(JSON.stringify({
@@ -568,8 +590,8 @@ const Main = {
         if (Tester && Tester.testBalance) Tester.setBalance(this.accountBalance - this.startBalance);
     },
     setStake(isLoss) {
-        if(isLoss && Config.stakeType && window[Config.stakeType]) {
-            this.currentStake = window[Config.stakeType].getStake(this.currentStake,this.lossCount);
+        if(isLoss && this.config.stakeType && window[this.config.stakeType]) {
+            this.currentStake = window[this.config.stakeType].getStake(this.currentStake,this.lossCount);
         }else if (isLoss && this.startMartingale) {
             let profit = Math.abs(this.profit);
             if (!this.disableFahimgale) {
