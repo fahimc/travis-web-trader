@@ -1,4 +1,12 @@
 const Config = {
-  appID:'',
-  apiKey: ''
+  isVirtual: true,
+  virtual: {
+    appID: '',
+    apiKey: ''
+  },
+  live: {
+    appID: '',
+    apiKey: ''
+  },
+  stakeType: ''
 };

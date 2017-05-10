@@ -101,17 +101,21 @@ const Main = {
     },
     onLoaded() {
         this.checkQuery();
+        this.setConfig();
         ChartComponent.create();
         View.init();
         View.updateStake(this.currentStake, this.lossLimit, this.profitLimit);
 
         Tester.start();
         if (!Tester.isTesting) {
-            this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + Config.appID);
+            this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + (this.isVirtual? Config.virtual.appID: Config.live.appID));
             this.addListener();
         }
         Storage.init();
 
+    },
+    setConfig(){
+        if(Config.isVirtual !== undefined)this.isVirtual = Config.isVirtual;
     },
     checkQuery() {
         let isTestMode = this.getQueryVariable('testing');
@@ -151,7 +155,7 @@ const Main = {
         this.trendingUpPrediction= false;
     },
     onClose(event) {
-        this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + Config.appID);
+        this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + (this.isVirtual? Config.virtual.appID: Config.live.appID));
         this.ws.onopen = this.onOpen.bind(this);
         this.ws.onclose = this.onClose.bind(this);
         this.ws.onmessage = this.onMessage.bind(this);
@@ -164,7 +168,7 @@ const Main = {
 
     },
     authorize() {
-        if (this.ws) this.ws.send(JSON.stringify({ "authorize": Config.apiKey }));
+        if (this.ws) this.ws.send(JSON.stringify({ "authorize": (this.isVirtual? Config.virtual.apiKey: Config.live.apiKey) }));
     },
     buyContract() {
         if (this.ws) this.ws.send(JSON.stringify({
@@ -542,7 +546,8 @@ const Main = {
         setTimeout(function() {
             this.isTrading = true;
             View.setBreak(false);
-        }.bind(this), isLong ? this.longBreakDuration : this.breakDuration);
+            let count = this.lossStreak - this.longBreakLossCount;
+        }.bind(this), isLong ? this.longBreakDuration + (count * 60000) : this.breakDuration);
     },
     setLossLimit() {
         let profit = this.accountBalance - this.startBalance;
@@ -563,7 +568,9 @@ const Main = {
         if (Tester && Tester.testBalance) Tester.setBalance(this.accountBalance - this.startBalance);
     },
     setStake(isLoss) {
-        if (isLoss && this.startMartingale) {
+        if(isLoss && Config.stakeType && window[Config.stakeType]) {
+            this.currentStake = window[Config.stakeType].getStake(this.currentStake,this.lossCount);
+        }else if (isLoss && this.startMartingale) {
             let profit = Math.abs(this.profit);
             if (!this.disableFahimgale) {
                 // this.currentStake = Math.ceil(Math.abs(this.profit) + (Math.abs(this.profit) * 0.06));//debug martingale remvoed to test
