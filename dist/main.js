@@ -1,6 +1,6 @@
 const Main = {
     isVirtual: true,
-    isTarget: true,
+    isTarget: false,
     disableFahimgale: false,
     stakeTicks: 6,
     profitLimit: 100, //DEBUG
@@ -563,12 +563,12 @@ const Main = {
 
     },
     takeABreak(isLong) {
+        let count = this.lossStreak - this.longBreakLossCount;
         this.isTrading = false;
         View.setBreak(true);
         setTimeout(function() {
             this.isTrading = true;
             View.setBreak(false);
-            let count = this.lossStreak - this.longBreakLossCount;
         }.bind(this), isLong ? this.longBreakDuration + (count * 60000) : this.breakDuration);
     },
     setLossLimit() {
