@@ -194,7 +194,8 @@ let ChartComponent = {
             this.config.data.datasets[0].data.shift();
             this.config.data.labels.shift();
         }
-        this.config.options.scales.yAxes[0].ticks.min = item.lowestPrice ? item.lowestPrice - 20 : 0;
+        let barrier = Main.assetModel ?Main.assetModel.chartBarrier:20;
+        this.config.options.scales.yAxes[0].ticks.min = item.lowestPrice ? item.lowestPrice - barrier : 0;
         this.chart.update();
     },
     updateClose(item) {
@@ -204,13 +205,15 @@ let ChartComponent = {
             this.closeConfig.data.datasets[0].data.shift();
             this.closeConfig.data.labels.shift();
         }
-        this.closeConfig.options.scales.yAxes[0].ticks.min = item.lowestPrice ? item.lowestPrice - 10 : 0;
+        let barrier = Main.assetModel ?Main.assetModel.chartBarrier:20;
+        this.closeConfig.options.scales.yAxes[0].ticks.min = item.lowestPrice ? item.lowestPrice - barrier : 0;
         this.closechart.update();
     },
     updatePredictionChart(collection, lowestPrice, highestPrice) {
         this.predictionConfig.data.labels = collection.concat([]);
         this.predictionConfig.data.datasets[0].data = collection.concat([]);
-        if (lowestPrice) this.predictionConfig.options.scales.yAxes[0].ticks.min = lowestPrice - 5;
+        let barrier = Main.assetModel ?Main.assetModel.chartBarrier:20;
+        if (lowestPrice) this.predictionConfig.options.scales.yAxes[0].ticks.min = lowestPrice - barrier;
         //if(highestPrice)this.predictionConfig.options.scales.yAxes[0].ticks.max = highestPrice + 5;
         //this.predictionConfig.options.scales.yAxes[0].ticks.max = highestPrice + 1;
         this.pchart.update();

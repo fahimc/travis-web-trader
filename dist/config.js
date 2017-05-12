@@ -1,5 +1,5 @@
 const Config = {
-  isVirtual: false,
+  isVirtual: true,
   virtual: {
     appID: '',
     apiKey: ''
@@ -8,5 +8,6 @@ const Config = {
     appID: '',
     apiKey: ''
   },
+  asset:'R_100',
   stakeType: ''
 };

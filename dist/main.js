@@ -77,7 +77,8 @@ const Main = {
     transactionTimer: null,
     transactionTimerDuration: 30000,
     isTransaction: false,
-    config:null,
+    config: null,
+    assetModel: null,
     log: {
 
     },
@@ -109,15 +110,19 @@ const Main = {
 
         Tester.start();
         if (!Tester.isTesting) {
-            this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + (this.isVirtual? this.config.virtual.appID: this.config.live.appID));
+            this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + (this.isVirtual ? this.config.virtual.appID : this.config.live.appID));
             this.addListener();
         }
         Storage.init();
 
     },
-    setConfig(){
-        if(this.config)return;
-        if(Config.isVirtual !== undefined)this.isVirtual = Config.isVirtual;
+    setConfig() {
+        if (this.config) return;
+        if (Config.isVirtual !== undefined) this.isVirtual = Config.isVirtual;
+        if (Config.asset !== undefined && Config.asset) this.ASSET_NAME = Config.asset;
+        if (window[this.ASSET_NAME + 'Model']) {
+            this.assetModel = window[this.ASSET_NAME + 'Model'];
+        }
         this.config = Config;
     },
     checkQuery() {
@@ -127,9 +132,8 @@ const Main = {
         let apiKey = this.getQueryVariable('key');
         let appID = this.getQueryVariable('id');
         let stakeType = this.getQueryVariable('stake');
-        if(isTestMode)
-        {
-            if(prediction){
+        if (isTestMode) {
+            if (prediction) {
                 this.resetPredictions();
                 this.setPredictionType(prediction);
             }
@@ -137,21 +141,21 @@ const Main = {
             console.log('TESTING ENABLED');
             window.WebSocket = FakeWebSocket;
         }
-        if(apiKey && appID){
-            this.createConfig(isVirtual,apiKey,appID,stakeType);
+        if (apiKey && appID) {
+            this.createConfig(isVirtual, apiKey, appID, stakeType);
         }
     },
-    createConfig(isVirtual,apiKey,appID,stakeType){
+    createConfig(isVirtual, apiKey, appID, stakeType) {
         let cKey = 'live';
-        if(isVirtual)cKey = 'virtual';
-        this.config= {
-                isVirtual:isVirtual,
-                stakeType:stakeType
-            };
-            this.config[cKey] = {
-                appID:appID,
-                apiKey:apiKey
-            }
+        if (isVirtual) cKey = 'virtual';
+        this.config = {
+            isVirtual: isVirtual,
+            stakeType: stakeType
+        };
+        this.config[cKey] = {
+            appID: appID,
+            apiKey: apiKey
+        }
     },
     getQueryVariable(variable) {
         var query = window.location.search.substring(1);
@@ -159,25 +163,25 @@ const Main = {
         for (var i = 0; i < vars.length; i++) {
             var pair = vars[i].split("=");
             if (pair[0] == variable) {
-                return pair[1]; }
+                return pair[1];
+            }
         }
         return false;
     },
-    setPredictionType(prediction){
-        if(this[prediction + 'Prediction'] != undefined )
-        {
+    setPredictionType(prediction) {
+        if (this[prediction + 'Prediction'] != undefined) {
             this[prediction + 'Prediction'] = true;
         }
         console.log(prediction + 'Prediction');
     },
-    resetPredictions(){
-        this.chanelPrediction= false;
-        this.bullishPrediction= false;
-        this.trendPrediction= false;
-        this.trendingUpPrediction= false;
+    resetPredictions() {
+        this.chanelPrediction = false;
+        this.bullishPrediction = false;
+        this.trendPrediction = false;
+        this.trendingUpPrediction = false;
     },
     onClose(event) {
-        this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + (this.isVirtual? this.config.virtual.appID: this.config.live.appID));
+        this.ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=' + (this.isVirtual ? this.config.virtual.appID : this.config.live.appID));
         this.ws.onopen = this.onOpen.bind(this);
         this.ws.onclose = this.onClose.bind(this);
         this.ws.onmessage = this.onMessage.bind(this);
@@ -190,7 +194,7 @@ const Main = {
 
     },
     authorize() {
-        if (this.ws) this.ws.send(JSON.stringify({ "authorize": (this.isVirtual? this.config.virtual.apiKey: this.config.live.apiKey) }));
+        if (this.ws) this.ws.send(JSON.stringify({ "authorize": (this.isVirtual ? this.config.virtual.apiKey : this.config.live.apiKey) }));
     },
     buyContract() {
         if (this.ws) this.ws.send(JSON.stringify({
@@ -234,22 +238,21 @@ const Main = {
         View.ended(false);
     },
     end(ignoreReload) {
-        if(this.ended)return;
+        if (this.ended) return;
         this.ended = true;
         clearTimeout(this.volatileTimer);
         View.ended(true);
-        console.log('end called',this.winCount, this.lossCount);
+        console.log('end called', this.winCount, this.lossCount);
         Storage.setWins(this.winCount, this.lossCount);
         Storage.setBalance(this.accountBalance);
         Tester.storeBalance();
         TestModel.end();
-        if(this.isTarget)
-        {
+        if (this.isTarget) {
             let startBalance = Storage.get('startbalance');
-            if(startBalance != undefined) {
-                startBalance = Number(startBalance );
-                if(this.accountBalance - startBalance >= this.profitLimit)ignoreReload = true;
-            } 
+            if (startBalance != undefined) {
+                startBalance = Number(startBalance);
+                if (this.accountBalance - startBalance >= this.profitLimit) ignoreReload = true;
+            }
         }
 
         this.ws.send(JSON.stringify({
@@ -262,9 +265,9 @@ const Main = {
             "forget_all": "transaction"
         }));
         this.ws = null;
-        if (!ignoreReload)setTimeout(()=>{
-           location.reload();  
-       },10);
+        if (!ignoreReload) setTimeout(() => {
+            location.reload();
+        }, 10);
 
 
     },
@@ -529,7 +532,7 @@ const Main = {
         if (isLoss == true) {
             //this.profit -= this.currentStake;
             this.lossStreak++;
-            if(this.lossStreak >= this.volatilityLimit ) Volatility.changeLimit = Volatility.defaultChangeTightLimit;
+            if (this.lossStreak >= this.volatilityLimit) Volatility.changeLimit = Volatility.defaultChangeTightLimit;
             Storage.setStreak(this.lossStreak);
             this.startMartingale = true;
             this.lossCount++;
@@ -538,7 +541,7 @@ const Main = {
         } else if (isLoss == false) {
             //this.profit += (this.currentStake + (this.currentStake * 0.94));
             this.lossStreak = 0;
-             Volatility.changeLimit = Volatility.defaultChangeLimit;
+            Volatility.changeLimit = Volatility.defaultChangeLimit;
             this.startMartingale = false;
             this.winCount++;
             this.setSuccess();
@@ -590,9 +593,9 @@ const Main = {
         if (Tester && Tester.testBalance) Tester.setBalance(this.accountBalance - this.startBalance);
     },
     setStake(isLoss) {
-        if(isLoss && this.config.stakeType && window[this.config.stakeType]) {
-            this.currentStake = window[this.config.stakeType].getStake(this.currentStake,this.lossCount);
-        }else if (isLoss && this.startMartingale) {
+        if (isLoss && this.config.stakeType && window[this.config.stakeType]) {
+            this.currentStake = window[this.config.stakeType].getStake(this.currentStake, this.lossCount);
+        } else if (isLoss && this.startMartingale) {
             let profit = Math.abs(this.profit);
             if (!this.disableFahimgale) {
                 // this.currentStake = Math.ceil(Math.abs(this.profit) + (Math.abs(this.profit) * 0.06));//debug martingale remvoed to test

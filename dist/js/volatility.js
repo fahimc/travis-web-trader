@@ -8,13 +8,18 @@ const Volatility = {
     defaultChangeTightLimit: 10,
     timer: null,
     changeCounts: [],
-    movementRange: 60,
     check(price, override) {
-        this.checkDirection();
+        this.setDefaults();
         if (!this.timer && !override) {
             this.start();
         } else {
             this.tickCollection.push(price);
+        }
+    },
+    setDefaults(){
+        if(Main.assetModel)
+        {
+            this.priceChangeBarrier = Main.assetModel.priceChangeBarrier;   
         }
     },
     start() {
@@ -27,7 +32,6 @@ const Volatility = {
         let change = this.priceChangeSmall(collection);
         let changeCount = this.numberOfChanges(collection);
         if (changeCount > this.changeLimit||change) {
-        //if (this.checkDirection(collection)) {
             Main.pauseTrading = true;
             change = change?change:0;
             View.updateVolatile(true, changeCount > this.changeLimit ? 'direction changes:' + changeCount : 'price change: ' + change.toFixed(2));
@@ -53,15 +57,6 @@ const Volatility = {
 
         //console.log('change', bottomCollection.length, topCollection.length);
         if (bottomCollection.length < 2 && topCollection.length < 2) return false;
-        return true;
-    },
-    checkDirection(_collection) {
-        let ticks = _collection ? _collection : Main.history;
-        let collection = ticks.slice(ticks.length - 100, ticks.length);
-        let difference = Number(collection[0]) - Number(collection[collection.length - 1]);
-        if (difference >= this.movementRange) {
-            return false;
-        }
         return true;
     },
     mean(_collection) {
