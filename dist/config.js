@@ -1,13 +1,13 @@
 const Config = {
   isVirtual: true,
   virtual: {
-    appID: '',
-    apiKey: ''
+    appID: '3374',
+    apiKey: '4F61diD8mzgGDD1'
   },
   live: {
     appID: '',
     apiKey: ''
   },
-  asset:'R_100',
+  asset:'RDBULL',
   stakeType: ''
 };

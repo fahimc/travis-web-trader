@@ -1,0 +1,2222 @@
+{
+  "echo_req": {
+    "trading_times": "2015-09-14"
+  },
+  "msg_type": "trading_times",
+  "trading_times": {
+    "markets": [
+      {
+        "name": "Forex",
+        "submarkets": [
+          {
+            "name": "Major Pairs",
+            "symbols": [
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "AUD/JPY",
+                "settlement": "",
+                "symbol": "frxAUDJPY",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "AUD/USD",
+                "settlement": "",
+                "symbol": "frxAUDUSD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "EUR/AUD",
+                "settlement": "",
+                "symbol": "frxEURAUD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "EUR/CAD",
+                "settlement": "",
+                "symbol": "frxEURCAD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "EUR/CHF",
+                "settlement": "",
+                "symbol": "frxEURCHF",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "EUR/GBP",
+                "settlement": "",
+                "symbol": "frxEURGBP",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "EUR/JPY",
+                "settlement": "",
+                "symbol": "frxEURJPY",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "EUR/USD",
+                "settlement": "",
+                "symbol": "frxEURUSD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "GBP/AUD",
+                "settlement": "",
+                "symbol": "frxGBPAUD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "GBP/JPY",
+                "settlement": "",
+                "symbol": "frxGBPJPY",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "GBP/USD",
+                "settlement": "",
+                "symbol": "frxGBPUSD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "USD/CAD",
+                "settlement": "",
+                "symbol": "frxUSDCAD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "USD/CHF",
+                "settlement": "",
+                "symbol": "frxUSDCHF",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "USD/JPY",
+                "settlement": "",
+                "symbol": "frxUSDJPY",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Minor Pairs",
+            "symbols": [
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "AUD/CAD",
+                "settlement": "",
+                "symbol": "frxAUDCAD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "AUD/CHF",
+                "settlement": "",
+                "symbol": "frxAUDCHF",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "AUD/NZD",
+                "settlement": "",
+                "symbol": "frxAUDNZD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "AUD/PLN",
+                "settlement": "",
+                "symbol": "frxAUDPLN",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "EUR/NZD",
+                "settlement": "",
+                "symbol": "frxEURNZD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "GBP/CAD",
+                "settlement": "",
+                "symbol": "frxGBPCAD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "GBP/CHF",
+                "settlement": "",
+                "symbol": "frxGBPCHF",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "GBP/NOK",
+                "settlement": "",
+                "symbol": "frxGBPNOK",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "GBP/NZD",
+                "settlement": "",
+                "symbol": "frxGBPNZD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "GBP/PLN",
+                "settlement": "",
+                "symbol": "frxGBPPLN",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "NZD/JPY",
+                "settlement": "",
+                "symbol": "frxNZDJPY",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "NZD/USD",
+                "settlement": "",
+                "symbol": "frxNZDUSD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "USD/MXN",
+                "settlement": "",
+                "symbol": "frxUSDMXN",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "USD/NOK",
+                "settlement": "",
+                "symbol": "frxUSDNOK",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "USD/PLN",
+                "settlement": "",
+                "symbol": "frxUSDPLN",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "USD/SEK",
+                "settlement": "",
+                "symbol": "frxUSDSEK",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Smart FX",
+            "symbols": [
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "AUD Index",
+                "settlement": "",
+                "symbol": "WLDAUD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "EUR Index",
+                "settlement": "",
+                "symbol": "WLDEUR",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "GBP Index",
+                "settlement": "",
+                "symbol": "WLDGBP",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "USD Index",
+                "settlement": "",
+                "symbol": "WLDUSD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Indices",
+        "submarkets": [
+          {
+            "name": "Asia/Oceania",
+            "symbols": [
+              {
+                "delay_amount": 15,
+                "events": [
+
+                ],
+                "feed_license": "delayed",
+                "name": "Australian Index",
+                "settlement": "",
+                "symbol": "AS51",
+                "times": {
+                  "close": [
+                    "06:00:00"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "09:00:00"
+                }
+              },
+              {
+                "delay_amount": 10,
+                "events": [
+
+                ],
+                "feed_license": "delayed",
+                "name": "Bombay Index",
+                "settlement": "",
+                "symbol": "BSESENSEX30",
+                "times": {
+                  "close": [
+                    "10:00:00"
+                  ],
+                  "open": [
+                    "03:45:00"
+                  ],
+                  "settlement": "13:00:00"
+                }
+              },
+              {
+                "delay_amount": 60,
+                "events": [
+
+                ],
+                "feed_license": "delayed",
+                "name": "Hong Kong Index",
+                "settlement": "",
+                "symbol": "HSI",
+                "times": {
+                  "close": [
+                    "03:59:00",
+                    "07:40:00"
+                  ],
+                  "open": [
+                    "01:30:00",
+                    "05:00:00"
+                  ],
+                  "settlement": "10:40:00"
+                }
+              },
+              {
+                "delay_amount": 1440,
+                "events": [
+
+                ],
+                "feed_license": "chartonly",
+                "name": "Jakarta Index",
+                "settlement": "",
+                "symbol": "JCI",
+                "times": {
+                  "close": [
+                    "05:00:00",
+                    "08:50:00"
+                  ],
+                  "open": [
+                    "02:00:00",
+                    "06:30:00"
+                  ],
+                  "settlement": "11:50:00"
+                }
+              },
+              {
+                "delay_amount": 1440,
+                "events": [
+
+                ],
+                "feed_license": "daily",
+                "name": "Japanese Index",
+                "settlement": "",
+                "symbol": "N225",
+                "times": {
+                  "close": [
+                    "02:30:00",
+                    "06:00:00"
+                  ],
+                  "open": [
+                    "00:00:00",
+                    "03:30:00"
+                  ],
+                  "settlement": "09:00:00"
+                }
+              },
+              {
+                "delay_amount": 1440,
+                "events": [
+
+                ],
+                "feed_license": "daily",
+                "name": "Singapore Index",
+                "settlement": "",
+                "symbol": "STI",
+                "times": {
+                  "close": [
+                    "09:00:00"
+                  ],
+                  "open": [
+                    "01:00:00"
+                  ],
+                  "settlement": "12:00:00"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Europe/Africa",
+            "symbols": [
+              {
+                "events": [
+
+                ],
+                "name": "Belgian Index",
+                "settlement": "",
+                "symbol": "BFX",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Dutch Index",
+                "settlement": "",
+                "symbol": "AEX",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "French Index",
+                "settlement": "",
+                "symbol": "FCHI",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "delay_amount": 15,
+                "events": [
+
+                ],
+                "feed_license": "delayed",
+                "name": "German Index",
+                "settlement": "",
+                "symbol": "GDAXI",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "delay_amount": 15,
+                "events": [
+
+                ],
+                "feed_license": "delayed",
+                "name": "Irish Index",
+                "settlement": "",
+                "symbol": "ISEQ",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "21:30:00"
+                }
+              },
+              {
+                "delay_amount": 15,
+                "events": [
+
+                ],
+                "feed_license": "delayed",
+                "name": "Norwegian Index",
+                "settlement": "",
+                "symbol": "OBX",
+                "times": {
+                  "close": [
+                    "14:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "17:30:00"
+                }
+              },
+              {
+                "delay_amount": 30,
+                "events": [
+
+                ],
+                "feed_license": "delayed",
+                "name": "South African Index",
+                "settlement": "",
+                "symbol": "TOP40",
+                "times": {
+                  "close": [
+                    "14:50:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "17:50:00"
+                }
+              },
+              {
+                "delay_amount": 1440,
+                "events": [
+
+                ],
+                "feed_license": "daily",
+                "name": "Swiss Index",
+                "settlement": "",
+                "symbol": "SSMI",
+                "times": {
+                  "close": [
+                    "15:20:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:20:00"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Americas",
+            "symbols": [
+              {
+                "delay_amount": 1440,
+                "events": [
+
+                ],
+                "feed_license": "chartonly",
+                "name": "US Index",
+                "settlement": "",
+                "symbol": "SPC",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Middle East",
+            "symbols": [
+              {
+                "delay_amount": 1440,
+                "events": [
+
+                ],
+                "feed_license": "chartonly",
+                "name": "Dubai Index",
+                "settlement": "",
+                "symbol": "DFMGI",
+                "times": {
+                  "close": [
+                    "09:45:00"
+                  ],
+                  "open": [
+                    "06:00:00"
+                  ],
+                  "settlement": "12:45:00"
+                }
+              }
+            ]
+          },
+          {
+            "name": "OTC Indices",
+            "symbols": [
+              {
+                "events": [
+
+                ],
+                "name": "Australian OTC Index",
+                "settlement": "",
+                "symbol": "OTC_AS51",
+                "times": {
+                  "close": [
+                    "06:00:00"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "09:00:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Belgian OTC Index",
+                "settlement": "",
+                "symbol": "OTC_BFX",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Bombay OTC Index",
+                "settlement": "",
+                "symbol": "OTC_BSESENSEX30",
+                "times": {
+                  "close": [
+                    "10:00:00"
+                  ],
+                  "open": [
+                    "03:45:00"
+                  ],
+                  "settlement": "13:00:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Dutch OTC Index",
+                "settlement": "",
+                "symbol": "OTC_AEX",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "French OTC Index",
+                "settlement": "",
+                "symbol": "OTC_FCHI",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "German OTC Index",
+                "settlement": "",
+                "symbol": "OTC_GDAXI",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Hong Kong OTC Index",
+                "settlement": "",
+                "symbol": "OTC_HSI",
+                "times": {
+                  "close": [
+                    "03:59:00",
+                    "07:40:00"
+                  ],
+                  "open": [
+                    "01:30:00",
+                    "05:00:00"
+                  ],
+                  "settlement": "10:40:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Istanbul OTC Index",
+                "settlement": "",
+                "symbol": "OTC_BIST100",
+                "times": {
+                  "close": [
+                    "09:30:00",
+                    "14:30:00"
+                  ],
+                  "open": [
+                    "06:35:00",
+                    "10:30:00"
+                  ],
+                  "settlement": "17:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Japanese OTC Index",
+                "settlement": "",
+                "symbol": "OTC_N225",
+                "times": {
+                  "close": [
+                    "02:30:00",
+                    "06:00:00"
+                  ],
+                  "open": [
+                    "00:00:00",
+                    "03:30:00"
+                  ],
+                  "settlement": "09:00:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "UK OTC Index",
+                "settlement": "",
+                "symbol": "OTC_FTSE",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "US OTC Index",
+                "settlement": "",
+                "symbol": "OTC_SPC",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "US Tech OTC Index",
+                "settlement": "",
+                "symbol": "OTC_IXIC",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Wall Street OTC Index",
+                "settlement": "",
+                "symbol": "OTC_DJI",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "OTC Stocks",
+        "submarkets": [
+          {
+            "name": "Germany",
+            "symbols": [
+              {
+                "events": [
+
+                ],
+                "name": "Airbus",
+                "settlement": "",
+                "symbol": "DEAIR",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Allianz",
+                "settlement": "",
+                "symbol": "DEALV",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "BMW",
+                "settlement": "",
+                "symbol": "DEBMW",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Daimler",
+                "settlement": "",
+                "symbol": "DEDAI",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Deutsche Bank",
+                "settlement": "",
+                "symbol": "DEDBK",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Novartis",
+                "settlement": "",
+                "symbol": "DENOT",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "SAP",
+                "settlement": "",
+                "symbol": "DESAP",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Siemens",
+                "settlement": "",
+                "symbol": "DESIE",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              }
+            ]
+          },
+          {
+            "name": "India",
+            "symbols": [
+              {
+                "events": [
+
+                ],
+                "name": "Bharti Airtel",
+                "settlement": "",
+                "symbol": "INBHARTIARTL",
+                "times": {
+                  "close": [
+                    "10:00:00"
+                  ],
+                  "open": [
+                    "03:45:00"
+                  ],
+                  "settlement": "13:00:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Maruti Suzuki",
+                "settlement": "",
+                "symbol": "INMARUTI",
+                "times": {
+                  "close": [
+                    "10:00:00"
+                  ],
+                  "open": [
+                    "03:45:00"
+                  ],
+                  "settlement": "13:00:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Reliance Industries",
+                "settlement": "",
+                "symbol": "INRIL",
+                "times": {
+                  "close": [
+                    "10:00:00"
+                  ],
+                  "open": [
+                    "03:45:00"
+                  ],
+                  "settlement": "13:00:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Tata Steel",
+                "settlement": "",
+                "symbol": "INTATASTEEL",
+                "times": {
+                  "close": [
+                    "10:00:00"
+                  ],
+                  "open": [
+                    "03:45:00"
+                  ],
+                  "settlement": "13:00:00"
+                }
+              }
+            ]
+          },
+          {
+            "name": "UK",
+            "symbols": [
+              {
+                "events": [
+
+                ],
+                "name": "BP",
+                "settlement": "",
+                "symbol": "UKBP",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Barclays",
+                "settlement": "",
+                "symbol": "UKBARC",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "British American Tobacco",
+                "settlement": "",
+                "symbol": "UKBATS",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "HSBC",
+                "settlement": "",
+                "symbol": "UKHSBA",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Lloyds Bank",
+                "settlement": "",
+                "symbol": "UKLLOY",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Rio Tinto",
+                "settlement": "",
+                "symbol": "UKRIO",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Standard Chartered",
+                "settlement": "",
+                "symbol": "UKSTAN",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Tesco",
+                "settlement": "",
+                "symbol": "UKTSCO",
+                "times": {
+                  "close": [
+                    "15:30:00"
+                  ],
+                  "open": [
+                    "07:00:00"
+                  ],
+                  "settlement": "18:30:00"
+                }
+              }
+            ]
+          },
+          {
+            "name": "US",
+            "symbols": [
+              {
+                "events": [
+
+                ],
+                "name": "Alibaba",
+                "settlement": "",
+                "symbol": "USALIBA",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Alphabet",
+                "settlement": "",
+                "symbol": "USGOOG",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Amazon.com",
+                "settlement": "",
+                "symbol": "USAMZN",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "American Express",
+                "settlement": "",
+                "symbol": "USAMX",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Apple",
+                "settlement": "",
+                "symbol": "USAAPL",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Berkshire Hathaway",
+                "settlement": "",
+                "symbol": "USBRKSHR",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Boeing",
+                "settlement": "",
+                "symbol": "USBNG",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Caterpillar",
+                "settlement": "",
+                "symbol": "USCAT",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Citigroup",
+                "settlement": "",
+                "symbol": "USCT",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Electronic Arts",
+                "settlement": "",
+                "symbol": "USEA",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Exxon Mobil",
+                "settlement": "",
+                "symbol": "USXOM",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Facebook",
+                "settlement": "",
+                "symbol": "USFB",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Goldman Sachs",
+                "settlement": "",
+                "symbol": "USGLDSCH",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "IBM",
+                "settlement": "",
+                "symbol": "USIBM",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Johnson & Johnson",
+                "settlement": "",
+                "symbol": "USJNJ",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "MasterCard",
+                "settlement": "",
+                "symbol": "USMA",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "McDonald's",
+                "settlement": "",
+                "symbol": "USMCDON",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Microsoft",
+                "settlement": "",
+                "symbol": "USMSFT",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "PepsiCo",
+                "settlement": "",
+                "symbol": "USPEP",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Procter & Gamble",
+                "settlement": "",
+                "symbol": "USPG",
+                "times": {
+                  "close": [
+                    "20:00:00"
+                  ],
+                  "open": [
+                    "13:30:00"
+                  ],
+                  "settlement": "22:59:59"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Commodities",
+        "submarkets": [
+          {
+            "name": "Metals",
+            "symbols": [
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "Gold/USD",
+                "settlement": "",
+                "symbol": "frxXAUUSD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "Palladium/USD",
+                "settlement": "",
+                "symbol": "frxXPDUSD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "Platinum/USD",
+                "settlement": "",
+                "symbol": "frxXPTUSD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+                  {
+                    "dates": "Fridays",
+                    "descrip": "Closes early (at 21:00)"
+                  }
+                ],
+                "name": "Silver/USD",
+                "settlement": "",
+                "symbol": "frxXAGUSD",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Energy",
+            "symbols": [
+              {
+                "events": [
+
+                ],
+                "name": "Oil/USD",
+                "settlement": "",
+                "symbol": "frxBROUSD",
+                "times": {
+                  "close": [
+                    "18:30:00"
+                  ],
+                  "open": [
+                    "07:15:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Volatility Indices",
+        "submarkets": [
+          {
+            "name": "Continuous Indices",
+            "symbols": [
+              {
+                "events": [
+
+                ],
+                "name": "Volatility 10 Index",
+                "settlement": "",
+                "symbol": "R_10",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Volatility 100 Index",
+                "settlement": "",
+                "symbol": "R_100",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Volatility 25 Index",
+                "settlement": "",
+                "symbol": "R_25",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Volatility 50 Index",
+                "settlement": "",
+                "symbol": "R_50",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Volatility 75 Index",
+                "settlement": "",
+                "symbol": "R_75",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Daily Reset Indices",
+            "symbols": [
+              {
+                "events": [
+
+                ],
+                "name": "Bear Market Index",
+                "settlement": "",
+                "symbol": "RDBEAR",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              },
+              {
+                "events": [
+
+                ],
+                "name": "Bull Market Index",
+                "settlement": "",
+                "symbol": "RDBULL",
+                "times": {
+                  "close": [
+                    "23:59:59"
+                  ],
+                  "open": [
+                    "00:00:00"
+                  ],
+                  "settlement": "23:59:59"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
