@@ -287,7 +287,7 @@ const Main = {
     },
     onStopTrading() {
         this.isTrading = false;
-        this.end();
+        this.end(true);
     },
     onStartTrading() {
         if (!this.startTime) {
