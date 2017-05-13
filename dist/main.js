@@ -1,11 +1,11 @@
 const Main = {
     isVirtual: true,
-    isTarget: false,
+    isTarget: true,
     disableFahimgale: false,
     stakeTicks: 6,
     profitLimit: 100, //DEBUG
     lossLimit: -500,
-    lossStreakLimit: 7,
+    lossStreakLimit: 9,
     volatilityLimit: 5,
     stake: 0.5,
     currentStake: 0.5,
@@ -558,7 +558,7 @@ const Main = {
         ChartComponent.updatePredictionChart([]);
         this.setStake(isLoss);
         View.updateCounts(this.winCount, this.lossCount, this.maxLossStreak);
-        if (this.isTarget && this.lossStreak >= this.lossStreakLimit || profit <= this.lossLimit || this.accountBalance <= 0 || profit >= this.profitLimit) {
+        if (this.lossStreakLimit && this.lossStreak >= this.lossStreakLimit || profit <= this.lossLimit || this.accountBalance <= 0 || profit >= this.profitLimit) {
             let ignore = this.isTarget ? profit >= this.profitLimit : profit <= this.lossLimit;
             this.end(ignore);
         }
