@@ -66,6 +66,7 @@ const TestModel = {
   historicalItemIndex: 0,
   historicalIndex: 0,
   getBalance() {
+    if(!this.ENABLED)return;
     let balance = Storage.get(Storage.keys.balance);
     let startbalance = Storage.get(Storage.keys.startbalance);
     if (Number(balance)) {
@@ -78,6 +79,7 @@ const TestModel = {
     return this.balance;
   },
   setBalance(balance) {
+    if(!this.ENABLED)return;
     Storage.set(Storage.testPrefix + Storage.keys.balance, balance);
     this.balance = balance;
   },
@@ -146,6 +148,7 @@ const TestModel = {
     }
   },
   end() {
+    if(!this.ENABLED)return;
     if (this.strategy === this.STRATEGIES.HISTORY) {
       Storage.set('historicalItemIndex', this.historicalItemIndex);
       Storage.set('historicalIndex', this.historicalIndex);
