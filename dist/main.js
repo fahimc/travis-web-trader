@@ -560,6 +560,7 @@ const Main = {
         View.updateCounts(this.winCount, this.lossCount, this.maxLossStreak);
         if (this.lossStreakLimit && this.lossStreak >= this.lossStreakLimit || profit <= this.lossLimit || this.accountBalance <= 0 || profit >= this.profitLimit) {
             let ignore = this.isTarget ? profit >= this.profitLimit : profit <= this.lossLimit;
+            if(this.lossStreakLimit && this.lossStreak >= this.lossStreakLimit)Storage.setLossLimit();
             this.end(ignore);
         }
         if (!isLoss) this.end();

@@ -4,6 +4,7 @@ const Storage = {
         balance: 'balance',
         wins: 'wins',
         loses: 'loses',
+        hitLossLimit: 'hitLossLimit',
         streaks: 'streaks',
         historicalItemIndex: 'historicalItemIndex',
         historicalIndex: 'historicalIndex',
@@ -14,6 +15,7 @@ const Storage = {
     },
     wins: 0,
     loses: 0,
+    hitLossLimit: 0,
     init() {
         let str = this.get(this.keys.streaks);
         let startbalance = this.get(Storage.keys.startbalance);
@@ -21,6 +23,7 @@ const Storage = {
         let table = [];
         let wins =this.get(Storage.keys.wins);
         let loses =this.get(Storage.keys.loses);
+        let hitLossLimit =this.get(Storage.keys.hitLossLimit);
         if (str && str != 'undefined') {
             console.table({ loses: JSON.parse(str) });
         }
@@ -31,6 +34,7 @@ const Storage = {
         }
         table.push({name:'total wins',value:  wins});
         table.push({name:'total loses', value: loses});
+        table.push({name:'total lose limit hit', value: hitLossLimit});
         if (wins) {
             table.push({name:'total difference',value:  Number(wins) - Number(loses)});
             let percentage = ((Number(wins) / (Number(wins) + Number(loses))) * 100).toFixed(2) + '%';
@@ -45,6 +49,9 @@ const Storage = {
 
         str = this.get(this.keys.loses);
         if (str && str != 'undefined') this.loses = Number(str);
+
+        str = this.get(this.keys.hitLossLimit);
+        if (str && str != 'undefined') this.hitLossLimit = Number(str);
 
         console.table(table);
     },
@@ -71,6 +78,10 @@ const Storage = {
         this.loses += loses;
         this.set(this.keys.wins, this.wins);
         this.set(this.keys.loses, this.loses);
+    },
+    setLossLimit() {
+        this.hitLossLimit++;
+        this.set(this.keys.hitLossLimit, this.hitLossLimit);
     },
     setBalance(balance) {
         if (!TestModel.ENABLED) {
