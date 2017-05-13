@@ -1,6 +1,6 @@
 const Main = {
     isVirtual: true,
-    isTarget: true,
+    isTarget: false,
     disableFahimgale: false,
     stakeTicks: 6,
     profitLimit: 100, //DEBUG
