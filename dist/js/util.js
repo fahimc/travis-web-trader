@@ -22,7 +22,7 @@ const Util = {
             if(this.currentDuration == 0 ) {
                 clearInterval(this.breakInterval);
             }
-            View.updateTimer(this.currentDuration + ' seconds');
+            View.updateTimer((this.currentDuration/1000) + ' seconds');
         },this.intervalDuration);
     }
 };

@@ -287,11 +287,12 @@ const Main = {
 
     },
     setNextAsset() {
+        if(!this.config.switchAssets)return;
         switch (this.ASSET_NAME) {
             case 'R_100':
-                this.ASSET_NAME = 'RDBULL';
+                this.ASSET_NAME = 'R_75';
                 break;
-            case 'RDBULL':
+            case 'R_75':
                 this.ASSET_NAME = 'R_100';
                 break;
         }
@@ -706,6 +707,11 @@ const Main = {
         return this.log[type];
     },
     setPrediction(proposal, predictionType, duration) {
+        if(this.assetModel.payout[proposal] !==0.94)
+        {
+            let dif = 0.94 - this.assetModel.payout[proposal];
+            if(dif > 0)this.currentStake +=  this.currentStake * dif;
+        }
         this.getPriceProposal(proposal, duration);
         View.updatePredictionType(predictionType);
         this.predictionType = predictionType;

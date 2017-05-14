@@ -1,5 +1,6 @@
 const Config = {
   isVirtual: true,
+  switchAssets:false,
   virtual: {
     appID: '',
     apiKey: ''
