@@ -248,7 +248,7 @@ const Main = {
         console.log('end called', this.winCount, this.lossCount);
         Storage.setWins(this.winCount, this.lossCount);
         Storage.setBalance(this.accountBalance);
-        if(this.lossStreak)Storage.setLossArray(this.lossStreak);
+       
         Tester.storeBalance();
         TestModel.end();
         if (this.isTarget) {
@@ -574,6 +574,7 @@ const Main = {
             this.setFail();
         } else if (isLoss == false) {
             //this.profit += (this.currentStake + (this.currentStake * 0.94));
+            if(this.lossStreak)Storage.setLossArray(this.lossStreak);
             this.lossStreak = 0;
             Volatility.changeLimit = Volatility.defaultChangeLimit;
             this.startMartingale = false;
