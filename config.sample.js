@@ -8,6 +8,6 @@ const Config = {
     appID: '',
     apiKey: ''
   },
-  asset:'RDBULL',
-  stakeType: ''
+  asset:'R_100',
+  stakeType: 'SevenStake'
 };

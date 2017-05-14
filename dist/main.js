@@ -67,10 +67,10 @@ const Main = {
     volatilatyCap: 30,
     proposalTickCount: 0,
     lastBalance: 0,
-    breakDuration: 120000, //LIVE
-    longBreakDuration: 300000, //LIVE
-    //breakDuration: 1000, //BULL
-    //longBreakDuration: 10000, //BULL
+    breakDuration: 120000,
+    longBreakDuration: 300000,
+    breakExtention: 60000,
+    lossLimitRefreshDuration: 300000,
     idleStartTime: 0,
     volatileChecker: true,
     martingaleStakeLevel: 8,
@@ -102,8 +102,8 @@ const Main = {
 
     },
     onLoaded() {
-        this.checkQuery();
         this.setConfig();
+        this.checkQuery();
         ChartComponent.create();
         View.init();
         View.updateStake(this.currentStake, this.lossLimit, this.profitLimit);
@@ -132,6 +132,7 @@ const Main = {
         let apiKey = this.getQueryVariable('key');
         let appID = this.getQueryVariable('id');
         let stakeType = this.getQueryVariable('stake');
+        let asset = this.getQueryVariable('asset');
         if (isTestMode) {
             if (prediction) {
                 this.resetPredictions();
@@ -144,6 +145,8 @@ const Main = {
         if (apiKey && appID) {
             this.createConfig(isVirtual, apiKey, appID, stakeType);
         }
+        if(asset)this.ASSET_NAME = asset;
+        console.log(this.ASSET_NAME);
     },
     createConfig(isVirtual, apiKey, appID, stakeType) {
         let cKey = 'live';
@@ -237,7 +240,7 @@ const Main = {
         View.updatePredictionType('');
         View.ended(false);
     },
-    end(ignoreReload) {
+    end(ignoreReload, duration) {
         if (this.ended) return;
         this.ended = true;
         clearTimeout(this.volatileTimer);
@@ -245,6 +248,7 @@ const Main = {
         console.log('end called', this.winCount, this.lossCount);
         Storage.setWins(this.winCount, this.lossCount);
         Storage.setBalance(this.accountBalance);
+        if(this.lossStreak)Storage.setLossArray(this.lossStreak);
         Tester.storeBalance();
         TestModel.end();
         if (this.isTarget) {
@@ -265,11 +269,40 @@ const Main = {
             "forget_all": "transaction"
         }));
         this.ws = null;
-        if (!ignoreReload) setTimeout(() => {
-            location.reload();
-        }, 10);
+
+        if (!ignoreReload || (TestModel.ENABLED && !TestModel.ignoreReload)) {
+            setTimeout(() => {
+                if (this.hasManyBigStreaks()) {
+                    Storage.clearLossArray();
+                    this.setNextAsset();
+                    window.location.search ="asset="+this.ASSET_NAME;
+                } else {
+                    location.reload();
+                }
+            }, duration ? duration : 10);
+            View.setBreak(true);
+            Util.startBreakTimer(duration ? duration : 10);
+        }
 
 
+    },
+    setNextAsset() {
+        switch (this.ASSET_NAME) {
+            case 'R_100':
+                this.ASSET_NAME = 'RDBULL';
+                break;
+            case 'RDBULL':
+                this.ASSET_NAME = 'R_100';
+                break;
+        }
+    },
+    hasManyBigStreaks() {
+        let lossArray = Storage.getLossArray();
+        let count = 0;
+        lossArray.forEach((streak) => {
+            if (streak >= 4) count++;
+        });
+        if (count >= 2) return true;
     },
     getTranscations() {
         this.ws.send(JSON.stringify({
@@ -379,6 +412,7 @@ const Main = {
                 break;
             case 'asset_index':
                 this.assetArray = data.asset_index;
+                console.log('asset_index',this.ASSET_NAME);
                 View.updateAsset(this.ASSET_NAME, this.assetArray, this.payout);
                 this.getTicks();
                 this.getTranscations();
@@ -407,7 +441,7 @@ const Main = {
                 this.buyContract();
                 break;
             case 'buy':
-                console.log('buy', data);
+                // console.log('buy', data);
                 break;
             case 'transaction':
                 if (data.transaction && data.transaction.action && data.transaction.action == 'sell') {
@@ -556,24 +590,31 @@ const Main = {
         this.predictionItem = null;
         View.updatePrediction('');
         ChartComponent.updatePredictionChart([]);
-        this.setStake(isLoss);
+
         View.updateCounts(this.winCount, this.lossCount, this.maxLossStreak);
-        if (this.lossStreakLimit && this.lossStreak >= this.lossStreakLimit || profit <= this.lossLimit || this.accountBalance <= 0 || profit >= this.profitLimit) {
+        if (this.lossStreakLimit && this.lossStreak > this.lossStreakLimit || profit <= this.lossLimit || this.accountBalance <= 0 || profit >= this.profitLimit) {
             let ignore = this.isTarget ? profit >= this.profitLimit : profit <= this.lossLimit;
-            if(this.lossStreakLimit && this.lossStreak >= this.lossStreakLimit)Storage.setLossLimit();
+            let duration;
+            if (this.lossStreakLimit && this.lossStreak > this.lossStreakLimit) {
+                console.log('loss limit reached');
+                Storage.setLossLimit();
+                duration = this.lossLimitRefreshDuration;
+            }
             this.end(ignore);
         }
         if (!isLoss) this.end();
-
+        this.setStake(isLoss);
     },
     takeABreak(isLong) {
         let count = this.lossStreak - this.longBreakLossCount;
         this.isTrading = false;
+        let duration = isLong ? this.longBreakDuration + (count * this.breakExtention) : this.breakDuration;
         View.setBreak(true);
         setTimeout(function() {
             this.isTrading = true;
             View.setBreak(false);
-        }.bind(this), isLong ? this.longBreakDuration + (count * 60000) : this.breakDuration);
+        }.bind(this), duration);
+        Util.startBreakTimer(duration);
     },
     setLossLimit() {
         let profit = this.accountBalance - this.startBalance;

@@ -4,10 +4,11 @@ const TestModel = {
     HISTORY: 'HISTORY'
   },
   ENABLED: false,
+  ignoreReload: true,
   speed: 100,
-  balance: 700,
+  balance: 1200,
   assets: [],
-  strategy: 'HISTORY',
+  strategy: 'LOSE',
   history: {
     prices: [
       "11054.80",
@@ -80,7 +81,7 @@ const TestModel = {
   },
   setBalance(balance) {
     if(!this.ENABLED)return;
-    Storage.set(Storage.testPrefix + Storage.keys.balance, balance);
+    Storage.set(Storage.keys.balance, balance);
     this.balance = balance;
   },
   setHistory(collection) {
@@ -149,11 +150,13 @@ const TestModel = {
   },
   end() {
     if(!this.ENABLED)return;
+    Storage.show();
     if (this.strategy === this.STRATEGIES.HISTORY) {
       Storage.set('historicalItemIndex', this.historicalItemIndex);
       Storage.set('historicalIndex', this.historicalIndex);
       Storage.set('balance', this.balance);
-      console.log(this.historicalItemIndex,this.historicalIndex);
+    }else{
+     // Storage.clearTest();
     }
   }
 };

@@ -39,6 +39,7 @@ let View = {
         this.maxLossStreak = document.querySelector('#maxLossStreak');
         this.takingABreak = document.querySelector('#takingABreak');
         this.isVolatile = document.querySelector('#isVolatile');
+        this.breakEnds = document.querySelector('#breakEnds');
         this.addListeners();
         this.startTime.textContent = this.formatDate(new Date());
     },
@@ -82,6 +83,9 @@ let View = {
         } else {
             this.takingABreak.parentNode.parentNode.classList.remove('danger');
         }
+    },
+    updateTimer(duration){
+        this.breakEnds.innerHTML = duration;
     },
     ended(bool) {
         this.endedElement.textContent = bool;
