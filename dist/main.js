@@ -81,6 +81,7 @@ const Main = {
     isTransaction: false,
     config: null,
     assetModel: null,
+    transactionCount: 0,
     log: {
 
     },
@@ -147,7 +148,7 @@ const Main = {
         if (apiKey && appID) {
             this.createConfig(isVirtual, apiKey, appID, stakeType);
         }
-        if(asset)this.ASSET_NAME = asset;
+        if (asset) this.ASSET_NAME = asset;
         console.log(this.ASSET_NAME);
     },
     createConfig(isVirtual, apiKey, appID, stakeType) {
@@ -250,7 +251,7 @@ const Main = {
         console.log('end called', this.winCount, this.lossCount);
         Storage.setWins(this.winCount, this.lossCount);
         Storage.setBalance(this.accountBalance);
-       
+
         Tester.storeBalance();
         TestModel.end();
         if (this.isTarget) {
@@ -277,7 +278,7 @@ const Main = {
                 if (this.hasManyBigStreaks()) {
                     Storage.clearLossArray();
                     this.setNextAsset();
-                    window.location.search ="asset="+this.ASSET_NAME;
+                    window.location.search = "asset=" + this.ASSET_NAME;
                 } else {
                     location.reload();
                 }
@@ -289,7 +290,7 @@ const Main = {
 
     },
     setNextAsset() {
-        if(!this.config.switchAssets)return;
+        if (!this.config.switchAssets) return;
         switch (this.ASSET_NAME) {
             case 'R_100':
                 this.ASSET_NAME = 'R_75';
@@ -350,7 +351,7 @@ const Main = {
     },
     getPriceProposal(type, duration) {
         if (!type || this.isProposal) return;
-        console.log('proposa stake',  this.currentStake)
+        console.log('proposa stake', this.currentStake)
         this.isProposal = true;
         this.proposalTickCount = 0;
         this.lastBalance = this.accountBalance;
@@ -383,7 +384,7 @@ const Main = {
     onMessage(event) {
         if (this.ended) return;
         var data = JSON.parse(event.data);
-        //if (data.msg_type != 'tick') console.log('onMessage', data);
+        if (data.error) console.log('onMessage', data);
         switch (data.msg_type) {
             case 'authorize':
                 //this.addFunds();
@@ -416,7 +417,7 @@ const Main = {
                 break;
             case 'asset_index':
                 this.assetArray = data.asset_index;
-                console.log('asset_index',this.ASSET_NAME);
+                console.log('asset_index', this.ASSET_NAME);
                 View.updateAsset(this.ASSET_NAME, this.assetArray, this.payout);
                 this.getTicks();
                 this.getTranscations();
@@ -445,7 +446,7 @@ const Main = {
                 this.buyContract();
                 break;
             case 'buy':
-                console.log('buy', data);
+                //console.log('buy', data);
                 break;
             case 'transaction':
                 if (data.transaction && data.transaction.action && data.transaction.action == 'sell') {
@@ -562,7 +563,12 @@ const Main = {
         }
     },
     doTransaction(isLoss) {
-        this.isProposal = false;
+        this.transactionCount++;
+        if (this.transactionCount > 1) {
+            this.transactionCount = 0;
+            this.isProposal = false;
+
+        }
         this.proposalTickCount = 0;
         this.idleStartTime = null;
         if (isLoss == undefined) {
@@ -581,7 +587,7 @@ const Main = {
             this.setFail();
         } else if (isLoss == false) {
             //this.profit += (this.currentStake + (this.currentStake * 0.94));
-            if(this.lossStreak)Storage.setLossArray(this.lossStreak);
+            if (this.lossStreak) Storage.setLossArray(this.lossStreak);
             this.lossStreak = 0;
             Volatility.changeLimit = Volatility.defaultChangeLimit;
             this.startMartingale = false;
@@ -655,13 +661,13 @@ const Main = {
                 let newStake = (profitAbs * 0.5) + ((profitAbs * 0.5) * cut);
                 let _stake = Number((newStake * 2).toFixed(2));
                 this.currentStake = _stake;
-                console.log('setStake',this.currentStake);
+                console.log('setStake', this.currentStake);
             } else {
                 //non fahimgale
             }
 
         } else {
-           // this.currentStake = this.stake;
+            // this.currentStake = this.stake;
         }
         if (this.profit - this.currentStake <= this.lossLimit) this.end(true);
         View.updateStake(this.currentStake, this.lossLimit, this.profitLimit);
@@ -714,10 +720,9 @@ const Main = {
         return this.log[type];
     },
     setPrediction(proposal, predictionType, duration) {
-        if(this.assetModel.payout[proposal] !==0.94)
-        {
+        if (this.assetModel.payout[proposal] !== 0.94) {
             let dif = 0.94 - this.assetModel.payout[proposal];
-            if(dif > 0)this.currentStake +=  this.currentStake * dif;
+            if (dif > 0) this.currentStake += this.currentStake * dif;
         }
         this.getPriceProposal(proposal, duration);
         View.updatePredictionType(predictionType);

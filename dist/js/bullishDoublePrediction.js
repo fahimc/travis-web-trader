@@ -38,15 +38,17 @@ const BullishDoublePrediction = {
                 type: proposal
             };
             if (Main.currentStake >= 1) Main.currentStake = Main.currentStake * 0.5;
+            if(Main.currentStake < 0.4)Main.currentStake = 0.5;
             console.log('bull stake',Main.currentStake);
             ChartComponent.updatePredictionChart([previousTick, currentTick], lowest, highest);
             if (this.isFisrtPrediction) Main.isProposal = false;
             Main.setPrediction(proposal, predictionType);
+             Main.isProposal = true;
             if (this.isFisrtPrediction) {
                 this.pause = true;
                 setTimeout(() => {
                     this.pause = false;
-                }, 100);
+                }, 10);
             }
 
             this.isFisrtPrediction = this.isFisrtPrediction ? '' : proposal;
