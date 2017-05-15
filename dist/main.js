@@ -3,7 +3,7 @@ const Main = {
     isTarget: false,
     disableFahimgale: false,
     stakeTicks: 6,
-    profitLimit: 0.1, //DEBUG
+    profitLimit: 0, //DEBUG
     lossLimit: -500,
     lossStreakLimit: 11,
     volatilityLimit: 5,
@@ -69,10 +69,10 @@ const Main = {
     volatilatyCap: 30,
     proposalTickCount: 0,
     lastBalance: 0,
-    breakDuration: 120000,
-    longBreakDuration: 300000,
+    breakDuration: 120,
+    longBreakDuration: 300,
     breakExtention: 60000,
-    lossLimitRefreshDuration: 300000,
+    lossLimitRefreshDuration: 300,
     idleStartTime: 0,
     volatileChecker: true,
     martingaleStakeLevel: 8,
