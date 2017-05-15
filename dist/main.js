@@ -611,7 +611,7 @@ const Main = {
             this.end(ignore);
         }
         if (!isLoss && this.refreshOnWin) this.end();
-        this.setStake(isLoss);
+        this.setStake(true);
     },
     takeABreak(isLong) {
         let count = this.lossStreak - this.longBreakLossCount;
@@ -655,12 +655,13 @@ const Main = {
                 let newStake = (profitAbs * 0.5) + ((profitAbs * 0.5) * cut);
                 let _stake = Number((newStake * 2).toFixed(2));
                 this.currentStake = _stake;
+                console.log('setStake',this.currentStake);
             } else {
                 //non fahimgale
             }
 
         } else {
-            this.currentStake = this.stake;
+           // this.currentStake = this.stake;
         }
         if (this.profit - this.currentStake <= this.lossLimit) this.end(true);
         View.updateStake(this.currentStake, this.lossLimit, this.profitLimit);
