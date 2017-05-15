@@ -32,7 +32,7 @@ const Volatility = {
         let change = this.priceChangeSmall(collection);
         let changeCount = this.numberOfChanges(collection);
         if (changeCount > this.changeLimit||change) {
-            Main.pauseTrading = true;
+            //Main.pauseTrading = true;
             change = change?change:0;
             View.updateVolatile(true, changeCount > this.changeLimit ? 'direction changes:' + changeCount : 'price change: ' + change.toFixed(2));
         } else {

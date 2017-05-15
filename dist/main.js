@@ -3,21 +3,23 @@ const Main = {
     isTarget: false,
     disableFahimgale: false,
     stakeTicks: 6,
-    profitLimit: 100, //DEBUG
+    profitLimit: 0.1, //DEBUG
     lossLimit: -500,
     lossStreakLimit: 11,
     volatilityLimit: 5,
     stake: 0.5,
     currentStake: 0.5,
     chanelPrediction: false,
-    bullishPrediction: true,
+    bullishPrediction: false,
     trendPrediction: false,
     trendingUpPrediction: false,
+    bullishDoublePrediction: true,
     maxPrediction: false,
     trendUpDuration: 10,
     trendUpLongDuration: 300,
     trendingUpBarrier: 10,
     longBreakLossCount: 6,
+    refreshOnWin: false,
     ws: null,
     history: [],
     winCount: 0,
@@ -348,6 +350,7 @@ const Main = {
     },
     getPriceProposal(type, duration) {
         if (!type || this.isProposal) return;
+        console.log('proposa stake',  this.currentStake)
         this.isProposal = true;
         this.proposalTickCount = 0;
         this.lastBalance = this.accountBalance;
@@ -442,7 +445,7 @@ const Main = {
                 this.buyContract();
                 break;
             case 'buy':
-                // console.log('buy', data);
+                console.log('buy', data);
                 break;
             case 'transaction':
                 if (data.transaction && data.transaction.action && data.transaction.action == 'sell') {
@@ -525,6 +528,9 @@ const Main = {
         if (this.bullishPrediction) {
             BullishPrediction.predict(this.history);
         }
+        if (this.bullishDoublePrediction) {
+            BullishDoublePrediction.predict(this.history);
+        }
         if (this.maxPrediction) {
             MaxPrediction.predict(this.history);
         }
@@ -604,7 +610,7 @@ const Main = {
             }
             this.end(ignore);
         }
-        if (!isLoss) this.end();
+        if (!isLoss && this.refreshOnWin) this.end();
         this.setStake(isLoss);
     },
     takeABreak(isLong) {

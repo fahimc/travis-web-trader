@@ -18,7 +18,7 @@ var SevenStake = {
     16: 2000.00
   },
   getStake(currentStake,lossCount) {
-  	console.log('Seven Stake',this.stake[lossCount]);
+  	//console.log('Seven Stake',this.stake[lossCount]);
   	return this.stake[lossCount] != undefined ? this.stake[lossCount] : currentStake * 2;
   }
 };
