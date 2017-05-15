@@ -9,6 +9,7 @@ const Storage = {
         streaks: 'streaks',
         historicalItemIndex: 'historicalItemIndex',
         historicalIndex: 'historicalIndex',
+        lowestProfit: 'lowestProfit',
     },
     testPrefix: 'test_',
     streaks: {
@@ -16,6 +17,7 @@ const Storage = {
     },
     wins: 0,
     loses: 0,
+    lowestProfit: 0,
     lossArray: [],
     hitLossLimit: 0,
     init() {
@@ -35,10 +37,14 @@ const Storage = {
         str = this.get(this.keys.lossArray);
         if (str && str != 'undefined') this.lossArray = JSON.parse(str);
 
+        str = this.get(this.keys.lowestProfit);
+        if (str && str != 'undefined') this.lowestProfit = Number(str);
+
     },
     show() {
         let str = this.get(this.keys.streaks);
         let startbalance = this.get(Storage.keys.startbalance);
+        let lowestProfit = this.get(Storage.keys.lowestProfit);
         let balance = this.get(Storage.keys.balance);
         let table = [];
         let wins = this.get(Storage.keys.wins);
@@ -50,6 +56,7 @@ const Storage = {
         }
         table.push({ name: 'starting balance', value: startbalance });
         table.push({ name: 'current balance', value: balance });
+        table.push({ name: 'lowest Profit', value: lowestProfit });
         if (startbalance && balance) {
             table.push({ name: 'current profit', value: (Number(balance) - Number(startbalance)).toFixed(2) });
         }
@@ -102,6 +109,10 @@ const Storage = {
     setLossLimit() {
         this.hitLossLimit++;
         this.set(this.keys.hitLossLimit, this.hitLossLimit);
+    },
+    setLowest(lowestProfit) {
+        if(this.lowestProfit > lowestProfit)this.lowestProfit = lowestProfit;
+        this.set(this.keys.lowestProfit, this.lowestProfit);
     },
     setBalance(balance) {
         this.set(this.keys.balance, balance);

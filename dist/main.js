@@ -644,6 +644,7 @@ const Main = {
         } else if (profit < -10 && this.highestProfit < 5 && (this.lossCount + this.winCount) > 30) {
             //this.profitLimit = 1;
         }
+        Storage.setLowest(this.lowestProfit);
         View.updateProfit(this.lowestProfit, this.highestProfit);
         View.updateBalance(this.accountBalance, profit);
         if (Tester && Tester.testBalance) Tester.setBalance(this.accountBalance - this.startBalance);
