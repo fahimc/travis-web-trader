@@ -19,7 +19,7 @@ const Main = {
     trendUpLongDuration: 300,
     trendingUpBarrier: 10,
     longBreakLossCount: 6,
-    refreshOnWin: false,
+    refreshOnWin: true,
     ws: null,
     history: [],
     winCount: 0,
