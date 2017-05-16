@@ -384,7 +384,10 @@ const Main = {
     onMessage(event) {
         if (this.ended) return;
         var data = JSON.parse(event.data);
-        if (data.error) console.log('onMessage', data);
+        if (data.error) {
+            console.log('onMessage', data);
+            this.isProposal=false;
+        }
         switch (data.msg_type) {
             case 'authorize':
                 //this.addFunds();
