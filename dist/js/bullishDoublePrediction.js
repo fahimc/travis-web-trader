@@ -38,6 +38,7 @@ const BullishDoublePrediction = {
             let stake = Math.abs(Main.profit) * (this.nextProposal ? 0.5 : 0.5);
             Main.currentStake = (stake + (stake * 0.07)) * 2;
 
+
             if (Main.currentStake < 0.4) Main.currentStake = 0.5;
             View.updateStake(Main.currentStake, Main.lossLimit, Main.profitLimit);
             ChartComponent.updatePredictionChart([previousTick, currentTick], lowest, highest);
