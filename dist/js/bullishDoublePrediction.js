@@ -37,7 +37,7 @@ const BullishDoublePrediction = {
         type: proposal
       };
       let stake = (Math.abs(Main.profit)) * 0.5;
-      Main.currentStake = stake + (stake * 0.07);
+      Main.currentStake = stake + (stake * 0.1);
       if (Main.currentStake < 0.4) Main.currentStake = 0.5;
       // Main.currentStake = stake + (stake *0.07);
       //if (this.isFisrtPrediction) Main.currentStake = stake + (stake *0.07);
@@ -48,10 +48,10 @@ const BullishDoublePrediction = {
       Main.isProposal = false;
 
       stake = (Math.abs(Main.profit) + Main.currentStake) * 0.5;
-      Main.currentStake = (stake + (stake * 0.07)) * 2;
-      if (Main.currentStake <= 0.5) Main.currentStake = 0.5;
+      Main.currentStake = (stake + (stake * 0.1)) * 2;
+      if (Main.currentStake <= 0.5) Main.currentStake = 0.6;
       Main.setPrediction(proposal, predictionType);
-      Main.isProposal = true;
+      //Main.isProposal = true;
       View.updateStake(Main.currentStake, Main.lossLimit, Main.profitLimit);
 
 
