@@ -1,9 +1,8 @@
 const BullishDoublePrediction = {
-    isFisrtPrediction: '',
     pause: false,
+    nextProposal: '',
     predict(ticks) {
-        if (!this.isFisrtPrediction && (Main.isProposal || Main.pauseTrading)) return;
-        if (this.pause) return;
+        if (!this.nextProposal && (Main.isProposal || Main.pauseTrading)) return;
         let found = false;
         let proposal = '';
         let predictionType = '';
@@ -11,50 +10,44 @@ const BullishDoublePrediction = {
         let currentTick = ticks[ticks.length - 1];
         let highest = currentTick;
         let lowest = currentTick;
-        if (this.isFisrtPrediction) {
-            proposal = this.isFisrtPrediction == 'CALL' ? 'PUT' : 'CALL';
-            predictionType = 'BULL_' + proposal + '_SECOND';
+        let isSecond=false;
+        if (!this.nextProposal) {
+            if (previousTick < currentTick) {
+                this.nextProposal = 'CALL';
+            } else if (previousTick > currentTick) {
+                this.nextProposal = 'PUT';
+            }
+            proposal = this.nextProposal == 'CALL' ? 'PUT' : 'CALL';
+            predictionType = 'BULL_' + proposal + '_OPP';
             found = true;
 
         } else {
-            if (previousTick < currentTick) {
-                proposal = 'CALL';
-                predictionType = 'BULL_UP';
-                found = true;
-                highest = currentTick;
-                lowest = previousTick;
-            } else if (previousTick > currentTick) {
-                proposal = 'PUT';
-                predictionType = 'BULL_DOWN';
-                found = true;
-                highest = previousTick;
-                lowest = currentTick;
-            }
+            console.log('here');
+            proposal = this.nextProposal;
+            predictionType = this.nextProposal == 'CALL' ? 'BULL_UP' : 'BULL_DOWN';
+            isSecond = true;
+            found = true;
         }
 
         if (found) {
+
             Main.currentTrendItem = {
                 predictionType: predictionType,
                 type: proposal
             };
-             let stake = Math.abs(Main.profit) * (this.isFisrtPrediction?0.5:0.5);
-             Main.currentStake = stake + (stake *0.07);
-            
-            if(Main.currentStake < 0.4)Main.currentStake = 0.5;
-            View.updateStake(Main.currentStake, Main.lossLimit, Main.profitLimit);
-           // console.log('bull stake',Main.currentStake);
-            ChartComponent.updatePredictionChart([previousTick, currentTick], lowest, highest);
-            if (this.isFisrtPrediction) Main.isProposal = false;
-            Main.setPrediction(proposal, predictionType);
-             Main.isProposal = true;
-            if (this.isFisrtPrediction) {
-                this.pause = true;
-                setTimeout(() => {
-                    this.pause = false;
-                }, 10);
-            }
+            let stake = Math.abs(Main.profit) * (this.nextProposal ? 0.5 : 0.5);
+            Main.currentStake = stake + (stake * 0.07);
 
-            this.isFisrtPrediction = this.isFisrtPrediction ? '' : proposal;    
+            if (Main.currentStake < 0.4) Main.currentStake = 0.5;
+            View.updateStake(Main.currentStake, Main.lossLimit, Main.profitLimit);
+            ChartComponent.updatePredictionChart([previousTick, currentTick], lowest, highest);
+            if (isSecond) {
+                Main.isProposal = false;
+                this.nextProposal = '';
+            }
+            Main.setPrediction(proposal, predictionType);
+            Main.isProposal = true;
+
         }
 
         return found;

@@ -650,6 +650,7 @@ const Main = {
         if (Tester && Tester.testBalance) Tester.setBalance(this.accountBalance - this.startBalance);
     },
     setStake(isLoss) {
+        return;
         if (isLoss && this.config.stakeType && window[this.config.stakeType]) {
             this.currentStake = window[this.config.stakeType].getStake(this.currentStake, this.lossCount);
         } else if (isLoss && this.startMartingale) {
