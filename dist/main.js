@@ -5,7 +5,7 @@ const Main = {
     stakeTicks: 6,
     profitLimit: 0, //DEBUG
     lossLimit: -500,
-    lossStreakLimit: 11,
+    lossStreakLimit: 10,
     volatilityLimit: 5,
     stake: 0.5,
     currentStake: 0.5,
@@ -19,7 +19,7 @@ const Main = {
     trendUpLongDuration: 300,
     trendingUpBarrier: 10,
     longBreakLossCount: 6,
-    refreshOnWin: true,
+    refreshOnWin: false,
     ws: null,
     history: [],
     winCount: 0,
@@ -72,7 +72,7 @@ const Main = {
     breakDuration: 120,
     longBreakDuration: 300,
     breakExtention: 60000,
-    lossLimitRefreshDuration: 300,
+    lossLimitRefreshDuration: 10,
     idleStartTime: 0,
     volatileChecker: true,
     martingaleStakeLevel: 8,
@@ -248,7 +248,7 @@ const Main = {
         this.ended = true;
         clearTimeout(this.volatileTimer);
         View.ended(true);
-        console.log('end called', this.winCount, this.lossCount);
+        console.log('end called', ignoreReload);
         Storage.setWins(this.winCount, this.lossCount);
         Storage.setBalance(this.accountBalance);
 
@@ -410,7 +410,7 @@ const Main = {
                 }
                 this.accountBalance = data.balance.balance;
                 this.setDefaultStake();
-                this.lossLimit = -(this.accountBalance - 10); //dynamic lose limit
+                //this.lossLimit = -(this.accountBalance - 10); //dynamic lose limit
                 this.setLossLimit();
                 if (!this.started) this.getAvailableAssets();
 
@@ -614,7 +614,7 @@ const Main = {
                 Storage.setLossLimit();
                 duration = this.lossLimitRefreshDuration;
             }
-            this.end(ignore);
+            this.end();
         }
         if (!isLoss && this.refreshOnWin) this.end();
         this.setStake(true);
@@ -671,7 +671,7 @@ const Main = {
         } else {
             // this.currentStake = this.stake;
         }
-        if (this.profit - this.currentStake <= this.lossLimit) this.end(true);
+        if (this.profit - this.currentStake <= this.lossLimit) this.end();
         View.updateStake(this.currentStake, this.lossLimit, this.profitLimit);
     },
     setPositions() {
