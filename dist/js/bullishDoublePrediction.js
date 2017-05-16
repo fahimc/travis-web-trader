@@ -47,7 +47,7 @@ const BullishDoublePrediction = {
                 this.nextProposal = '';
             }
             Main.setPrediction(proposal, predictionType);
-            Main.isProposal = true;
+           // Main.isProposal = true;
 
         }
 
