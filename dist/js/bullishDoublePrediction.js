@@ -40,6 +40,7 @@ const BullishDoublePrediction = {
 
 
             if (Main.currentStake < 0.4) Main.currentStake = 0.5;
+            //if(Main.currentStake > 20)Main.currentStake=Main.currentStake*0.5;
             View.updateStake(Main.currentStake, Main.lossLimit, Main.profitLimit);
             ChartComponent.updatePredictionChart([previousTick, currentTick], lowest, highest);
             if (isSecond) {
