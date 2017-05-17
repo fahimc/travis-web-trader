@@ -386,7 +386,7 @@ const Main = {
         var data = JSON.parse(event.data);
         if (data.error) {
             console.log('onMessage', data);
-            this.isProposal=false;
+            this.isProposal = false;
         }
         switch (data.msg_type) {
             case 'authorize':
@@ -567,7 +567,7 @@ const Main = {
     },
     doTransaction(isLoss) {
         this.transactionCount++;
-        
+
         this.proposalTickCount = 0;
         this.idleStartTime = null;
         if (isLoss == undefined) {
@@ -613,13 +613,15 @@ const Main = {
                 Storage.setLossLimit();
                 duration = this.lossLimitRefreshDuration;
             }
-            if (this.transactionCount > 1)this.end();
+            if (this.transactionCount > 1) this.end();
         }
         //if (!isLoss && this.refreshOnWin) this.end();
         //this.setStake(true);
         if (this.transactionCount > 1) {
             this.transactionCount = 0;
-            this.isProposal = false;
+            setTimeout(() => {
+                this.isProposal = false;
+            }, 1000);
 
         }
     },
