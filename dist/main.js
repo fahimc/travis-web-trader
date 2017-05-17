@@ -567,11 +567,7 @@ const Main = {
     },
     doTransaction(isLoss) {
         this.transactionCount++;
-        if (this.transactionCount > 1) {
-            this.transactionCount = 0;
-            this.isProposal = false;
-
-        }
+        
         this.proposalTickCount = 0;
         this.idleStartTime = null;
         if (isLoss == undefined) {
@@ -617,10 +613,17 @@ const Main = {
                 Storage.setLossLimit();
                 duration = this.lossLimitRefreshDuration;
             }
-            this.end();
+
+            if (this.transactionCount > 1)this.end();
         }
-        if (!isLoss && this.refreshOnWin) this.end();
-        this.setStake(true);
+
+        //if (!isLoss && this.refreshOnWin) this.end();
+        //this.setStake(true);
+        if (this.transactionCount > 1) {
+            this.transactionCount = 0;
+            this.isProposal = false;
+
+        }
     },
     takeABreak(isLong) {
         let count = this.lossStreak - this.longBreakLossCount;
