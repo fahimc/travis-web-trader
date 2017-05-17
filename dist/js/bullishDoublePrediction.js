@@ -22,7 +22,6 @@ const BullishDoublePrediction = {
             found = true;
 
         } else {
-            console.log('here');
             proposal = this.nextProposal;
             predictionType = this.nextProposal == 'CALL' ? 'BULL_UP' : 'BULL_DOWN';
             isSecond = true;
@@ -35,11 +34,10 @@ const BullishDoublePrediction = {
                 predictionType: predictionType,
                 type: proposal
             };
-            let stake = Math.abs(Main.profit) * (this.nextProposal ? 0.5 : 0.5);
-            Main.currentStake = (stake + (stake * 0.07)) * 2;
+            Main.currentStake = Main.currentStake = Math.ceil(Math.abs(Main.profit) + (Math.abs(Main.profit) * 0.06));
 
 
-            if (Main.currentStake < 0.4) Main.currentStake = 0.5;
+            if (Main.currentStake < 0.4) Main.currentStake = Main.stake;
             //if(Main.currentStake > 20)Main.currentStake=Main.currentStake*0.5;
             View.updateStake(Main.currentStake, Main.lossLimit, Main.profitLimit);
             ChartComponent.updatePredictionChart([previousTick, currentTick], lowest, highest);

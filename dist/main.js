@@ -501,7 +501,7 @@ const Main = {
                         lowestPrice: highLowClose.lowest,
                         highestPrice: highLowClose.highest
                     });
-                    //this.proposalCompleteCheck();
+                    this.proposalCompleteCheck();
                     Volatility.check(this.currentPrice);
                     if (this.idleStartTime) this.checkIdleTime();
                 }
@@ -556,7 +556,7 @@ const Main = {
         if (dif >= 300000) location.reload();
     },
     proposalCompleteCheck() {
-        if (this.isProposal) {
+        if (this.isProposal && this.transactionCount > 0) {
             if (this.proposalTickCount > this.stakeTicks + 5) {
                 console.log('proposalCompleteCheck');
                 this.doTransaction();
@@ -567,11 +567,7 @@ const Main = {
     },
     doTransaction(isLoss) {
         this.transactionCount++;
-        if (this.transactionCount > 1) {
-            this.transactionCount = 0;
-            this.isProposal = false;
-
-        }
+        
         this.proposalTickCount = 0;
         this.idleStartTime = null;
         if (isLoss == undefined) {
@@ -617,10 +613,15 @@ const Main = {
                 Storage.setLossLimit();
                 duration = this.lossLimitRefreshDuration;
             }
-            this.end();
+            if (this.transactionCount > 1)this.end();
         }
-        if (!isLoss && this.refreshOnWin) this.end();
-        this.setStake(true);
+        //if (!isLoss && this.refreshOnWin) this.end();
+        //this.setStake(true);
+        if (this.transactionCount > 1) {
+            this.transactionCount = 0;
+            this.isProposal = false;
+
+        }
     },
     takeABreak(isLong) {
         let count = this.lossStreak - this.longBreakLossCount;
