@@ -34,8 +34,8 @@ const BullishDoublePrediction = {
                 predictionType: predictionType,
                 type: proposal
             };
-            Main.currentStake = Main.currentStake = Math.ceil(Math.abs(Main.profit) + (Math.abs(Main.profit) * 0.06));
-
+            let stake = Math.abs(Main.profit) * (this.nextProposal ? 0.5 : 0.5);
+            Main.currentStake = (stake + (stake * 0.07)) * 2;
 
             if (Main.currentStake < 0.4) Main.currentStake = Main.stake;
             //if(Main.currentStake > 20)Main.currentStake=Main.currentStake*0.5;
