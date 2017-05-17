@@ -384,8 +384,8 @@ const Main = {
     onMessage(event) {
         if (this.ended) return;
         var data = JSON.parse(event.data);
+            if(data.msg_type !== 'tick')console.log('onMessage', data);
         if (data.error) {
-            console.log('onMessage', data);
             this.isProposal=false;
         }
         switch (data.msg_type) {
@@ -501,7 +501,7 @@ const Main = {
                         lowestPrice: highLowClose.lowest,
                         highestPrice: highLowClose.highest
                     });
-                    //this.proposalCompleteCheck();
+                    this.proposalCompleteCheck();
                     Volatility.check(this.currentPrice);
                     if (this.idleStartTime) this.checkIdleTime();
                 }
@@ -621,7 +621,9 @@ const Main = {
         //this.setStake(true);
         if (this.transactionCount > 1) {
             this.transactionCount = 0;
-            this.isProposal = false;
+            setTimeout(()=>{
+              this.isProposal = false;
+            },1000);
 
         }
     },
