@@ -6,7 +6,7 @@ const BullishDoublePrediction = {
         let found = false;
         let proposal = '';
         let predictionType = '';
-        let longTick = ticks[ticks.length - 5];
+        let longTick = ticks[ticks.length - 4];
         let previousTick = ticks[ticks.length - 2];
         let currentTick = ticks[ticks.length - 1];
         let highest = currentTick;
@@ -37,7 +37,7 @@ const BullishDoublePrediction = {
                 type: proposal
             };
             let stake = Math.abs(Main.profit) * (this.nextProposal ? 0.5 : 0.5) * 2;
-            Main.currentStake = (stake + (stake * 0.3));
+            Main.currentStake = (stake + (stake * 0.07));
 
             if (Main.currentStake < 0.4) Main.currentStake = Main.stake;
             //if(Main.currentStake > 20)Main.currentStake=Main.currentStake*0.5;
