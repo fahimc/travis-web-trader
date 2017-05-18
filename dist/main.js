@@ -556,7 +556,7 @@ const Main = {
         }
     },
     doTransaction(isLoss) {
-        this.isProposal = false;
+        
         this.proposalTickCount = 0;
         this.idleStartTime = null;
         if (isLoss == undefined) {
@@ -606,6 +606,7 @@ const Main = {
         }
         if (!isLoss) this.end();
         this.setStake(isLoss);
+        this.isProposal = false;
     },
     takeABreak(isLong) {
         let count = this.lossStreak - this.longBreakLossCount;

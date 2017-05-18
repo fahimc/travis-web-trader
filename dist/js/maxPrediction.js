@@ -26,6 +26,11 @@ const MaxPrediction = {
                 predictionType: predictionType,
                 type: proposal
             };
+            if(Main.lossStreak > 4){
+                Main.stakeTicks = 10;
+            }else{
+                Main.stakeTicks = 6;
+            }
             ChartComponent.updatePredictionChart([collection[0], collection[collection.length - 1]], lowest, highest);
             Main.setPrediction(proposal, predictionType);
         }
