@@ -60,22 +60,33 @@ const ChannelPrediction = {
     },
     checkChannelDirection(collection) {
         let bottoms = [];
+        let tops = [];
         let previous = collection[0];
         let direction = collection[0] > collection[1] ? 'FALL' : 'RAISE';
         collection.forEach((price, index) => {
             if (index > 1 && previous < price && previous > collection[index - 2]) {
                 bottoms.push(previous);
             }
+            if (index > 1 && previous > price && previous < collection[index - 2]) {
+                tops.push(previous);
+            }
             previous = price;
         });
-        if(bottoms.length < 2)return;
+        if(bottoms.length < 2 && tops.length < 2 )return;
         let foundRaise = true;
         let foundFall = true;
         previous = bottoms[0];
-        direction = bottoms[0] > bottoms[1] ? 'FALL' : 'RAISE';
+        direction = 'RAISE';
+        if(bottoms[0] > bottoms[1])direction =  'FALL'
         bottoms.forEach((price, index) => {
             if (index > 1) {
                 if (index && price < previous && direction == 'RAISE') foundRaise = false;
+            }
+
+            previous = price;
+        });
+        tops.forEach((price, index) => {
+            if (index > 1) {
                 if (index && price > previous && direction == 'FALL') foundFall = false;
             }
 

@@ -5,7 +5,7 @@ const Main = {
     stakeTicks: 6,
     profitLimit: 0, //DEBUG
     lossLimit: -500,
-    lossStreakLimit: 10,
+    lossStreakLimit: 7,
     volatilityLimit: 5,
     stake: 0.5,
     currentStake: 0.5,
@@ -82,6 +82,9 @@ const Main = {
     config: null,
     assetModel: null,
     transactionCount: 0,
+    transactionTotal: 1,
+    proposaltime: 1000,
+    useStake: false,
     log: {
 
     },
@@ -614,16 +617,16 @@ const Main = {
                 duration = this.lossLimitRefreshDuration;
             }
 
-            if (this.transactionCount > 1)this.end();
+            if (this.transactionCount > this.transactionTotal)this.end();
         }
-
-        //if (!isLoss && this.refreshOnWin) this.end();
-        //this.setStake(true);
-        if (this.transactionCount > 1) {
+        //if(this.lowestProfit < -30 && this.profit > -(Math.abs(this.lowestProfit) * 0.1))this.end();
+        if (!isLoss && this.transactionCount > this.transactionTotal) this.end();
+        if(this.useStake)this.setStake(true);
+        if (this.transactionCount > this.transactionTotal) {
             this.transactionCount = 0;
             setTimeout(()=>{
               this.isProposal = false;
-            },1000);
+            },this.proposaltime);
 
         }
     },
@@ -658,7 +661,6 @@ const Main = {
         if (Tester && Tester.testBalance) Tester.setBalance(this.accountBalance - this.startBalance);
     },
     setStake(isLoss) {
-        return;
         if (isLoss && this.config.stakeType && window[this.config.stakeType]) {
             this.currentStake = window[this.config.stakeType].getStake(this.currentStake, this.lossCount);
         } else if (isLoss && this.startMartingale) {
