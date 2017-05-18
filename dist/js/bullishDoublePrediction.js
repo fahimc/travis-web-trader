@@ -6,17 +6,19 @@ const BullishDoublePrediction = {
         let found = false;
         let proposal = '';
         let predictionType = '';
+        let longTick = ticks[ticks.length - 5];
         let previousTick = ticks[ticks.length - 2];
         let currentTick = ticks[ticks.length - 1];
         let highest = currentTick;
         let lowest = currentTick;
         let isSecond=false;
         if (!this.nextProposal) {
-            if (previousTick < currentTick) {
+            if (longTick < currentTick && previousTick < currentTick) {
                 this.nextProposal = 'CALL';
-            } else if (previousTick > currentTick) {
+            } else if (longTick > currentTick && previousTick > currentTick) {
                 this.nextProposal = 'PUT';
             }
+            if(! this.nextProposal)return;
             proposal = this.nextProposal == 'CALL' ? 'PUT' : 'CALL';
             predictionType = 'BULL_' + proposal + '_OPP';
             found = true;
@@ -34,8 +36,8 @@ const BullishDoublePrediction = {
                 predictionType: predictionType,
                 type: proposal
             };
-            let stake = Math.abs(Main.profit) * (this.nextProposal ? 0.5 : 0.5);
-            Main.currentStake = (stake + (stake * 0.07)) * 2;
+            let stake = Math.abs(Main.profit) * (this.nextProposal ? 0.5 : 0.5) * 2;
+            Main.currentStake = (stake + (stake * 0.3));
 
             if (Main.currentStake < 0.4) Main.currentStake = Main.stake;
             //if(Main.currentStake > 20)Main.currentStake=Main.currentStake*0.5;
