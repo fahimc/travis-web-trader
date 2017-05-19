@@ -7,6 +7,7 @@ const Main = {
     lossLimit: -500,
     lossStreakLimit: 9,
     volatilityLimit: 5,
+    assetChangeStreak: 3,
     stake: 0.5,
     currentStake: 0.5,
     chanelPrediction: false,
@@ -145,7 +146,7 @@ const Main = {
         if (apiKey && appID) {
             this.createConfig(isVirtual, apiKey, appID, stakeType);
         }
-        if(asset)this.ASSET_NAME = asset;
+        if (asset) this.ASSET_NAME = asset;
         console.log(this.ASSET_NAME);
     },
     createConfig(isVirtual, apiKey, appID, stakeType) {
@@ -248,7 +249,7 @@ const Main = {
         console.log('end called', this.winCount, this.lossCount);
         Storage.setWins(this.winCount, this.lossCount);
         Storage.setBalance(this.accountBalance);
-       
+
         Tester.storeBalance();
         TestModel.end();
         if (this.isTarget) {
@@ -275,7 +276,7 @@ const Main = {
                 if (this.hasManyBigStreaks()) {
                     Storage.clearLossArray();
                     this.setNextAsset();
-                    window.location.search ="asset="+this.ASSET_NAME;
+                    window.location.search = "asset=" + this.ASSET_NAME;
                 } else {
                     location.reload();
                 }
@@ -287,7 +288,7 @@ const Main = {
 
     },
     setNextAsset() {
-        if(!this.config.switchAssets)return;
+        if (!this.config.switchAssets) return;
         switch (this.ASSET_NAME) {
             case 'R_100':
                 this.ASSET_NAME = 'R_75';
@@ -302,7 +303,7 @@ const Main = {
         let count = 0;
         lossArray.forEach((streak) => {
             if (streak >= 3) count++;
-            if(streak >= 5)count+=2;
+            if (streak >= 5) count += 2;
         });
         if (count >= 2) return true;
     },
@@ -378,6 +379,24 @@ const Main = {
     getTicks() {
         this.ws.send(JSON.stringify({ ticks: this.ASSET_NAME }));
     },
+    changeAsset() {
+        console.log('ASSET CHANGED');
+        this.ws.send(JSON.stringify({
+            "forget_all": "ticks"
+        }));
+        this.ws.send(JSON.stringify({
+            "forget_all": "transaction"
+        }));
+        this.setNextAsset();
+        this.history = [];
+        this.historyTimes = [];
+        this.started = false;
+        this.isTrading = false;
+        View.updateAsset(this.ASSET_NAME, this.assetArray, this.payout);
+        this.getHistory();
+        this.getTicks();
+        this.getTranscations();
+    },
     onMessage(event) {
         if (this.ended) return;
         var data = JSON.parse(event.data);
@@ -414,7 +433,7 @@ const Main = {
                 break;
             case 'asset_index':
                 this.assetArray = data.asset_index;
-                console.log('asset_index',this.ASSET_NAME);
+                console.log('asset_index', this.ASSET_NAME);
                 View.updateAsset(this.ASSET_NAME, this.assetArray, this.payout);
                 this.getTicks();
                 this.getTranscations();
@@ -557,7 +576,7 @@ const Main = {
         }
     },
     doTransaction(isLoss) {
-        
+
         this.proposalTickCount = 0;
         this.idleStartTime = null;
         if (isLoss == undefined) {
@@ -576,7 +595,7 @@ const Main = {
             this.setFail();
         } else if (isLoss == false) {
             //this.profit += (this.currentStake + (this.currentStake * 0.94));
-            if(this.lossStreak)Storage.setLossArray(this.lossStreak);
+            if (this.lossStreak) Storage.setLossArray(this.lossStreak);
             this.lossStreak = 0;
             Volatility.changeLimit = Volatility.defaultChangeLimit;
             this.startMartingale = false;
@@ -607,6 +626,7 @@ const Main = {
         }
         if (!isLoss) this.end();
         this.setStake(isLoss);
+        if(this.assetChangeStreak && this.lossStreak >= this.assetChangeStreak)this.changeAsset();
         this.isProposal = false;
     },
     takeABreak(isLong) {
@@ -709,10 +729,9 @@ const Main = {
         return this.log[type];
     },
     setPrediction(proposal, predictionType, duration) {
-        if(this.assetModel.payout[proposal] !==0.94)
-        {
+        if (this.assetModel.payout[proposal] !== 0.94) {
             let dif = 0.94 - this.assetModel.payout[proposal];
-            if(dif > 0)this.currentStake +=  this.currentStake * dif;
+            if (dif > 0) this.currentStake += this.currentStake * dif;
         }
         this.getPriceProposal(proposal, duration);
         View.updatePredictionType(predictionType);
