@@ -83,7 +83,7 @@ const Storage = {
         this.set(this.keys.streaks, JSON.stringify(this.streaks));
     },
     setLossArray(key){
-        if(this.lossArray.length >= 5)this.lossArray =[];
+        if(this.lossArray.length >= 5)this.lossArray.shift();
         this.lossArray.push(key);
         this.set(this.keys.lossArray,JSON.stringify(this.lossArray));
     },
