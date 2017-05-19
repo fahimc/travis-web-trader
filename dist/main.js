@@ -301,7 +301,8 @@ const Main = {
         let lossArray = Storage.getLossArray();
         let count = 0;
         lossArray.forEach((streak) => {
-            if (streak >= 4) count++;
+            if (streak >= 3) count++;
+            if(streak >= 5)count+=2;
         });
         if (count >= 2) return true;
     },
