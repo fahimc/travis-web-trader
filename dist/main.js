@@ -626,7 +626,7 @@ const Main = {
         }
         if (!isLoss) this.end();
         this.setStake(isLoss);
-        if(this.assetChangeStreak && this.lossStreak >= this.assetChangeStreak)this.changeAsset();
+        if(this.assetChangeStreak && this.lossStreak == this.assetChangeStreak)this.changeAsset();
         this.isProposal = false;
     },
     takeABreak(isLong) {
