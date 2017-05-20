@@ -5,7 +5,7 @@ const Main = {
     stakeTicks: 6,
     profitLimit: 100, //DEBUG
     lossLimit: -500,
-    lossStreakLimit: 9,
+    lossStreakLimit: 10,
     volatilityLimit: 5,
     assetChangeStreak: [3,6,8,9],
     stake: 0.5,
@@ -614,10 +614,10 @@ const Main = {
         ChartComponent.updatePredictionChart([]);
 
         View.updateCounts(this.winCount, this.lossCount, this.maxLossStreak);
-        if (this.lossStreakLimit && this.lossStreak > this.lossStreakLimit || profit <= this.lossLimit || this.accountBalance <= 0 || profit >= this.profitLimit) {
+        if (this.lossStreakLimit && this.lossStreak >= this.lossStreakLimit || profit <= this.lossLimit || this.accountBalance <= 0 || profit >= this.profitLimit) {
             let ignore = this.isTarget ? profit >= this.profitLimit : profit <= this.lossLimit;
             let duration;
-            if (this.lossStreakLimit && this.lossStreak > this.lossStreakLimit) {
+            if (this.lossStreakLimit && this.lossStreak >= this.lossStreakLimit) {
                 console.log('loss limit reached');
                 Storage.setLossLimit();
                 duration = this.lossLimitRefreshDuration;
