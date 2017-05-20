@@ -14,19 +14,306 @@
 <body>
   <script type="text/javascript">
   let Test = {
+    history:[],
     run() {
-      this.checkChange(History.prices);
-      this.checkChange(History2.prices);
-      this.checkChange(History3.prices);
-      this.checkChange(History4.prices);
-      this.checkChange(History5.prices);
-      this.checkDirectionChange(History.prices);
-      this.checkDirectionChange(History2.prices);
-      this.checkDirectionChange(History3.prices);
-      this.checkDirectionChange(History4.prices);
-      this.checkDirectionChange(History5.prices);
+      let upCollection = [1,2,3,4,5,6,7,8,9,10];
+      let downCollection = [10,9,8,7,6,5,4,3,2,1];
+      let randomCollection = [1,4,-6,7,2,3,9,-5,4,-6];
+      let history1 = ["9520.12",
+      "9521.73",
+      "9521.92",
+      "9524.05",
+      "9522.02",
+      "9524.42",
+      "9528.73",
+      "9527.62",
+      "9528.30",
+      "9528.93",
+      "9526.69",
+      "9528.93",
+      "9527.52",
+      "9533.61",
+      "9535.81",
+      "9535.54",
+      "9539.18",
+      "9541.71",
+      "9543.60",
+      "9545.16",
+      "9545.73",
+      "9545.38",
+      "9546.82",
+      "9543.38",
+      "9546.41",
+      "9543.92",
+      "9546.50",
+      "9544.25",
+      "9543.04",
+      "9539.79"];
+      let history2 = ["9592.77",
+      "9590.46",
+      "9588.19",
+      "9588.62",
+      "9588.10",
+      "9589.64",
+      "9587.73",
+      "9586.74",
+      "9588.84",
+      "9592.08",
+      "9592.73",
+      "9593.07",
+      "9591.53",
+      "9588.77",
+      "9586.93",
+      "9585.53",
+      "9584.03",
+      "9585.02",
+      "9583.67",
+      "9583.85",
+      "9583.94",
+      "9586.52",
+      "9586.59",
+      "9590.00",
+      "9586.06",
+      "9587.92",
+      "9588.68",
+      "9584.20",
+      "9582.85",
+      "9583.91"];
+      let history3 =[
+      "9546.29",
+      "9546.94",
+      "9545.24",
+      "9544.25",
+      "9543.54",
+      "9541.45",
+      "9546.73",
+      "9544.58",
+      "9542.53",
+      "9542.78",
+      "9543.19",
+      "9539.11",
+      "9541.58",
+      "9539.89",
+      "9537.79",
+      "9537.64",
+      "9540.31",
+      "9537.93",
+      "9541.02",
+      "9540.27",
+      "9537.67",
+      "9539.72",
+      "9537.30",
+      "9534.89",
+      "9535.24",
+      "9532.31",
+      "9534.31",
+      "9537.65",
+      "9539.81",
+      "9537.28"
+    ];
+    let history4 = [
+      "9544.30",
+      "9543.65",
+      "9545.98",
+      "9547.93",
+      "9548.59",
+      "9548.20",
+      "9546.61",
+      "9545.02",
+      "9547.42",
+      "9547.56",
+      "9548.14",
+      "9545.84",
+      "9544.73",
+      "9549.14",
+      "9547.09",
+      "9547.20",
+      "9548.51",
+      "9549.83",
+      "9549.88",
+      "9551.79",
+      "9557.25",
+      "9552.02",
+      "9554.26",
+      "9555.97",
+      "9556.08",
+      "9555.27",
+      "9554.18",
+      "9554.81",
+      "9554.90",
+      "9558.71"
+    ];
+
+    let history5 = [
+      "9546.29",
+      "9546.94",
+      "9545.24",
+      "9544.25",
+      "9543.54",
+      "9541.45",
+      "9546.73",
+      "9544.58",
+      "9542.53",
+      "9542.78",
+      "9543.19",
+      "9539.11",
+      "9541.58",
+      "9539.89",
+      "9537.79",
+      "9537.64",
+      "9540.31",
+      "9537.93",
+      "9541.02",
+      "9540.27",
+      "9537.67",
+      "9539.72",
+      "9537.30",
+      "9534.89",
+      "9535.24",
+      "9532.31",
+      "9534.31",
+      "9537.65",
+      "9539.81",
+      "9537.28"
+    ];
+
+    let history6 = [
+      "9598.02",
+      "9594.10",
+      "9591.51",
+      "9586.28",
+      "9586.11",
+      "9584.59",
+      "9582.67",
+      "9579.57",
+      "9577.20",
+      "9574.06",
+      "9570.15",
+      "9567.73",
+      "9569.10",
+      "9567.70",
+      "9569.37",
+      "9569.45",
+      "9567.60",
+      "9568.17",
+      "9568.91",
+      "9568.15",
+      "9566.99",
+      "9564.42",
+      "9565.17",
+      "9564.82",
+      "9564.45",
+      "9563.19",
+      "9561.09",
+      "9559.69",
+      "9558.63",
+      "9559.68",
+      "9558.75",
+      "9560.80",
+      "9556.89",
+      "9555.80",
+      "9556.50",
+      "9557.90",
+      "9557.32",
+      "9556.81",
+      "9555.48",
+      "9558.57",
+      "9561.37",
+      "9562.79",
+      "9558.75",
+      "9556.50",
+      "9556.19",
+      "9553.20",
+      "9554.79",
+      "9553.94",
+      "9556.95",
+      "9557.53",
+      "9557.17",
+      "9559.52",
+      "9553.42",
+      "9551.38",
+      "9551.22",
+      "9549.23",
+      "9546.60",
+      "9546.24",
+      "9547.21",
+      "9549.43",
+      "9543.73",
+      "9546.29",
+      "9546.94",
+      "9545.24",
+      "9544.25",
+      "9543.54",
+      "9541.45",
+      "9546.73",
+      "9544.58",
+      "9542.53",
+      "9542.78",
+      "9543.19",
+      "9539.11",
+      "9541.58",
+      "9539.89",
+      "9537.79",
+      "9537.64",
+      "9540.31",
+      "9537.93",
+      "9541.02",
+      "9540.27",
+      "9537.67",
+      "9539.72",
+      "9537.30",
+      "9534.89",
+      "9535.24",
+      "9532.31",
+      "9534.31",
+      "9537.65",
+      "9539.81",
+      "9537.28"
+    ];
+      // this.checkChange(History.prices);
+      // this.checkChange(History2.prices);
+      // this.checkChange(History3.prices);
+      // this.checkChange(History4.prices);
+      // this.checkChange(History5.prices);
+      // this.checkDirectionChange(History.prices);
+      // this.checkDirectionChange(History2.prices);
+      // this.checkDirectionChange(History3.prices);
+      // this.checkDirectionChange(History4.prices);
+      // this.checkDirectionChange(History5.prices);
+      //this.deviation(upCollection);
+      //this.deviation(downCollection);
+     // this.deviation(randomCollection);
+      this.deviation(history1);
+      this.deviation(history2);
+      this.deviation(history3);
+      this.deviation(history4);
+      this.deviation(history5);
+      this.deviation(history6);
 
     },
+    mean(collection) {
+        let sum = 0;
+        collection.forEach((price) => {
+            sum += Number(price);
+        });
+        let mean = sum / collection.length;
+        return mean;
+    },
+    deviation(collection){
+      let mean = this.mean(collection);
+      console.log(collection[collection.length-1] - mean);
+      let sum=0;
+      let deviations = collection.map((price) => {
+        price = Number(price);
+        let result = (price - mean);
+           let square =  result * result;
+           sum+=square;
+           return square;
+        });
+
+      let divide = sum/(deviations.length-1);
+      let standardDeviation = Math.sqrt(divide);
+    }, 
     checkChange(collection) {
       let previousPrice = collection[0];
       let changeCollection = [];

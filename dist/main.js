@@ -7,7 +7,7 @@ const Main = {
     lossLimit: -500,
     lossStreakLimit: 10,
     volatilityLimit: 5,
-    assetChangeStreak: [2,4,6,8],
+    assetChangeStreak: [2,5,7,9],
     stake: 0.5,
     currentStake: 0.5,
     chanelPrediction: false,
