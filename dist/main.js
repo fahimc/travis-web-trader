@@ -7,7 +7,7 @@ const Main = {
     lossLimit: -500,
     lossStreakLimit: 9,
     volatilityLimit: 5,
-    assetChangeStreak: 3,
+    assetChangeStreak: [3,6,8,9],
     stake: 0.5,
     currentStake: 0.5,
     chanelPrediction: false,
@@ -626,8 +626,15 @@ const Main = {
         }
         if (!isLoss) this.end();
         this.setStake(isLoss);
-        if(this.assetChangeStreak && this.lossStreak == this.assetChangeStreak)this.changeAsset();
+        if(this.assetChangeStreak && this.isAssetChangeIndex())this.changeAsset();
         this.isProposal = false;
+    },
+    isAssetChangeIndex(){
+        let found = false;
+        this.assetChangeStreak.forEach((num)=>{
+            if(this.lossStreak == num)found=true;
+        });
+        return found;
     },
     takeABreak(isLong) {
         let count = this.lossStreak - this.longBreakLossCount;
