@@ -7,7 +7,7 @@ const Main = {
     lossLimit: -500,
     lossStreakLimit: 10,
     volatilityLimit: 5,
-    assetChangeStreak: [2,5,7,9],
+    assetChangeStreak: [3,6,8,10],
     stake: 0.5,
     currentStake: 0.5,
     chanelPrediction: false,
@@ -61,7 +61,7 @@ const Main = {
     trendSuccess: [],
     trendFail: [],
     trendSucessPercentage: 0.6,
-    pauseTrading: false,
+    pauseTrading: true,
     currentTrendItem: {},
     ticksAverageCollection: [],
     volatileTimer: null,
@@ -78,8 +78,10 @@ const Main = {
     transactionTimer: null,
     transactionTimerDuration: 30000,
     isTransaction: false,
+    isBreak: false,
     config: null,
     assetModel: null,
+    historyCallback: [],
     log: {
 
     },
@@ -287,7 +289,11 @@ const Main = {
 
 
     },
-    setNextAsset() {
+    setNextAsset(asset) {
+        if(asset){
+            this.ASSET_NAME=asset;
+            return;
+        }
         if (!this.config.switchAssets) return;
         switch (this.ASSET_NAME) {
             case 'R_100':
@@ -314,9 +320,10 @@ const Main = {
         }));
 
     },
-    getHistory(count) {
+    getHistory(count,asset,callback) {
+        if(callback)this.historyCallback.push({asset:asset,callback:callback});
         this.ws.send(JSON.stringify({
-            "ticks_history": this.ASSET_NAME,
+            "ticks_history": asset?asset:this.ASSET_NAME,
             "end": "latest",
             "count": count ? count : 5000
         }));
@@ -331,7 +338,7 @@ const Main = {
             this.reset();
         }
         this.idleStartTime = new Date().getTime();
-        this.isTrading = true;
+        if(!this.isBreak)this.isTrading = true;
 
     },
     onProposeRaise() {
@@ -348,7 +355,7 @@ const Main = {
             type: 'PUT'
         };
     },
-    getPriceProposal(type, duration) {
+    getPriceProposal(type, duration,amount) {
         if (!type || this.isProposal) return;
         this.isProposal = true;
         this.proposalTickCount = 0;
@@ -356,7 +363,7 @@ const Main = {
         View.updatePrediction(type, this.startPricePosition, this.currentPrice);
         this.ws.send(JSON.stringify({
             "proposal": 1,
-            "amount": this.currentStake,
+            "amount": amount?amount:this.currentStake,
             "basis": "stake",
             "contract_type": type ? type : "CALL",
             "currency": this.isVirtual ? "USD" : 'GBP',
@@ -379,15 +386,17 @@ const Main = {
     getTicks() {
         this.ws.send(JSON.stringify({ ticks: this.ASSET_NAME }));
     },
-    changeAsset() {
+    changeAsset(asset) {
         console.log('ASSET CHANGED');
+        MockMode.restart();
         this.ws.send(JSON.stringify({
             "forget_all": "ticks"
         }));
         this.ws.send(JSON.stringify({
             "forget_all": "transaction"
         }));
-        this.setNextAsset();
+        this.setNextAsset(asset);
+        this.assetModel = window[this.ASSET_NAME + 'Model'];
         this.history = [];
         this.historyTimes = [];
         this.started = false;
@@ -452,6 +461,17 @@ const Main = {
                     ChartComponent.setCloseData(collection30);
                     this.onStartTrading();
                 }
+                if(this.historyCallback)
+                {
+                    for(let a=0;a<this.historyCallback.length;a++){
+                        if(this.historyCallback[a].asset==data.echo_req.ticks_history)
+                        {
+                            this.historyCallback[a].callback(data);
+                            this.historyCallback.splice(a,1);
+                            a--;
+                        }
+                    }
+                }
                 break;
             case 'proposal':
                 // console.log('proposal', data);
@@ -515,6 +535,7 @@ const Main = {
                         highestPrice: highLowClose.highest
                     });
                     //this.proposalCompleteCheck();
+                    MockMode.run(this.currentPrice);
                     Volatility.check(this.currentPrice);
                     if (this.idleStartTime) this.checkIdleTime();
                 }
@@ -626,7 +647,7 @@ const Main = {
         }
         if (!isLoss) this.end();
         this.setStake(isLoss);
-        if(this.assetChangeStreak && this.isAssetChangeIndex())this.changeAsset();
+        //if(this.assetChangeStreak && this.isAssetChangeIndex())this.changeAsset();
         this.isProposal = false;
     },
     isAssetChangeIndex(){
@@ -641,7 +662,9 @@ const Main = {
         this.isTrading = false;
         let duration = isLong ? this.longBreakDuration + (count * this.breakExtention) : this.breakDuration;
         View.setBreak(true);
+        this.isBreak=true;
         setTimeout(function() {
+            this.isBreak=false;
             this.isTrading = true;
             View.setBreak(false);
         }.bind(this), duration);
@@ -735,12 +758,12 @@ const Main = {
         }
         return this.log[type];
     },
-    setPrediction(proposal, predictionType, duration) {
+    setPrediction(proposal, predictionType, duration,amount) {
         if (this.assetModel.payout[proposal] !== 0.94) {
             let dif = 0.94 - this.assetModel.payout[proposal];
             if (dif > 0) this.currentStake += this.currentStake * dif;
         }
-        this.getPriceProposal(proposal, duration);
+        this.getPriceProposal(proposal, duration,amount);
         View.updatePredictionType(predictionType);
         this.predictionType = predictionType;
     }

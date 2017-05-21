@@ -1,8 +1,8 @@
 var RDBULLModel = {
-  chartBarrier:2,
-  priceChangeBarrier:2.5,
+  chartBarrier:1,
+  priceChangeBarrier:1,
   payout:{
-    CALL:0.91,
+    CALL:0.901,
     PUT:0.984
   }
 };

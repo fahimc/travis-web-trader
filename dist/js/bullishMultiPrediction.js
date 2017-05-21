@@ -1,6 +1,8 @@
 const BullishPrediction = {
+    doMultiple: false,
+    multipleCount: 0,
     predict(ticks, checkMode) {
-        if (!checkMode && (Main.isProposal || Main.pauseTrading)) return;
+        if (!this.doMultiple && !checkMode && (Main.isProposal || Main.pauseTrading)) return;
         let lastTick = ticks[ticks.length - 4];
         let previousTick = ticks[ticks.length - 2];
         let currentTick = ticks[ticks.length - 1];
@@ -29,8 +31,19 @@ const BullishPrediction = {
                 type: proposal
             };
             if (!checkMode) {
-               ChartComponent.updatePredictionChart(ticks.slice(ticks.length - 4, ticks.length), lowest, highest);
-               Main.setPrediction(proposal, predictionType, checkMode);
+                ChartComponent.updatePredictionChart(ticks.slice(ticks.length - 4, ticks.length), lowest, highest);
+                if(this.doMultiple)Main.isProposal = false;
+                Main.setPrediction(proposal, predictionType, checkMode, this.doMultiple?Main.stake:null);
+                
+                if (Main.lossStreak >= 1 && !this.doMultiple) {
+                    this.doMultiple = true;
+                } else if (this.doMultiple) {
+                    this.multipleCount++;
+                    if (this.multipleCount > 4) {
+                        this.doMultiple = false;
+                        this.multipleCount = 0;
+                    }
+                }
             } else {
                 return {
                     predictionType: predictionType,

@@ -48,6 +48,11 @@ let View = {
         this.stopButton.addEventListener('click', this.onStopClicked.bind(this));
         this.raiseButton.addEventListener('click', this.onRaiseClicked.bind(this));
         this.fallButton.addEventListener('click', this.onFallClicked.bind(this));
+        this.assetSelector.addEventListener('change', this.onChangeClicked.bind(this));
+    },
+    onChangeClicked(event){
+        console.log(event.srcElement.selectedOptions[0].value);
+        Main.changeAsset(event.srcElement.selectedOptions[0].value);
     },
     onFallClicked() {
         App.EventBus.dispatch(App.EVENT.PROPOSE_FALL);

@@ -31,10 +31,12 @@ const Volatility = {
     end(collection) {
         let change = this.priceChangeSmall(collection);
         let changeCount = this.numberOfChanges(collection);
-        if (changeCount > this.changeLimit||change) {
+        if (!MockMode.toTrade || changeCount > this.changeLimit||change) {
             Main.pauseTrading = true;
             change = change?change:0;
-            View.updateVolatile(true, changeCount > this.changeLimit ? 'direction changes:' + changeCount : 'price change: ' + change.toFixed(2));
+            let message = changeCount > this.changeLimit ? 'direction changes:' + changeCount : 'price change: ' + change.toFixed(2);
+            if(!MockMode.toTrade)message = 'win percentage is ' + (MockMode.winPercentage * 100).toFixed(2) + '%';
+            View.updateVolatile(true, message);
         } else {
             Main.pauseTrading = false;
             View.updateVolatile(false, '');
