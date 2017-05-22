@@ -5,7 +5,7 @@ const Main = {
     stakeTicks: 6,
     profitLimit: 100, //DEBUG
     lossLimit: -500,
-    lossStreakLimit: 10,
+    lossStreakLimit: 11,
     volatilityLimit: 5,
     assetChangeStreak: [2,5,7,9],
     stake: 0.5,
@@ -331,7 +331,7 @@ const Main = {
             this.reset();
         }
         this.idleStartTime = new Date().getTime();
-        this.isTrading = true;
+        if(!this.pauseTrading)this.isTrading = true;
 
     },
     onProposeRaise() {
@@ -622,7 +622,7 @@ const Main = {
                 Storage.setLossLimit();
                 duration = this.lossLimitRefreshDuration;
             }
-            this.end(ignore);
+            this.end(ignore,duration);
         }
         if (!isLoss) this.end();
         this.setStake(isLoss);
