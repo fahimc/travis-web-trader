@@ -1,6 +1,6 @@
 const Config = {
   isVirtual: true,
-  switchAssets:false,
+  switchAssets:true,
   virtual: {
     appID: '',
     apiKey: ''
@@ -10,5 +10,10 @@ const Config = {
     apiKey: ''
   },
   asset:'R_100',
-  stakeType: 'SevenStake'
+  stakeType: 'SevenStake',
+  testMode:true,
+  testData:{
+    balance:1100,
+    ignoreReload:true
+  }
 };
