@@ -5,9 +5,9 @@ const Main = {
     stakeTicks: 6,
     profitLimit: 100, //DEBUG
     lossLimit: -500,
-    lossStreakLimit: 11,
+    lossStreakLimit: 13,
     volatilityLimit: 5,
-    assetChangeStreak: [2,5,7,9],
+    assetChangeStreak: [2, 5, 7, 9],
     stake: 0.5,
     currentStake: 0.5,
     chanelPrediction: false,
@@ -105,8 +105,8 @@ const Main = {
     onLoaded() {
         this.setConfig();
         this.checkQuery();
-        if(this.config.testMode) {
-            TestModel.ENABLED=true;
+        if (this.config.testMode) {
+            TestModel.ENABLED = true;
             window.WebSocket = FakeWebSocket;
             TestModel.init();
         }
@@ -336,7 +336,7 @@ const Main = {
             this.reset();
         }
         this.idleStartTime = new Date().getTime();
-        if(!this.pauseTrading)this.isTrading = true;
+        if (!this.pauseTrading) this.isTrading = true;
 
     },
     onProposeRaise() {
@@ -385,7 +385,7 @@ const Main = {
         this.ws.send(JSON.stringify({ ticks: this.ASSET_NAME }));
     },
     changeAsset() {
-        if(TestModel.ENABLED)return;
+        if (TestModel.ENABLED) return;
         console.log('ASSET CHANGED');
         this.ws.send(JSON.stringify({
             "forget_all": "ticks"
@@ -628,27 +628,29 @@ const Main = {
                 Storage.setLossLimit();
                 duration = this.lossLimitRefreshDuration;
             }
-            this.end(ignore,duration);
+            this.end(ignore, duration);
         }
         if (!isLoss) this.end();
         this.setStake(isLoss);
-        if(this.assetChangeStreak && this.isAssetChangeIndex())this.changeAsset();
+        if (this.assetChangeStreak && this.isAssetChangeIndex()) this.changeAsset();
         this.isProposal = false;
     },
-    isAssetChangeIndex(){
+    isAssetChangeIndex() {
         let found = false;
-        this.assetChangeStreak.forEach((num)=>{
-            if(this.lossStreak == num)found=true;
+        this.assetChangeStreak.forEach((num) => {
+            if (this.lossStreak == num) found = true;
         });
         return found;
     },
     takeABreak(isLong) {
         let count = this.lossStreak - this.longBreakLossCount;
         this.isTrading = false;
+        this.pauseTrading = true;
         let duration = isLong ? this.longBreakDuration + (count * this.breakExtention) : this.breakDuration;
         View.setBreak(true);
         setTimeout(function() {
             this.isTrading = true;
+            this.pauseTrading = false;
             View.setBreak(false);
         }.bind(this), duration);
         Util.startBreakTimer(duration);
@@ -692,9 +694,9 @@ const Main = {
             this.currentStake = this.stake;
         }
         if (this.profit - this.currentStake <= this.lossLimit) {
-            console.log('MAX I DONT HAVE ENOUGH MONEY, limit reached!',this.profit,this.currentStake,this.lossLimit);
+            console.log('MAX I DONT HAVE ENOUGH MONEY, limit reached!', this.profit, this.currentStake, this.lossLimit);
             this.end(true);
-        } 
+        }
         View.updateStake(this.currentStake, this.lossLimit, this.profitLimit);
     },
     setPositions() {
