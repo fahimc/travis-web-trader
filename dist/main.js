@@ -149,6 +149,9 @@ const Main = {
             this.createConfig(isVirtual, apiKey, appID, stakeType);
         }
         if (asset) this.ASSET_NAME = asset;
+        if (window[this.ASSET_NAME + 'Model']) {
+            this.assetModel = window[this.ASSET_NAME + 'Model'];
+        }
         console.log(this.ASSET_NAME);
     },
     createConfig(isVirtual, apiKey, appID, stakeType) {
@@ -280,7 +283,7 @@ const Main = {
                     this.setNextAsset();
                     window.location.search = "asset=" + this.ASSET_NAME;
                 } else {
-                    location.reload();
+                   window.location.search = "asset=" + this.ASSET_NAME;
                 }
             }, duration ? duration : 10);
             View.setBreak(true);

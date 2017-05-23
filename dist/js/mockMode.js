@@ -8,9 +8,9 @@ let MockMode = {
     winPercentage: 0,
     transactionCollection: [],
     countCollection: [],
-    initialWinPercentageCap: 0.4,
+    initialWinPercentageCap: 0.52,
     tightWinPercentageCap: 0.6,
-    currentWinPercentageCap: 0.4,
+    currentWinPercentageCap: 0.52,
     gettingHistory: false,
     assetCollection: [
         'R_100',
@@ -21,6 +21,7 @@ let MockMode = {
         'RDBULL',
         'RDBEAR'
     ],
+    lossStreak:0,
     assetResultCollection: [],
     run(currentPrice) {
         this.checkTransactions(currentPrice);
@@ -29,7 +30,8 @@ let MockMode = {
         this.checkTrade();
         if (this.assetResultCollection.length >= this.assetCollection.length) {
             this.checkAssetResults();
-        } else {
+        } else if(Main.lossStreak > this.lossStreak){
+            this.lossStreak = Main.lossStreak;
             this.checkAssets();
         }
 
@@ -68,8 +70,8 @@ let MockMode = {
         let wins = this.numberOfWins();
         this.winPercentage = wins / total;
         if (isNaN(this.winPercentage)) this.winPercentage = 0;
-        //this.toTrade = Main.lossStreak >= 3 ? this.winPercentage >= this.tightWinPercentageCap : this.winPercentage >= this.currentWinPercentageCap;
-        this.toTrade = true;
+        this.toTrade = Main.lossStreak >= 3 ? this.winPercentage >= this.tightWinPercentageCap : this.winPercentage >= this.currentWinPercentageCap;
+        //this.toTrade = true;
         if (total > 5) {
             this.countCollection.shift();
         }

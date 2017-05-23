@@ -9,9 +9,13 @@ const Storage = {
         streaks: 'streaks',
         historicalItemIndex: 'historicalItemIndex',
         historicalIndex: 'historicalIndex',
+        assetStreaks: 'assetStreaks',
     },
     testPrefix: 'test_',
     streaks: {
+
+    },
+    assetStreaks: {
 
     },
     wins: 0,
@@ -22,6 +26,9 @@ const Storage = {
         this.show();
         let str = this.get(this.keys.streaks);
         if (str && str != 'undefined') this.streaks = JSON.parse(str);
+
+        str = this.get(this.keys.assetStreaks);
+        if (str && str != 'undefined') this.assetStreaks = JSON.parse(str);
 
         str = this.get(this.keys.wins);
         if (str && str != 'undefined') this.wins = Number(str);
@@ -63,6 +70,11 @@ const Storage = {
             table.push({ name: 'win percentage', value: percentage });
         }
         console.table(table);
+        str = this.get(this.keys.assetStreaks);
+        if (str && str != 'undefined') {
+            console.table([this.assetStreaks]);
+        }
+
     },
     get(key) {
         if (Tester.isTesting || TestModel.ENABLED) {
@@ -78,9 +90,20 @@ const Storage = {
         localStorage.setItem(key, value);
     },
     setStreak(key) {
-        if (this.streaks[key] == undefined) this.streaks[key] = 0;
+        if (this.streaks[key] == undefined) {
+            this.streaks[key] = 0;
+        }
+        console.log(this.assetStreaks[Main.ASSET_NAME]);
+        if (this.assetStreaks[Main.ASSET_NAME] == undefined) {
+            this.assetStreaks[Main.ASSET_NAME] = {};
+        }
+        if (this.assetStreaks[Main.ASSET_NAME][key] == undefined) {
+            this.assetStreaks[Main.ASSET_NAME][key] = 0;
+        }
         this.streaks[key]++;
+        this.assetStreaks[Main.ASSET_NAME][key]++;
         this.set(this.keys.streaks, JSON.stringify(this.streaks));
+        this.set(this.keys.assetStreaks, JSON.stringify(this.assetStreaks));
     },
     setLossArray(key){
         if(this.lossArray.length >= 5)this.lossArray.shift();
