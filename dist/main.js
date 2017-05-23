@@ -645,12 +645,12 @@ const Main = {
     takeABreak(isLong) {
         let count = this.lossStreak - this.longBreakLossCount;
         this.isTrading = false;
-        this.pauseTrading = true;
+      //  this.pauseTrading = true;
         let duration = isLong ? this.longBreakDuration + (count * this.breakExtention) : this.breakDuration;
         View.setBreak(true);
         setTimeout(function() {
             this.isTrading = true;
-            this.pauseTrading = false;
+           // this.pauseTrading = false;
             View.setBreak(false);
         }.bind(this), duration);
         Util.startBreakTimer(duration);
