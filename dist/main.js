@@ -105,6 +105,11 @@ const Main = {
     onLoaded() {
         this.setConfig();
         this.checkQuery();
+        if(this.config.testMode) {
+            TestModel.ENABLED=true;
+            window.WebSocket = FakeWebSocket;
+            TestModel.init();
+        }
         ChartComponent.create();
         View.init();
         View.updateStake(this.currentStake, this.lossLimit, this.profitLimit);
@@ -380,6 +385,7 @@ const Main = {
         this.ws.send(JSON.stringify({ ticks: this.ASSET_NAME }));
     },
     changeAsset() {
+        if(TestModel.ENABLED)return;
         console.log('ASSET CHANGED');
         this.ws.send(JSON.stringify({
             "forget_all": "ticks"

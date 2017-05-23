@@ -6,7 +6,7 @@ const TestModel = {
   ENABLED: false,
   ignoreReload: true,
   speed: 100,
-  balance: 1200,
+  balance: 1700,
   assets: [],
   strategy: 'LOSE',
   history: {
@@ -66,6 +66,10 @@ const TestModel = {
   historicalTicks: [],
   historicalItemIndex: 0,
   historicalIndex: 0,
+  init(){
+    if(Main.config.testData && Main.config.testData.balance) this.balance = Main.config.testData.balance;
+    if(Main.config.testData && Main.config.testData.ignoreReload != undefined)this.ignoreReload = Main.config.testData.ignoreReload;
+  },
   getBalance() {
     if(!this.ENABLED)return;
     let balance = Storage.get(Storage.keys.balance);
