@@ -62,6 +62,7 @@ const Main = {
     trendFail: [],
     trendSucessPercentage: 0.6,
     pauseTrading: false,
+    isBreak: false,
     currentTrendItem: {},
     ticksAverageCollection: [],
     volatileTimer: null,
@@ -336,7 +337,7 @@ const Main = {
             this.reset();
         }
         this.idleStartTime = new Date().getTime();
-        if (!this.pauseTrading) this.isTrading = true;
+        if (!this.pauseTrading && !this.isBreak) this.isTrading = true;
 
     },
     onProposeRaise() {
@@ -645,12 +646,12 @@ const Main = {
     takeABreak(isLong) {
         let count = this.lossStreak - this.longBreakLossCount;
         this.isTrading = false;
-      //  this.pauseTrading = true;
+        this.isBreak = true;
         let duration = isLong ? this.longBreakDuration + (count * this.breakExtention) : this.breakDuration;
         View.setBreak(true);
         setTimeout(function() {
             this.isTrading = true;
-           // this.pauseTrading = false;
+            this.isBreak = false;
             View.setBreak(false);
         }.bind(this), duration);
         Util.startBreakTimer(duration);
