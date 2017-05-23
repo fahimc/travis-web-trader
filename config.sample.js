@@ -11,9 +11,9 @@ const Config = {
   },
   asset:'R_100',
   stakeType: 'SevenStake',
-  testMode:false,
+  testMode:true,
   testData:{
-    balance:1700,
-    ignoreReload:false
+    balance:1100,
+    ignoreReload:true
   }
 };

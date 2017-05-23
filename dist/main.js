@@ -5,7 +5,7 @@ const Main = {
     stakeTicks: 6,
     profitLimit: 100, //DEBUG
     lossLimit: -500,
-    lossStreakLimit: 11,
+    lossStreakLimit: 15,
     volatilityLimit: 5,
     assetChangeStreak: [2,5,7,9],
     stake: 0.5,
@@ -691,7 +691,10 @@ const Main = {
         } else {
             this.currentStake = this.stake;
         }
-        if (this.profit - this.currentStake <= this.lossLimit) this.end(true);
+        if (this.profit - this.currentStake <= this.lossLimit) {
+            console.log('MAX I DONT HAVE ENOUGH MONEY, limit reached!',this.profit,this.currentStake,this.lossLimit);
+            this.end(true);
+        } 
         View.updateStake(this.currentStake, this.lossLimit, this.profitLimit);
     },
     setPositions() {

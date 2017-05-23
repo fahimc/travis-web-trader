@@ -160,7 +160,7 @@ const TestModel = {
       Storage.set('historicalIndex', this.historicalIndex);
       Storage.set('balance', this.balance);
     }else{
-     // Storage.clearTest();
+      Storage.clearTest();
     }
   }
 };
