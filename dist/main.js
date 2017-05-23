@@ -570,7 +570,7 @@ const Main = {
     checkIdleTime() {
         let time = new Date().getTime();
         let dif = time - this.idleStartTime;
-        if (dif >= 300000) location.reload();
+       // if (dif >= 300000) location.reload();
     },
     proposalCompleteCheck() {
         if (this.isProposal) {
