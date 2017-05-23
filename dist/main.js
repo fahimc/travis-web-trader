@@ -694,7 +694,7 @@ const Main = {
         } else {
             this.currentStake = this.stake;
         }
-        if (this.profit - this.currentStake <= this.lossLimit) {
+        if (this.profit - this.currentStake < this.lossLimit) {
             console.log('MAX I DONT HAVE ENOUGH MONEY, limit reached!', this.profit, this.currentStake, this.lossLimit);
             this.end(true);
         }
