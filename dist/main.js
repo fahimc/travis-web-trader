@@ -523,7 +523,7 @@ const Main = {
                     });
                     //this.proposalCompleteCheck();
                     Volatility.check(this.currentPrice);
-                    if (this.idleStartTime) this.checkIdleTime();
+                    //if (this.idleStartTime) this.checkIdleTime();
                 }
                 break;
         }
