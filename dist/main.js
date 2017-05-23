@@ -81,6 +81,7 @@ const Main = {
     isTransaction: false,
     isBreak: false,
     config: null,
+    idleTickCount:0,
     assetModel: null,
     historyCallback: [],
     log: {
@@ -495,6 +496,7 @@ const Main = {
                 // console.log('buy', data);
                 break;
             case 'transaction':
+                this.idleTickCount=0;
                 if (data.transaction && data.transaction.action && data.transaction.action == 'sell') {
                     //stop transaction timer
                     this.isTransaction = false;
@@ -515,6 +517,7 @@ const Main = {
             case 'tick':
                 if (data.tick) {
                     this.currentTick++;
+                    this.idleTickCount++;
                     this.history.push(data.tick.quote);
                     this.historyTimes.push(data.tick.epoch);
                     //console.log('ticks update',this.history.length);

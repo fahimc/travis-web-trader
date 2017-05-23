@@ -9,7 +9,7 @@ let MockMode = {
     transactionCollection: [],
     countCollection: [],
     initialWinPercentageCap: 0.52,
-    tightWinPercentageCap: 0.6,
+    tightWinPercentageCap: 0.8,
     currentWinPercentageCap: 0.52,
     gettingHistory: false,
     assetCollection: [
@@ -21,6 +21,7 @@ let MockMode = {
         'RDBULL',
         'RDBEAR'
     ],
+    IDLE_TICK_LIMIT:100,
     lossStreak:0,
     assetResultCollection: [],
     run(currentPrice) {
@@ -30,7 +31,7 @@ let MockMode = {
         this.checkTrade();
         if (this.assetResultCollection.length >= this.assetCollection.length) {
             this.checkAssetResults();
-        } else if(Main.lossStreak > this.lossStreak){
+        } else if(Main.idleTickCount > this.IDLE_TICK_LIMIT || Main.lossStreak > this.lossStreak){
             this.lossStreak = Main.lossStreak;
             this.checkAssets();
         }
