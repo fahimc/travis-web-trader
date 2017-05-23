@@ -5,7 +5,7 @@ const Main = {
     stakeTicks: 6,
     profitLimit: 100, //DEBUG
     lossLimit: -500,
-    lossStreakLimit: 15,
+    lossStreakLimit: 11,
     volatilityLimit: 5,
     assetChangeStreak: [2,5,7,9],
     stake: 0.5,
