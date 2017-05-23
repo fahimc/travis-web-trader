@@ -337,7 +337,7 @@ const Main = {
             this.reset();
         }
         this.idleStartTime = new Date().getTime();
-        if (!this.pauseTrading && !this.isBreak) this.isTrading = true;
+        if (!this.isBreak) this.isTrading = true;
 
     },
     onProposeRaise() {
