@@ -282,7 +282,6 @@ const Main = {
             "forget_all": "transaction"
         }));
         this.ws = null;
-
         if (!ignoreReload || (TestModel.ENABLED && !TestModel.ignoreReload)) {
             setTimeout(() => {
                 if (this.hasManyBigStreaks()) {
@@ -718,6 +717,9 @@ const Main = {
                 this.currentStake = _stake;
             } else {
                 //non fahimgale
+                let extra = (this.lossStreak * this.stake) * 0.06;
+                this.currentStake = this.stake + extra;
+                console.log('extra',extra);
             }
 
         } else {

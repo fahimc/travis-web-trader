@@ -111,6 +111,7 @@ const Storage = {
         this.set(this.keys.lossArray,JSON.stringify(this.lossArray));
     },
     setWins(count, loses) {
+        console.log('wins',count);
         this.wins += count;
         this.loses += loses;
         this.set(this.keys.wins, this.wins);
