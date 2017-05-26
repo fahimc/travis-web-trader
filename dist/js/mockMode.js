@@ -10,7 +10,7 @@ let MockMode = {
     countCollection: [],
     initialWinPercentageCap: 0.52,
     tightWinPercentageCap: 0.8,
-    currentWinPercentageCap: 0.52,
+    currentWinPercentageCap: 0.8,
     gettingHistory: false,
     assetCollection: [
         'R_100',
@@ -31,7 +31,7 @@ let MockMode = {
         this.checkTrade();
         if (this.assetResultCollection.length >= this.assetCollection.length) {
             this.checkAssetResults();
-        } else if(Main.idleTickCount > this.IDLE_TICK_LIMIT || Main.lossStreak > this.lossStreak){
+        } else if( Main.lossStreak < 6 && (Main.idleTickCount > this.IDLE_TICK_LIMIT || Main.lossStreak > this.lossStreak)){
             this.lossStreak = Main.lossStreak;
             this.checkAssets();
         }

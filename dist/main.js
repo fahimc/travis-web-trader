@@ -1,15 +1,15 @@
 const Main = {
     isVirtual: true,
     isTarget: false,
-    disableFahimgale: false,
+    disableFahimgale: true,
     stakeTicks: 6,
     profitLimit: 100, //DEBUG
     lossLimit: -500,
     lossStreakLimit: 13,
     volatilityLimit: 5,
     assetChangeStreak: [2, 5, 7, 9],
-    stake: 0.5,
-    currentStake: 0.5,
+    stake: 10,
+    currentStake: 10,
     chanelPrediction: false,
     bullishPrediction: true,
     trendPrediction: false,
@@ -639,7 +639,7 @@ const Main = {
 
         if (this.lossStreak >= 4) {
             let isGreaterThanFive = this.lossStreak > this.longBreakLossCount;
-            this.takeABreak(isGreaterThanFive);
+            //this.takeABreak(isGreaterThanFive);
         }
         View.updateMartingale(this.startMartingale);
         this.prediction = '';
