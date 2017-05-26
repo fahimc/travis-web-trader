@@ -10,7 +10,7 @@ let MockMode = {
     countCollection: [],
     initialWinPercentageCap: 0.52,
     tightWinPercentageCap: 0.8,
-    currentWinPercentageCap: 0.8,
+    currentWinPercentageCap: 0.52,
     gettingHistory: false,
     assetCollection: [
         'R_100',
@@ -21,7 +21,7 @@ let MockMode = {
         'RDBULL',
         'RDBEAR'
     ],
-    IDLE_TICK_LIMIT:100,
+    IDLE_TICK_LIMIT:10,
     lossStreak:0,
     assetResultCollection: [],
     run(currentPrice) {
@@ -31,7 +31,7 @@ let MockMode = {
         this.checkTrade();
         if (this.assetResultCollection.length >= this.assetCollection.length) {
             this.checkAssetResults();
-        } else if( Main.lossStreak < 6 && (Main.idleTickCount > this.IDLE_TICK_LIMIT || Main.lossStreak > this.lossStreak)){
+        } else if(Main.idleTickCount > this.IDLE_TICK_LIMIT ){
             this.lossStreak = Main.lossStreak;
             this.checkAssets();
         }
@@ -42,13 +42,12 @@ let MockMode = {
         this.assetResultCollection.forEach((item) => {
             if (item.winPercentage > best.winPercentage) best = item;
         });
+            console.log('BEST ASSET', best);
         if (!Main.isProposal && best.asset !== Main.ASSET_NAME) {
             Main.changeAsset(best.asset);
             this.assetResultCollection = [];
-            console.log('SWITCH TO', best);
-            setTimeout(function(){
               this.gettingHistory = false;
-            }.bind(this),3000);
+            console.log('SWITCH TO', best);
         }else{
           this.assetResultCollection=[];
            this.gettingHistory = false;
