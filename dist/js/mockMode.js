@@ -9,7 +9,7 @@ let MockMode = {
     transactionCollection: [],
     countCollection: [],
     initialWinPercentageCap: 0.52,
-    tightWinPercentageCap: 0.8,
+    tightWinPercentageCap: 0.52,
     currentWinPercentageCap: 0.52,
     gettingHistory: false,
     assetCollection: [
@@ -66,10 +66,16 @@ let MockMode = {
         this.countCollection = [];
     },
     checkTrade() {
+
         let total = this.countCollection.length;
         let wins = this.numberOfWins();
         this.winPercentage = wins / total;
         if (isNaN(this.winPercentage)) this.winPercentage = 0;
+        if(!this.countCollection[this.countCollection.length-1]) {
+            console.log('Last trade not a win');
+            this.toTrade=false;
+            return;
+        }
         this.toTrade = Main.lossStreak >= 3 ? this.winPercentage >= this.tightWinPercentageCap : this.winPercentage >= this.currentWinPercentageCap;
         //this.toTrade = true;
         if (total > 5) {
@@ -135,7 +141,7 @@ class AssetChecker {
     }
 
     run() {
-        Main.getHistory(200, this.asset, this.onHistory.bind(this));
+        Main.getHistory(30, this.asset, this.onHistory.bind(this));
     }
     onHistory(data) {
         if (data.echo_req.ticks_history == this.asset) {
@@ -149,6 +155,7 @@ class AssetChecker {
         let transaction;
         let winCount = 0;
         let lossCount = 0;
+        let lastTransactionIsWin=false;
         collection.forEach((price, index) => {
             price = Number(price);
             if (!transaction) {
@@ -159,15 +166,17 @@ class AssetChecker {
             } else {
                 let result = transaction.run(price, true);
                 if (transaction.complete && result) {
+                    lastTransactionIsWin=true;
                     winCount++;
                     transaction = null;
                 } else if (transaction.complete) {
+                    lastTransactionIsWin=false;
                     lossCount++;
                     transaction = null;
                 }
             }
 
         });
-        MockMode.assetResultCollection.push({ asset: this.asset, winPercentage: winCount / (this.asset, winCount + lossCount) });
+        if(!lastTransactionIsWin)MockMode.assetResultCollection.push({ asset: this.asset, winPercentage: winCount / (this.asset, winCount + lossCount) });
     }
 }
