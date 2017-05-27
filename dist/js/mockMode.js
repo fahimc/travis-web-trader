@@ -45,11 +45,11 @@ let MockMode = {
     },
     checkAssetResults() {
         let best = this.assetResultCollection[0];
-        console.log('returnResult',this.assetResultCollection);
+       // console.log('returnResult',this.assetResultCollection);
         this.assetResultCollection.forEach((item) => {
             if (item.winPercentage > best.winPercentage) best = item;
         });
-        console.log('BEST ASSET', best);
+      //  console.log('BEST ASSET', best);
         if (!Main.isProposal && best.asset !== Main.ASSET_NAME) {
             Main.changeAsset(best.asset);
             this.assetResultCollection = [];
@@ -61,7 +61,7 @@ let MockMode = {
         }
     },
     checkAssets() {
-        console.log('check',this.gettingHistory);
+      //  console.log('check',this.gettingHistory);
         if (this.gettingHistory) return;
         this.gettingHistory = true;
         this.assetResultCollection = [];
@@ -180,7 +180,7 @@ class AssetChecker {
             }
 
         });
-        console.log(this.asset,winCount,lossCount);
+      //  console.log(this.asset,winCount,lossCount);
         if (!lastTransactionIsWin) MockMode.assetResultCollection.push({ asset: this.asset, winPercentage: winCount / (this.asset, winCount + lossCount) });
     }
 }
