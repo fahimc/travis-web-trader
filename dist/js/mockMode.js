@@ -71,11 +71,6 @@ let MockMode = {
         let wins = this.numberOfWins();
         this.winPercentage = wins / total;
         if (isNaN(this.winPercentage)) this.winPercentage = 0;
-        if(!this.countCollection[this.countCollection.length-1]) {
-            console.log('Last trade not a win');
-            this.toTrade=false;
-            return;
-        }
         this.toTrade = Main.lossStreak >= 3 ? this.winPercentage >= this.tightWinPercentageCap : this.winPercentage >= this.currentWinPercentageCap;
         //this.toTrade = true;
         if (total > 5) {
