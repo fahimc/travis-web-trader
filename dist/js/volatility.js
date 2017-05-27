@@ -31,8 +31,8 @@ const Volatility = {
     end(collection) {
         let change = this.priceChangeSmall(collection);
         let changeCount = this.numberOfChanges(collection);
-        if (!MockMode.toTrade ||change) {
-       // if (!MockMode.toTrade) {
+       if (!MockMode.toTrade ||change) {
+        //if (!MockMode.toTrade) {
             Main.pauseTrading = true;
             change = change?change:0;
             let message = changeCount > this.changeLimit ? 'direction changes:' + changeCount : 'price change: ' + change.toFixed(2);

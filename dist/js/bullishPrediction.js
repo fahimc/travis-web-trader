@@ -7,15 +7,15 @@ const BullishPrediction = {
         let highest = currentTick;
         let lowest = currentTick;
         let found = false;
-        let priceDif = Math.abs(lastTick - currentTick)
-        if (priceDif >= Main.assetModel.priceChangeBarrier && lastTick < previousTick && previousTick < currentTick) {
+        let priceDif = Math.abs(lastTick - currentTick)/2;
+        if (lastTick < previousTick && previousTick < currentTick) {
             this.isGoingInDirections(ticks.slice(ticks.length - 4, ticks.length), 'RAISE');
             proposal = 'CALL';
             predictionType = 'BULL_UP';
             found = true;
             highest = currentTick;
             lowest = previousTick;
-        } else if (priceDif >= Main.assetModel.priceChangeBarrier && lastTick > previousTick && previousTick > currentTick) {
+        } else if (lastTick > previousTick && previousTick > currentTick) {
             this.isGoingInDirections(ticks.slice(ticks.length - 4, ticks.length), 'FALL');
             proposal = 'PUT';
             predictionType = 'BULL_DOWN';
