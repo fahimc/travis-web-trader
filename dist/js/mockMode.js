@@ -8,9 +8,9 @@ let MockMode = {
     winPercentage: 0,
     transactionCollection: [],
     countCollection: [],
-    initialWinPercentageCap: 0.52,
+    initialWinPercentageCap: 0.50,
     tightWinPercentageCap: 0.8,
-    currentWinPercentageCap: 0.52,
+    currentWinPercentageCap: 0.50,
     gettingHistory: false,
     assetCollection: [
         'R_100',
@@ -21,39 +21,47 @@ let MockMode = {
         'RDBULL',
         'RDBEAR'
     ],
-    IDLE_TICK_LIMIT:10,
-    lossStreak:0,
+    IDLE_TICK_LIMIT: 10,
+    lossStreak: 0,
     assetResultCollection: [],
+    checkTimer: null,
     run(currentPrice) {
         this.checkTransactions(currentPrice);
         this.predict(currentPrice);
         //console.log('CURRENT WIN RATIO IS',this.winCount,this.lossCount,this.winCount/(this.winCount+this.lossCount));
         this.checkTrade();
+        console.log(this.assetResultCollection.length , this.assetCollection.length);
         if (this.assetResultCollection.length >= this.assetCollection.length) {
+            console.log('here');
             this.checkAssetResults();
-        } else if(Main.idleTickCount > this.IDLE_TICK_LIMIT ){
+        } else {
             this.lossStreak = Main.lossStreak;
-            this.checkAssets();
+            if (!this.checkTimer) this.checkTimer = setTimeout(() => {
+                this.checkAssets();
+                this.checkTimer = null;
+            }, 5000);
         }
 
     },
     checkAssetResults() {
         let best = this.assetResultCollection[0];
+        console.log('returnResult',this.assetResultCollection);
         this.assetResultCollection.forEach((item) => {
             if (item.winPercentage > best.winPercentage) best = item;
         });
-            console.log('BEST ASSET', best);
+        console.log('BEST ASSET', best);
         if (!Main.isProposal && best.asset !== Main.ASSET_NAME) {
             Main.changeAsset(best.asset);
             this.assetResultCollection = [];
-              this.gettingHistory = false;
+            this.gettingHistory = false;
             console.log('SWITCH TO', best);
-        }else{
-          this.assetResultCollection=[];
-           this.gettingHistory = false;
+        } else {
+            this.assetResultCollection = [];
+            this.gettingHistory = false;
         }
     },
     checkAssets() {
+        console.log('check',this.gettingHistory);
         if (this.gettingHistory) return;
         this.gettingHistory = true;
         this.assetResultCollection = [];
@@ -95,7 +103,7 @@ let MockMode = {
         }
     },
     predict(currentPrice) {
-        this.prediction = BullishPrediction.predict(Main.history, true);
+        this.prediction = Main.predictionModel? window[Main.predictionModel].predict(Main.history, true): BullishPrediction.predict(Main.history, true);
         if (this.prediction) {
             let transaction = new TransactionMock(this.prediction.type, currentPrice, Main.stakeTicks);
             this.transactionCollection.push(transaction);
@@ -150,28 +158,29 @@ class AssetChecker {
         let transaction;
         let winCount = 0;
         let lossCount = 0;
-        let lastTransactionIsWin=false;
+        let lastTransactionIsWin = false;
         collection.forEach((price, index) => {
             price = Number(price);
-            if (!transaction) { 
-                let prediction = Main.predictionModel? window[Main.predictionModel].predict(collection.slice(0, index + 1), true):BullishPrediction.predict(collection.slice(0, index + 1), true);
+            if (!transaction) {
+                let prediction = Main.predictionModel ? window[Main.predictionModel].predict(collection.slice(0, index + 1), true) : BullishPrediction.predict(collection.slice(0, index + 1), true);
                 if (prediction) {
                     transaction = new TransactionMock(prediction.type, price, Main.stakeTicks);
                 }
             } else {
                 let result = transaction.run(price, true);
                 if (transaction.complete && result) {
-                    lastTransactionIsWin=true;
+                    lastTransactionIsWin = true;
                     winCount++;
                     transaction = null;
                 } else if (transaction.complete) {
-                    lastTransactionIsWin=false;
+                    lastTransactionIsWin = false;
                     lossCount++;
                     transaction = null;
                 }
             }
 
         });
-        if(!lastTransactionIsWin)MockMode.assetResultCollection.push({ asset: this.asset, winPercentage: winCount / (this.asset, winCount + lossCount) });
+        console.log(this.asset,winCount,lossCount);
+        if (!lastTransactionIsWin) MockMode.assetResultCollection.push({ asset: this.asset, winPercentage: winCount / (this.asset, winCount + lossCount) });
     }
 }

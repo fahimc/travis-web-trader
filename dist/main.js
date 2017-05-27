@@ -82,6 +82,7 @@ const Main = {
     isTransaction: false,
     config: null,
     assetModel: null,
+    historyCallback:[],
     log: {
 
     },
@@ -295,7 +296,11 @@ const Main = {
 
 
     },
-    setNextAsset() {
+    setNextAsset(asset) {
+        if(asset){
+            this.ASSET_NAME=asset;
+            return;
+        }
         if (!this.config.switchAssets) return;
         switch (this.ASSET_NAME) {
             case 'R_100':
@@ -322,9 +327,10 @@ const Main = {
         }));
 
     },
-    getHistory(count) {
+    getHistory(count,asset,callback) {
+        if(callback)this.historyCallback.push({asset:asset,callback:callback});
         this.ws.send(JSON.stringify({
-            "ticks_history": this.ASSET_NAME,
+            "ticks_history": asset?asset:this.ASSET_NAME,
             "end": "latest",
             "count": count ? count : 5000
         }));
@@ -407,8 +413,7 @@ const Main = {
         this.getHistory();
         this.getTicks();
         this.getTranscations();
-    },
-    onMessage(event) {
+    },    onMessage(event) {
         if (this.ended) return;
         var data = JSON.parse(event.data);
         //if (data.msg_type != 'tick') console.log('onMessage', data);
@@ -462,6 +467,17 @@ const Main = {
                     ChartComponent.setData(collection);
                     ChartComponent.setCloseData(collection30);
                     this.onStartTrading();
+                }
+                if(this.historyCallback)
+                {
+                    for(let a=0;a<this.historyCallback.length;a++){
+                        if(this.historyCallback[a].asset==data.echo_req.ticks_history)
+                        {
+                            this.historyCallback[a].callback(data);
+                            this.historyCallback.splice(a,1);
+                            a--;
+                        }
+                    }
                 }
                 break;
             case 'proposal':
