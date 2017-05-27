@@ -5,7 +5,7 @@ var StepPrediction = {
         let shortRange = ticks.slice(ticks.length - 10, ticks.length);
         let collection = this.getDrops(shortRange);
         let highLow = Util.getHighLow(collection);
-        if (collection.length > 3) {
+        if (collection.length > 3 && shortRange[shortRange.length-2] > shortRange[shortRange.length-1]) {
             found = true;
             let predictionType = 'STEP_UP';
             let proposal = 'CALL';
