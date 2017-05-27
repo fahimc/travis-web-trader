@@ -10,6 +10,7 @@ const Main = {
     assetChangeStreak: [2, 5, 7, 9],
     stake: 0.5,
     currentStake: 0.5,
+    predictionModel: '',
     chanelPrediction: false,
     bullishPrediction: true,
     trendPrediction: false,
@@ -130,6 +131,7 @@ const Main = {
         if (window[this.ASSET_NAME + 'Model']) {
             this.assetModel = window[this.ASSET_NAME + 'Model'];
         }
+        if (Config.predictionType) this.predictionModel = Config.predictionType;
         this.config = Config;
     },
     checkQuery() {
@@ -385,16 +387,18 @@ const Main = {
     getTicks() {
         this.ws.send(JSON.stringify({ ticks: this.ASSET_NAME }));
     },
-    changeAsset() {
+    changeAsset(asset) {
         if (TestModel.ENABLED) return;
         console.log('ASSET CHANGED');
+        MockMode.restart();
         this.ws.send(JSON.stringify({
             "forget_all": "ticks"
         }));
         this.ws.send(JSON.stringify({
             "forget_all": "transaction"
         }));
-        this.setNextAsset();
+        this.setNextAsset(asset);
+        this.assetModel = window[this.ASSET_NAME + 'Model'];
         this.history = [];
         this.historyTimes = [];
         this.started = false;
@@ -522,6 +526,7 @@ const Main = {
                         highestPrice: highLowClose.highest
                     });
                     //this.proposalCompleteCheck();
+                    MockMode.run(this.currentPrice);
                     Volatility.check(this.currentPrice);
                     //if (this.idleStartTime) this.checkIdleTime();
                 }
@@ -543,6 +548,11 @@ const Main = {
         }.bind(this), this.transactionTimerDuration);
     },
     doPrediction() {
+        if (this.predictionModel) {
+            if(window[this.predictionModel])window[this.predictionModel].predict(this.history);
+            return;
+        }
+
         if (this.trendPrediction) {
             TrendPrediction.predict(this.history);
         }
@@ -570,7 +580,7 @@ const Main = {
     checkIdleTime() {
         let time = new Date().getTime();
         let dif = time - this.idleStartTime;
-       // if (dif >= 300000) location.reload();
+        // if (dif >= 300000) location.reload();
     },
     proposalCompleteCheck() {
         if (this.isProposal) {
