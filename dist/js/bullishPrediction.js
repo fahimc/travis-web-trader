@@ -7,6 +7,7 @@ const BullishPrediction = {
         let highest = currentTick;
         let lowest = currentTick;
         let found = false;
+        let priceDif = Math.abs(lastTick - currentTick)/2;
         if (lastTick < previousTick && previousTick < currentTick) {
             this.isGoingInDirections(ticks.slice(ticks.length - 4, ticks.length), 'RAISE');
             proposal = 'CALL';
