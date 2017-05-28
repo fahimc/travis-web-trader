@@ -30,11 +30,9 @@ let MockMode = {
         this.predict(currentPrice);
         //console.log('CURRENT WIN RATIO IS',this.winCount,this.lossCount,this.winCount/(this.winCount+this.lossCount));
         this.checkTrade();
-        console.log(this.assetResultCollection.length , this.assetCollection.length);
         if (this.assetResultCollection.length >= this.assetCollection.length) {
-            console.log('here');
             this.checkAssetResults();
-        } else {
+        } else if(Main.lossStreak > this.lossStreak){
             this.lossStreak = Main.lossStreak;
             if (!this.checkTimer) this.checkTimer = setTimeout(() => {
                 this.checkAssets();
@@ -51,7 +49,7 @@ let MockMode = {
         });
       //  console.log('BEST ASSET', best);
         if (!Main.isProposal && best.asset !== Main.ASSET_NAME) {
-            Main.changeAsset(best.asset);
+            //Main.changeAsset(best.asset);
             this.assetResultCollection = [];
             this.gettingHistory = false;
             console.log('SWITCH TO', best);

@@ -6,7 +6,7 @@ var StepPrediction = {
         let collection = this.getRaises(shortRange);
        // let dropcollection = this.getDrop(shortRange);
         let highLow = Util.getHighLow(collection);
-        if (collection.length > 2 && shortRange[shortRange.length-2] > shortRange[shortRange.length-1]) {
+        if (collection.length > 1 && shortRange[shortRange.length-2] > shortRange[shortRange.length-1]) {
             found = true;
             let predictionType = 'STEP_UP';
             let proposal = 'CALL';
@@ -58,7 +58,7 @@ var StepPrediction = {
         let previous = collection[0];
         let bottoms = [];
         collection.forEach((price, index) => {
-            if (index > 1 && previous < price && previous > collection[index - 2]) {
+            if (index > 1 && previous > price && previous > collection[index - 2]) {
                 bottoms.push(previous);
             }
             previous = price;
