@@ -638,7 +638,7 @@ const Main = {
 
         if (this.lossStreak >= 4) {
             let isGreaterThanFive = this.lossStreak > this.longBreakLossCount;
-            //this.takeABreak(isGreaterThanFive);
+            this.takeABreak(isGreaterThanFive);
         }
         View.updateMartingale(this.startMartingale);
         this.prediction = '';
