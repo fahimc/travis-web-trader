@@ -9,7 +9,7 @@ let MockMode = {
     transactionCollection: [],
     countCollection: [],
     initialWinPercentageCap: 0.52,
-    tightWinPercentageCap: 0.52,
+    tightWinPercentageCap: 0.8,
     currentWinPercentageCap: 0.52,
     gettingHistory: false,
     assetCollection: [
@@ -38,9 +38,9 @@ let MockMode = {
 
     },
     checkAssetResults() {
-        let best = this.assetResultCollection[0];
+        let best = Main.ASSET_NAME;
         this.assetResultCollection.forEach((item) => {
-            if (item.winPercentage > best.winPercentage) best = item;
+            if (item.winPercentage > best.winPercentage && item.winPercentage >= 0.7) best = item;
         });
             console.log('BEST ASSET', best);
         if (!Main.isProposal && best.asset !== Main.ASSET_NAME) {

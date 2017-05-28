@@ -31,7 +31,8 @@ const Volatility = {
     end(collection) {
         let change = this.priceChangeSmall(collection);
         let changeCount = this.numberOfChanges(collection);
-       if (!MockMode.toTrade ||change) {
+        let stopTrading = Main.lossStreak < 3 ? !MockMode.toTrade : (!MockMode.toTrade ||change)
+       if (stopTrading) {
         //if (!MockMode.toTrade) {
             Main.pauseTrading = true;
             change = change?change:0;
