@@ -9,7 +9,7 @@ let MockMode = {
     transactionCollection: [],
     countCollection: [],
     initialWinPercentageCap: 0.52,
-    tightWinPercentageCap: 0.8,
+    tightWinPercentageCap: 0.55,
     currentWinPercentageCap: 0.52,
     gettingHistory: false,
     assetCollection: [
