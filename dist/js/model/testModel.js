@@ -8,7 +8,7 @@ const TestModel = {
   speed: 100,
   balance: 1700,
   assets: [],
-  strategy: 'LOSE',
+  strategy: 'HISTORY',
   history: {
     prices: [
       "11054.80",

@@ -57,6 +57,7 @@ class FakeWebSocket {
             case 'ticks_history':
                 key = 'history';
                 obj = TestModel.history;
+                console.log(all);
                 if (!TestModel.currentTick) TestModel.currentTick = TestModel.history[TestModel.history.length - 1];
                 break;
             case 'ticks':

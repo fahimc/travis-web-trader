@@ -82,7 +82,7 @@ const TrendPrediction = {
         return isDirection;
     },
     predict(collection) {
-       if ( Main.isProposal || Main.pauseTrading) return;
+       if (Main.isBreak || Main.isProposal || Main.pauseTrading) return;
         this.currentPrice = collection[collection.length-1];
         let trend = this.checkTrend(collection);
         //console.log(trend);
