@@ -8,8 +8,8 @@ const Main = {
     lossStreakLimit: 13,
     volatilityLimit: 5,
     assetChangeStreak: [2, 5, 7, 9],
-    stake: 10,
-    currentStake: 10,
+    stake: 0.5,
+    currentStake: 0.5,
     predictionModel: '',
     chanelPrediction: false,
     bullishPrediction: true,
@@ -750,7 +750,7 @@ const Main = {
         let obj = Object.assign({}, this.currentTrendItem);
         this.trendFail.push(obj);
 
-        let logItem = this.getLogItem(this.currentTrendItem.predictionType);
+        let logItem = this.getLogItem(this.predictionType);
         logItem.loses++;
         if (this.lossStreak > this.maxLossStreak) this.maxLossStreak = this.lossStreak;
         View.updateLog(this.log);

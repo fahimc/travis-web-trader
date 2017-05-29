@@ -1,5 +1,6 @@
 let fs = require('fs');
-let History = require('./history.js');
+let History = require('./historyData.json');
+let Transaction = require('./transaction.js');
 
 const Main = {
     transactions: [],
@@ -7,69 +8,76 @@ const Main = {
         this.run();
     },
     run() {
-        History.forEach((collection) => {
-            this.runCollection(collection);
-        });
+        this.runCollection(History);
         let similar = this.getSimilar();
+        console.log('sort');
         similar.sort(function(a, b) {
             return parseFloat(a.count) - parseFloat(b.count);
         });
         this.write(similar);
     },
     runCollection(collection) {
-        let count = 0;
-        let tickCount = 0;
-        let transaction = false;
-        let transactionTick = 0;
+        console.log('runCollection');
         let lastTenCollection = [];
         collection.forEach((price, index) => {
-            if (transaction) {
-                if (!tickCount) transactionTick = price;
-                tickCount++;
-                if (tickCount == 6) {
-                    this.transactions.push({
-                        past: lastTenCollection,
-                        verdict: price > transactionTick ? 'CALL' : 'PUT'
-                    });
-                    transaction = false;
-                    tickCount = 0;
-                }
-            } else {
-                count++;
-                if (count == 10) {
-                    let ten = collection.slice(index - 9, index + 1);
-                    lastTenCollection = this.normaliseTen(ten);
-                    count = 0;
-                    transaction = true;
-                }
+            this.transactions.forEach((transaction) => {
+                transaction.run(price);
+            });
+            if (index >= 10) {
+                let ten = collection.slice(index - 10, index);
+                lastTenCollection = this.normaliseTen(ten);
+                let transaction = new Transaction(price, lastTenCollection);
+                this.transactions.push(transaction);
             }
+            // if (transaction) {
+            //     if (!tickCount) transactionTick = price;
+            //     tickCount++;
+            //     if (tickCount == 6) {
+            //         this.transactions.push({
+            //             past: lastTenCollection,
+            //             verdict: price > transactionTick ? 'CALL' : 'PUT'
+            //         });
+            //         transaction = false;
+            //         tickCount = 0;
+            //     }
+            // } else {
+            //     count++;
+            //     if (count == 10) {
+            //         let ten = collection.slice(index - 9, index + 1);
+            //         lastTenCollection = this.normaliseTen(ten);
+            //         count = 0;
+            //         transaction = true;
+            //     }
+            // }
 
         });
 
-        // console.log(transactions);
     },
     write(collection) {
+        console.log('write');
         fs.writeFile('predictions.json', JSON.stringify(collection, null, 2), 'utf8', null);
     },
     getSimilar() {
+        console.log('getSimilar', this.transactions.length);
         let collection = [];
+        let hashTable = {};
         this.transactions.forEach((obj, index) => {
-            this.transactions.forEach((obj2, index2) => {
-                if (obj.past.toString() == obj2.past.toString() && index !== index2 && obj.verdict  == obj2.verdict) {
-                    // console.log(obj.past,obj2.past);
-                    let found = false;
-                    collection.forEach((_obj) => {
-                        if (_obj.collection.toString() === obj.past.toString()) {
-                            found = true;
-                            _obj.count++;
-                        }
-                    });
-                    if (!found) collection.push({ collection: obj.past, count: 1 , verdict:obj.verdict});
+            let key = obj.pastCollection.toString().replace(',', '_') + '_' + obj.verdict;
+            if (hashTable[key]) {
+                hashTable[key].count++;
+            } else {
+                hashTable[key] = {
+                    collection: obj.pastCollection,
+                    verdict: obj.verdict,
+                    count: 0
                 }
-            });
+            }
         });
+        console.log('convert hashTable');
+        for (let key in hashTable) {
+            collection.push(hashTable[key]);
+        }
         return collection;
-        console.log(collection);
     },
     normaliseTen(collection) {
         let newCollection = [];
