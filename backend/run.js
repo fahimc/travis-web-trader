@@ -1,9 +1,11 @@
 const HISTORY = require('./historyData.json');
-const PREDICTOR = require('./prediction/direction.js');
+const DirectionPredictor = require('./prediction/direction.js');
+const BullishPredictor = require('./prediction/bullish.js');
 const Model = require('./model/RunnerModel.js');
 const Transaction = require('./module/transaction.js');
 
 const Runner = {
+    PREDICTOR:DirectionPredictor,
     init() {
         this.run();
     },
@@ -12,7 +14,7 @@ const Runner = {
         HISTORY.forEach((price, index) => {
             Model.runTransactions(price);
             let history = HISTORY.slice(0, index + 1);
-            let prediction = PREDICTOR.predict(price, history, Model);
+            let prediction = this.PREDICTOR.predict(price, history, Model);
             if (prediction) {
                 let transaction = new Transaction(prediction, Model);
                 Model.transactionCollection.push(transaction);
