@@ -1,7 +1,43 @@
 var DirectionPrediction = {
     lossStreak: 0,
+    purchasePrice: 0,
+    prediction: '',
+    secondPrediction: '',
+    tickCount: 0,
+    secondDone: false,
+    losing: false,
+    secondCount:0,
     predict(ticks, checkMode) {
-        if (Main.isProposal) return;
+        
+        if (Main.isProposal) {
+            if(this.secondDone)return;
+            let currentPrice = ticks[ticks.length - 1];
+            if (!this.purchasePrice) this.purchasePrice = currentPrice;
+            if (this.tickCount >= 1) {
+                this.tickCount++;
+                if (this.losing) {
+                    this.secondPrediction = '';
+                    if (this.purchasePrice > currentPrice) secondPrediction = 'PUT';
+                    if (this.purchasePrice < currentPrice) secondPrediction = 'CALL';
+                    if (secondPrediction) {
+                        console.log('SECOND PREDICTION');
+                        Main.isProposal = false;
+                        Main.currentStake = Math.abs(Main.profit) * 0.5;
+                        if (Main.currentStake < 0.35) Main.currentStake = 0.35;
+                        //this.purchase(ticks, secondPrediction);
+                    }
+                    this.secondDone = true;
+                    this.losing = false;
+                }
+
+                if (this.tickCount > 1 && this.prediction == 'CALL' && this.purchasePrice > currentPrice) this.losing = true;
+                if (this.tickCount > 1 && this.prediction == 'PUT' && this.purchasePrice < currentPrice) this.losing = true;
+            } else {
+                this.tickCount++;
+            }
+            return;
+        }
+         this.secondDone = false;
         let model = {
             lossStreak: Main.lossStreak
         }
@@ -27,12 +63,19 @@ var DirectionPrediction = {
         let downPercentage = (downs / total);
         let prediction = upPercentage > limit ? 'CALL' : (downPercentage > limit ? 'PUT' : '');
         if (prediction) {
-            let collection = history.slice(history.length - 10, history.length);
-            let highLow = Util.getHighLow(collection);
-            ChartComponent.updatePredictionChart(collection, highLow.lowest, highLow.highest);
-            Main.setPrediction(prediction, 'DIRECTION_' + prediction);
+            this.purchasePrice = 0;
+            this.tickCount = 0;
+
+            this.prediction = prediction;
+            this.purchase(history, prediction);
             return true;
         }
+    },
+    purchase(history, prediction) {
+        let collection = history.slice(history.length - 10, history.length);
+        let highLow = Util.getHighLow(collection);
+        ChartComponent.updatePredictionChart(collection, highLow.lowest, highLow.highest);
+        Main.setPrediction(prediction, 'DIRECTION_' + prediction);
     },
     checkHistory(history, model) {
         let collection = history.slice(history.length - 60, history.length);

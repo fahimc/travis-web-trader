@@ -82,7 +82,6 @@ const Main = {
         //     });
         //     newCollection.push(greaterThanCount);
         // });
-        console.log(newCollection);
         return newCollection;
     }
 }.init();
