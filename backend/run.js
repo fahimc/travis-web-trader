@@ -1,6 +1,7 @@
 const HISTORY = require('./historyData.json');
 const DirectionPredictor = require('./prediction/direction.js');
 const BullishPredictor = require('./prediction/bullish.js');
+const PatternPredictor = require('./prediction/pattern.js');
 const Model = require('./model/RunnerModel.js');
 const Transaction = require('./module/transaction.js');
 

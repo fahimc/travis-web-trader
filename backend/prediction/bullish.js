@@ -6,21 +6,18 @@ const Prediction = {
     },
     check(history) {
         let lastTick = history[history.length - 4];
-        let previousTick = history[history.length - 3];
+        let previousTick = history[history.length - 2];
         let currentTick = history[history.length - 1];
         let highest = currentTick;
         let lowest = currentTick;
         let found = false;
-        let priceDif = Math.abs(lastTick - currentTick) / 2;
-        if (lastTick < previousTick && previousTick < currentTick) {
-            this.isGoingInDirections(history.slice(history.length - 4, history.length), 'RAISE');
+        if (lastTick < previousTick && previousTick > currentTick) {
             proposal = 'CALL';
             predictionType = 'BULL_UP';
             found = true;
             highest = currentTick;
             lowest = previousTick;
-        } else if (lastTick > previousTick && previousTick > currentTick) {
-            this.isGoingInDirections(history.slice(history.length - 4, history.length), 'FALL');
+        } else if (lastTick > previousTick && previousTick < currentTick) {
             proposal = 'PUT';
             predictionType = 'BULL_DOWN';
             found = true;
@@ -36,7 +33,7 @@ const Prediction = {
         return found;
     },
     checkHistory(history) {
-        let collection = history.slice(history.length - 100, history.length);
+        let collection = history.slice(history.length - 60, history.length);
         let prediction = null;
         let count = 0;
         let wins = 0;
@@ -59,7 +56,7 @@ const Prediction = {
                 prediction = this.check(ticks);
             }
         });
-        return wins/(wins+loses) > 0.52;
+        return wins/(wins+loses) >= 0.52;
     },
     isGoingInDirections(collection, direction) {
         let count = 0;

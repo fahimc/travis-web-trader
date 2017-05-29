@@ -29,33 +29,17 @@ const Main = {
                 let transaction = new Transaction(price, lastTenCollection);
                 this.transactions.push(transaction);
             }
-            // if (transaction) {
-            //     if (!tickCount) transactionTick = price;
-            //     tickCount++;
-            //     if (tickCount == 6) {
-            //         this.transactions.push({
-            //             past: lastTenCollection,
-            //             verdict: price > transactionTick ? 'CALL' : 'PUT'
-            //         });
-            //         transaction = false;
-            //         tickCount = 0;
-            //     }
-            // } else {
-            //     count++;
-            //     if (count == 10) {
-            //         let ten = collection.slice(index - 9, index + 1);
-            //         lastTenCollection = this.normaliseTen(ten);
-            //         count = 0;
-            //         transaction = true;
-            //     }
-            // }
+            if (index % 10000 ==0) {
+             console.log('transactions:',this.transactions.length);   
+             console.log('index:',index,' total:',collection.length);   
+            }
 
         });
 
     },
     write(collection) {
         console.log('write');
-        fs.writeFile('predictions.json', JSON.stringify(collection, null, 2), 'utf8', null);
+        fs.writeFile('patterns.json', JSON.stringify(collection, null, 2), 'utf8', null);
     },
     getSimilar() {
         console.log('getSimilar', this.transactions.length);
@@ -81,13 +65,24 @@ const Main = {
     },
     normaliseTen(collection) {
         let newCollection = [];
+        let highest = collection[0];
+        let lowest = collection[0];
         collection.forEach((price) => {
-            let greaterThanCount = 0;
-            collection.forEach((_p) => {
-                if (price > _p) greaterThanCount++;
-            });
-            newCollection.push(greaterThanCount);
+            if(price > highest)highest = price;
+            if(price < lowest)lowest = price;
         });
+        collection.forEach((price) => {
+            let percentage = Number((((price-lowest)/(highest-lowest)) * 100).toFixed(0));
+            newCollection.push(percentage);
+        });
+        // collection.forEach((price) => {
+        //     let greaterThanCount = 0;
+        //     collection.forEach((_p) => {
+        //         if (price > _p) greaterThanCount++;
+        //     });
+        //     newCollection.push(greaterThanCount);
+        // });
+        console.log(newCollection);
         return newCollection;
     }
 }.init();
