@@ -26,6 +26,7 @@ const Runner = {
                 console.log('win ratio: ', Model.winCount / (Model.winCount + Model.lossCount));
                 console.log('streak: ', Model.lossCollection);
                 console.log('highestStake: £', Model.highestStake);
+                console.log('max transactions: ', Model.highestNumberOfTransactions);
                 console.log('profit: £', Model.balance.toFixed(2) - Model.STARTING_BALANCE);
             }
 

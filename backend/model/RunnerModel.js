@@ -13,6 +13,7 @@ const RunnerModel = {
   profit: 0,
   winCount: 0,
   transactionCollection: [],
+  highestNumberOfTransactions:0,
   hasTransaction() {
     return this.transactionCollection.length;
   },
@@ -46,6 +47,7 @@ const RunnerModel = {
     if(cost>this.highestStake)this.highestStake=cost;
     transaction.cost = cost;
     this.transactionCollection.push(transaction);
+    if(this.transactionCollection.length > this.highestNumberOfTransactions)this.highestNumberOfTransactions=this.transactionCollection.length ;
   },
   setWin(transaction) {
     this.balance += transaction.cost + (transaction.cost * 0.94);
