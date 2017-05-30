@@ -5,10 +5,10 @@ const TestModel = {
   },
   ENABLED: false,
   ignoreReload: true,
-  speed: 100,
+  speed: 10,
   balance: 1700,
   assets: [],
-  strategy: 'LOSE',
+  strategy: 'HISTORY',
   history: {
     prices: [
       "11054.80",
