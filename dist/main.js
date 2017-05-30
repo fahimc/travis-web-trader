@@ -10,6 +10,7 @@ const Main = {
     assetChangeStreak: [2, 5, 7, 9],
     stake: 0.5,
     currentStake: 0.5,
+    predictionModel: '',
     chanelPrediction: false,
     bullishPrediction: true,
     trendPrediction: false,
@@ -81,6 +82,7 @@ const Main = {
     isTransaction: false,
     config: null,
     assetModel: null,
+    historyCallback: [],
     log: {
 
     },
@@ -130,6 +132,7 @@ const Main = {
         if (window[this.ASSET_NAME + 'Model']) {
             this.assetModel = window[this.ASSET_NAME + 'Model'];
         }
+        if (Config.predictionType) this.predictionModel = Config.predictionType;
         this.config = Config;
     },
     checkQuery() {
@@ -293,7 +296,11 @@ const Main = {
 
 
     },
-    setNextAsset() {
+    setNextAsset(asset) {
+        if (asset) {
+            this.ASSET_NAME = asset;
+            return;
+        }
         if (!this.config.switchAssets) return;
         switch (this.ASSET_NAME) {
             case 'R_100':
@@ -320,9 +327,10 @@ const Main = {
         }));
 
     },
-    getHistory(count) {
+    getHistory(count, asset, callback) {
+        if (callback) this.historyCallback.push({ asset: asset, callback: callback });
         this.ws.send(JSON.stringify({
-            "ticks_history": this.ASSET_NAME,
+            "ticks_history": asset ? asset : this.ASSET_NAME,
             "end": "latest",
             "count": count ? count : 5000
         }));
@@ -385,16 +393,18 @@ const Main = {
     getTicks() {
         this.ws.send(JSON.stringify({ ticks: this.ASSET_NAME }));
     },
-    changeAsset() {
+    changeAsset(asset) {
         if (TestModel.ENABLED) return;
         console.log('ASSET CHANGED');
+        MockMode.restart();
         this.ws.send(JSON.stringify({
             "forget_all": "ticks"
         }));
         this.ws.send(JSON.stringify({
             "forget_all": "transaction"
         }));
-        this.setNextAsset();
+        this.setNextAsset(asset);
+        this.assetModel = window[this.ASSET_NAME + 'Model'];
         this.history = [];
         this.historyTimes = [];
         this.started = false;
@@ -459,6 +469,15 @@ const Main = {
                     ChartComponent.setCloseData(collection30);
                     this.onStartTrading();
                 }
+                if (this.historyCallback) {
+                    for (let a = 0; a < this.historyCallback.length; a++) {
+                        if (this.historyCallback[a].asset == data.echo_req.ticks_history) {
+                            this.historyCallback[a].callback(data);
+                            this.historyCallback.splice(a, 1);
+                            a--;
+                        }
+                    }
+                }
                 break;
             case 'proposal':
                 // console.log('proposal', data);
@@ -472,6 +491,7 @@ const Main = {
                 // console.log('buy', data);
                 break;
             case 'transaction':
+               // console.log('transaction', data);
                 if (data.transaction && data.transaction.action && data.transaction.action == 'sell') {
                     //stop transaction timer
                     this.isTransaction = false;
@@ -480,10 +500,12 @@ const Main = {
                     if (data.transaction.amount === '0.00') {
                         isLoss = true;
                     }
+                    Model.setTransactionComplete(data.transaction.id, isLoss);
                     this.doTransaction(isLoss);
 
                 } else if (data.transaction && data.transaction.action && data.transaction.action == 'buy') {
                     this.isTransaction = true;
+                    Model.setTransactionID(data.transaction.id, data.transaction.amount);
                 }
                 break;
             case 'forget_all':
@@ -498,6 +520,7 @@ const Main = {
                     this.currentPrice = data.tick.quote;
                     this.setPositions();
 
+                    Model.runTransactions(this.currentPrice);
                     if (this.isTrading) {
                         this.doPrediction();
                     }
@@ -522,6 +545,7 @@ const Main = {
                         highestPrice: highLowClose.highest
                     });
                     //this.proposalCompleteCheck();
+                    MockMode.run(this.currentPrice);
                     Volatility.check(this.currentPrice);
                     //if (this.idleStartTime) this.checkIdleTime();
                 }
@@ -543,6 +567,14 @@ const Main = {
         }.bind(this), this.transactionTimerDuration);
     },
     doPrediction() {
+        if (this.predictionModel) {
+            let prediction = window[this.predictionModel].predict(Number(this.currentPrice), this.history, Model);
+            if (prediction) {
+                Model.createTransaction(prediction,this.history);
+            }
+            return;
+        }
+
         if (this.trendPrediction) {
             TrendPrediction.predict(this.history);
         }
@@ -570,7 +602,7 @@ const Main = {
     checkIdleTime() {
         let time = new Date().getTime();
         let dif = time - this.idleStartTime;
-       // if (dif >= 300000) location.reload();
+        // if (dif >= 300000) location.reload();
     },
     proposalCompleteCheck() {
         if (this.isProposal) {
@@ -612,7 +644,7 @@ const Main = {
 
         if (this.lossStreak >= 4) {
             let isGreaterThanFive = this.lossStreak > this.longBreakLossCount;
-            this.takeABreak(isGreaterThanFive);
+           // this.takeABreak(isGreaterThanFive);
         }
         View.updateMartingale(this.startMartingale);
         this.prediction = '';
@@ -675,6 +707,8 @@ const Main = {
         if (Tester && Tester.testBalance) Tester.setBalance(this.accountBalance - this.startBalance);
     },
     setStake(isLoss) {
+        this.currentStake = Math.pow(this.lossStreak,0.5)?Math.pow(this.lossStreak,0.5) * 2:0.5;
+        return;
         if (isLoss && this.config.stakeType && window[this.config.stakeType]) {
             this.currentStake = window[this.config.stakeType].getStake(this.currentStake, this.lossCount);
         } else if (isLoss && this.startMartingale) {
@@ -724,7 +758,7 @@ const Main = {
         let obj = Object.assign({}, this.currentTrendItem);
         this.trendFail.push(obj);
 
-        let logItem = this.getLogItem(this.currentTrendItem.predictionType);
+        let logItem = this.getLogItem(this.predictionType);
         logItem.loses++;
         if (this.lossStreak > this.maxLossStreak) this.maxLossStreak = this.lossStreak;
         View.updateLog(this.log);
