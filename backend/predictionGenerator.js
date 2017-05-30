@@ -19,6 +19,7 @@ const Main = {
     runCollection(collection) {
         console.log('runCollection');
         let lastTenCollection = [];
+        //collection = collection.slice(0,10000);
         collection.forEach((price, index) => {
             this.transactions.forEach((transaction) => {
                 transaction.run(price);
@@ -39,7 +40,7 @@ const Main = {
     },
     write(collection) {
         console.log('write');
-        fs.writeFile('patterns.json', JSON.stringify(collection, null, 2), 'utf8', null);
+        fs.writeFile('patterns-test.json', JSON.stringify(collection, null, 2), 'utf8', null);
     },
     getSimilar() {
         console.log('getSimilar', this.transactions.length);
@@ -65,23 +66,33 @@ const Main = {
     },
     normaliseTen(collection) {
         let newCollection = [];
-        let highest = collection[0];
-        let lowest = collection[0];
-        collection.forEach((price) => {
-            if(price > highest)highest = price;
-            if(price < lowest)lowest = price;
+        let highest =[];
+        let lowest = [];
+         collection.forEach((price,index) => {
+           highest.push({price:price,index:index});
+           lowest.push({price:price,index:index});
         });
-        collection.forEach((price) => {
-            let percentage = Number((((price-lowest)/(highest-lowest)) * 100).toFixed(0));
-            newCollection.push(percentage);
+        highest.sort((a,b)=>{
+            return a.price-b.price;
         });
-        // collection.forEach((price) => {
-        //     let greaterThanCount = 0;
-        //     collection.forEach((_p) => {
-        //         if (price > _p) greaterThanCount++;
-        //     });
-        //     newCollection.push(greaterThanCount);
-        // });
+         lowest.sort((a,b)=>{
+            return a.price-b.price;
+        });
+         collection.forEach((price,index) => {
+            if(price > collection[0])
+            {
+                highest.forEach((obj,i)=>{
+                    if(obj.index == index)newCollection.push(i);
+                });
+            }
+            if(price < collection[0])
+            {
+                lowest.forEach((obj,i)=>{
+                    if(obj.index == index)newCollection.push(-i);
+                });
+            }
+                
+        });
         return newCollection;
     }
 }.init();
