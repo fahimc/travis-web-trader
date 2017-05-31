@@ -38,7 +38,7 @@ const Prediction = {
 
     let upPercentage = (ups / total);
     let downPercentage = (downs / total);
-    let prediction = upPercentage > limit ? 'CALL' : (downPercentage > limit ? 'PUT' : '');
+    let prediction = upPercentage > limit && collection[0] < collection[collection.length-1] ? 'CALL' : (downPercentage > limit  && collection[0] > collection[collection.length-1] ? 'PUT' : '');
     if (prediction) {
       let collection = history.slice(history.length - 2, history.length);
       this.prediction = { prediction: prediction, type: 'DIRECTION_' + prediction };

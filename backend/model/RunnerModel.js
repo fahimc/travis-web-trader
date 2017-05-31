@@ -3,7 +3,7 @@ const Transaction = require('../module/transaction.js');
 
 const RunnerModel = {
   STARTING_BALANCE: 1100,
-  LOSS_CAP: 9,
+  LOSS_CAP: 10,
   balance: 0,
   numberOfTicks: 0,
   lossCollection: {},

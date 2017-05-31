@@ -14,11 +14,11 @@ class Transaction {
       this.purchasePrice = price;
     }
     this.tickCount++;
-    if (!this.second) this.checkSecond(price, model);
     if (this.tickCount >= 6) {
       this.isWin = (this.purchasePrice < price && this.prediction.prediction == 'CALL' || this.purchasePrice > price && this.prediction.prediction == 'PUT');
       this.ended = true;
     }
+    //if (!this.second) this.checkSecond(price, model);
   }
   checkSecond(price, model) {
     if (!this.purchasePrice) this.purchasePrice = price;
