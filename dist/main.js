@@ -546,7 +546,7 @@ const Main = {
                         highestPrice: highLowClose.highest
                     });
                     //this.proposalCompleteCheck();
-                   MockMode.run(this.currentPrice);
+                   MockMode.run(this.currentPrice,this.history);
                    Volatility.check(this.currentPrice);
                     //if (this.idleStartTime) this.checkIdleTime();
                 }
@@ -666,7 +666,7 @@ const Main = {
             }
             this.end(ignore, duration);
         }
-        if (this.winStreak >=3) this.end();
+        if (this.profit > 0 || this.winStreak >=3) this.end();
        if (!isLoss){
         this.profit = 0;
         this.lossStreak =0;

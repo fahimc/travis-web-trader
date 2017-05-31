@@ -24,9 +24,8 @@ let MockMode = {
     lossStreak: 0,
     assetResultCollection: [],
     checkTimer: null,
-    run(currentPrice) {
-        this.checkTransactions(currentPrice);
-        this.predict(currentPrice);
+    run(currentPrice,history) {
+        this.checkHistory(history);
         //console.log('CURRENT WIN RATIO IS',this.winCount,this.lossCount,this.winCount/(this.winCount+this.lossCount));
         this.checkTrade();
         if (this.assetResultCollection.length >= this.assetCollection.length) {
@@ -39,6 +38,15 @@ let MockMode = {
             }, 5000);
         }
 
+    },
+    checkHistory(history){
+        this.restart();
+         this.transactionCollection=[];
+        let collection = history.slice(history.length-10,history.length);
+        collection.forEach((price)=>{
+            this.checkTransactions(price);
+            this.predict(price);
+        });
     },
     checkAssetResults() {
         let best = this.assetResultCollection[0];
