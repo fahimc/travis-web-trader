@@ -16,7 +16,6 @@ let MockMode = {
         'R_100',
         'R_10',
         'R_25',
-        'R_50',
         'R_75',
         'RDBULL',
         'RDBEAR'
