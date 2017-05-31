@@ -19,7 +19,7 @@ const Balance = {
   },
   purchase(model){
     if(!model.balance)model.balance = model.STARTING_BALANCE;
-    let cost = this.stake[model.lossStreak]  ? this.stake[model.lossStreak] : Math.abs(model.profit) * 2 ;
+    let cost = this.stake[model.winStreak?model.winStreak:model.lossStreak ]  ? this.stake[model.winStreak?model.winStreak:model.lossStreak ] : Math.abs(model.profit) * 2 ;
     model.profit -= cost;
     model.balance -= cost;
     return cost;

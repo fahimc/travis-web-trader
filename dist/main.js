@@ -2,6 +2,8 @@ const Main = {
     isVirtual: true,
     isTarget: false,
     disableFahimgale: false,
+    DEFAULT_TICK_LENGTH: 6,
+    LONG_TICK_LENGTH: 10,
     stakeTicks: 6,
     profitLimit: 100, //DEBUG
     lossLimit: -500,
