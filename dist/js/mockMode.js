@@ -8,9 +8,9 @@ let MockMode = {
     winPercentage: 0,
     transactionCollection: [],
     countCollection: [],
-    initialWinPercentageCap: 0.50,
+    initialWinPercentageCap: 0.52,
     tightWinPercentageCap: 0.8,
-    currentWinPercentageCap: 0.50,
+    currentWinPercentageCap: 0.52,
     gettingHistory: false,
     assetCollection: [
         'R_100',
@@ -49,7 +49,7 @@ let MockMode = {
         });
       //  console.log('BEST ASSET', best);
         if (!Main.isProposal && best.asset !== Main.ASSET_NAME) {
-            //Main.changeAsset(best.asset);
+            Main.changeAsset(best.asset);
             this.assetResultCollection = [];
             this.gettingHistory = false;
             console.log('SWITCH TO', best);
@@ -101,7 +101,7 @@ let MockMode = {
         }
     },
     predict(currentPrice) {
-        this.prediction = Main.predictionModel? window[Main.predictionModel].predict(Main.history, true): BullishPrediction.predict(Main.history, true);
+        this.prediction = Main.predictionModel? window[Main.predictionModel].predict(Main.history[Main.history.length-1],Main.history,{}, true): BullishPrediction.predict(Main.history[Main.history.length-1],Main.history,{}, true);
         if (this.prediction) {
             let transaction = new TransactionMock(this.prediction.type, currentPrice, Main.stakeTicks);
             this.transactionCollection.push(transaction);

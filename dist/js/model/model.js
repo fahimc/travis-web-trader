@@ -45,8 +45,13 @@ const Model = {
     purchase(history, prediction) {
         let collection = history.slice(history.length - 10, history.length);
         let highLow = Util.getHighLow(collection);
+        Main.currentTrendItem = {
+                predictionType: prediction.type,
+                type: prediction.prediction
+            };
         ChartComponent.updatePredictionChart(collection, highLow.lowest, highLow.highest);
         Main.isProposal = false;
         Main.setPrediction(prediction.prediction, prediction.type);
+
     }
 };

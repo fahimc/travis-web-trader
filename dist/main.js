@@ -4,8 +4,8 @@ const Main = {
     disableFahimgale: false,
     stakeTicks: 6,
     profitLimit: 100, //DEBUG
-    lossLimit: -500,
-    lossStreakLimit: 13,
+    lossLimit: -100,
+    lossStreakLimit: 10,
     volatilityLimit: 5,
     assetChangeStreak: [2, 5, 7, 9],
     stake: 0.5,
@@ -55,6 +55,7 @@ const Main = {
     predictionType: null,
     predictionModel: null,
     lossStreak: 0,
+    winStreak: 0,
     shortLossStreak: 0,
     isShort: false,
     pauseTimer: null,
@@ -417,7 +418,7 @@ const Main = {
     onMessage(event) {
         if (this.ended) return;
         var data = JSON.parse(event.data);
-        // if (data.msg_type != 'tick') console.log('onMessage', data);
+        //if (data.msg_type != 'tick') console.log('onMessage', data);
         switch (data.msg_type) {
             case 'authorize':
                 //this.addFunds();
@@ -545,8 +546,8 @@ const Main = {
                         highestPrice: highLowClose.highest
                     });
                     //this.proposalCompleteCheck();
-                    MockMode.run(this.currentPrice);
-                    Volatility.check(this.currentPrice);
+                   MockMode.run(this.currentPrice);
+                   Volatility.check(this.currentPrice);
                     //if (this.idleStartTime) this.checkIdleTime();
                 }
                 break;
@@ -625,6 +626,7 @@ const Main = {
         let profit = this.accountBalance - this.startBalance;
         if (isLoss == true) {
             //this.profit -= this.currentStake;
+            this.winStreak=0;
             this.lossStreak++;
             if (this.lossStreak >= this.volatilityLimit) Volatility.changeLimit = Volatility.defaultChangeTightLimit;
             Storage.setStreak(this.lossStreak);
@@ -633,6 +635,7 @@ const Main = {
             if (this.isShort) this.shortLossStreak++;
             this.setFail();
         } else if (isLoss == false) {
+            this.winStreak++;
             //this.profit += (this.currentStake + (this.currentStake * 0.94));
             if (this.lossStreak) Storage.setLossArray(this.lossStreak);
             this.lossStreak = 0;
@@ -663,7 +666,7 @@ const Main = {
             }
             this.end(ignore, duration);
         }
-       // if (!isLoss) this.end();
+        if (this.winStreak >=3) this.end();
        if (!isLoss){
         this.profit = 0;
         this.lossStreak =0;
@@ -712,18 +715,14 @@ const Main = {
     },
     setStake(isLoss) {
         
-        if (isLoss && this.config.stakeType && window[this.config.stakeType]) {
-            this.currentStake = window[this.config.stakeType].getStake(this.currentStake, this.lossStreak);
+        if (this.config.stakeType && window[this.config.stakeType]) {
+            this.currentStake = window[this.config.stakeType].getStake(this.currentStake, this.lossStreak,isLoss);
         } else if (isLoss && this.startMartingale) {
             let profit = Math.abs(this.profit);
             if (!this.disableFahimgale) {
-                // this.currentStake = Math.ceil(Math.abs(this.profit) + (Math.abs(this.profit) * 0.06));//debug martingale remvoed to test
-                let cut = this.lossStreak > 3 ? 0.00 : 0.4;
-                if (this.lossStreak > 3) cut = 0.0;
-                let profitAbs = Math.abs(this.profit);
-                let newStake = (profitAbs * 0.5) + ((profitAbs * 0.5) * cut);
-                let _stake = Number((newStake * 2).toFixed(2));
-                this.currentStake = _stake;
+                let stake = Math.pow(this.lossStreak,0.5);
+                 this.currentStake = Math.ceil(Math.abs(stake) + (Math.abs(stake) * 0.06));//debug martingale remvoed to test
+              if(this.currentStake < 0.5)this.currentStake=0.5;
             } else {
                 //non fahimgale
             }

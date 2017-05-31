@@ -1,5 +1,5 @@
-const BullishPrediction = {
-    predict(ticks, checkMode) {
+var BullishPrediction = {
+    predict(price,ticks,model, checkMode) {
         if (!checkMode && (Main.isBreak || Main.isProposal || Main.pauseTrading)) return;
         let lastTick = ticks[ticks.length - 4];
         let previousTick = ticks[ticks.length - 2];
@@ -29,8 +29,8 @@ const BullishPrediction = {
                 type: proposal
             };
             if (!checkMode) {
-               ChartComponent.updatePredictionChart(ticks.slice(ticks.length - 4, ticks.length), lowest, highest);
-               Main.setPrediction(proposal, predictionType, checkMode);
+                let prediction = { prediction: proposal, type: predictionType};
+                return prediction;
             } else {
                 return {
                     predictionType: predictionType,
