@@ -15,11 +15,10 @@ let MockMode = {
     assetCollection: [
         'R_100',
         'R_10',
-        'R_25',
-        'R_50',
         'R_75',
         'RDBULL',
-        'RDBEAR'
+        'RDBEAR',
+        'fxEURGBP'
     ],
     IDLE_TICK_LIMIT: 10,
     lossStreak: 0,
@@ -49,7 +48,7 @@ let MockMode = {
         });
       //  console.log('BEST ASSET', best);
         if (!Main.isProposal && best.asset !== Main.ASSET_NAME) {
-            //Main.changeAsset(best.asset);
+            Main.changeAsset(best.asset);
             this.assetResultCollection = [];
             this.gettingHistory = false;
             console.log('SWITCH TO', best);

@@ -665,7 +665,7 @@ const Main = {
     if (this.lossStreakLimit && this.lossStreak >= this.lossStreakLimit) {
       this.doParoli = true;
     }
-    if (!isLoss) this.end();
+    if (this.profit >=0) this.end();
     this.setStake(isLoss);
     if (this.assetChangeStreak && this.isAssetChangeIndex()) this.changeAsset();
     this.isProposal = false;
@@ -709,7 +709,7 @@ const Main = {
     if (Tester && Tester.testBalance) Tester.setBalance(this.accountBalance - this.startBalance);
   },
   setStake(isLoss) {
-    if (isLoss && this.config.stakeType && window[this.config.stakeType]) {
+    if (this.config.stakeType && window[this.config.stakeType]) {
       this.currentStake = window[this.config.stakeType].getStake(this.currentStake, this.lossCount, { winStreak: this.winStreak, doParoli: this.doParoli, profit: this.profit });
     } else if (isLoss && this.startMartingale) {
       let profit = Math.abs(this.profit);
