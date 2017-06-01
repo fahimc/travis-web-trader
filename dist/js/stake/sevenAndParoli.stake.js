@@ -1,5 +1,5 @@
-const Balance = {
-  stake: {
+var SevenAndParoliStake = {
+  stake:{
     0: 0.50,
     1: 0.90,
     2: 1.90,
@@ -9,8 +9,8 @@ const Balance = {
     6: 32.60,
     7: 67.20,
     8: 138.70,
-    9: 260.00,
-    10: 500.00,
+    9: 160.00,
+    10: 95.00,
     11: 440.00,
     12: 750.00,
     13: 1000.00,
@@ -24,16 +24,12 @@ const Balance = {
     } else {
       this.paroliStake *= 2;
     }
+  	console.log('Paroli',this.paroliStake);
     return this.paroliStake;
   },
-  purchase(model) {
-    if (!model.balance) model.balance = model.STARTING_BALANCE;
+  getStake(currentStake,lossCount,model) {
     if (model.doParoli) return this.paroli(model);
-    let cost = this.stake[model.lossStreak] ? this.stake[model.lossStreak] : Math.abs(model.profit) * 2;
-    model.profit -= cost;
-    model.balance -= cost;
-    return cost;
+    console.log('Seven Stake',this.stake[lossCount]);
+  	return this.stake[lossCount] != undefined ? this.stake[lossCount] : currentStake * 2;
   }
-}
-
-module.exports = Balance;
+};

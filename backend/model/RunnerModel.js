@@ -15,7 +15,7 @@ const RunnerModel = {
   winCount: 0,
   transactionCollection: [],
   highestNumberOfTransactions: 0,
-  reverseStake: false,
+  doParoli: false,
   hasTransaction() {
     return this.transactionCollection.length;
   },
@@ -28,11 +28,12 @@ const RunnerModel = {
           this.setWin(transaction);
           this.lossStreak = 0;
           this.winCount++;
-          if (this.reverseStake) {
-            if (this.balance - this.STARTING_BALANCE > 0) {
-             // this.winStreak++;
+          this.winStreak++;
+          if (this.doParoli) {
+            if (this.balance - this.STARTING_BALANCE >= 0) {
+                this.doParoli=false;
             } else {
-              this.winStreak = 0;
+              
             }
           }
 
@@ -45,8 +46,7 @@ const RunnerModel = {
           }
           this.lossCount++;
           if (this.LOSS_CAP && this.lossStreak >= this.LOSS_CAP) {
-            this.lossStreak = this.LOSS_CAP+1;
-            this.reverseStake = true;
+            this.doParoli = true;
           }
         }
       }
