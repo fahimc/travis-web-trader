@@ -20,11 +20,10 @@ var SevenAndParoliStake = {
   paroliStake: 0,
   paroli(model) {
     if (!model.winStreak) {
-      this.paroliStake = Math.abs(model.profit) / 2;
+      this.paroliStake = this.stake[model.doParoli-1];
     } else {
       this.paroliStake *= 2;
     }
-  	console.log('Paroli',this.paroliStake);
     return this.paroliStake;
   },
   getStake(currentStake,lossCount,model) {

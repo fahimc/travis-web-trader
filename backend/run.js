@@ -5,7 +5,7 @@ const PatternPredictor = require('./prediction/pattern.js');
 const Model = require('./model/RunnerModel.js');
 
 const Runner = {
-    PREDICTOR:DirectionPredictor,
+    PREDICTOR:BullishPredictor,
     init() {
         this.run();
     },

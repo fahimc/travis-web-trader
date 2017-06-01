@@ -7,7 +7,7 @@ const Main = {
   stakeTicks: 6,
   profitLimit: 100, //DEBUG
   lossLimit: -500,
-  lossStreakLimit: 6,
+  lossStreakLimit: 4,
   volatilityLimit: 5,
   assetChangeStreak: [2, 5, 7, 9],
   stake: 0.5,
@@ -83,7 +83,7 @@ const Main = {
   transactionTimer: null,
   transactionTimerDuration: 30000,
   isTransaction: false,
-  doParoli: false,
+  doParoli: 0,
   config: null,
   assetModel: null,
   historyCallback: [],
@@ -421,7 +421,7 @@ const Main = {
   onMessage(event) {
     if (this.ended) return;
     var data = JSON.parse(event.data);
-    //if (data.msg_type != 'tick') console.log('onMessage', data);
+    if (data.msg_type != 'tick') console.log('onMessage', data);
     switch (data.msg_type) {
       case 'authorize':
         //this.addFunds();
@@ -640,7 +640,7 @@ const Main = {
       this.setSuccess();
       if (this.doParoli) {
         if (this.profit >= 0) {
-          this.doParoli = false;
+          this.doParoli = 0;
         }
       }
     }
@@ -663,7 +663,7 @@ const Main = {
       this.end(ignore, duration);
     }
     if (this.lossStreakLimit && this.lossStreak >= this.lossStreakLimit) {
-      this.doParoli = true;
+      this.doParoli++;
     }
     if (this.profit >=0) this.end();
     this.setStake(isLoss);

@@ -1,4 +1,4 @@
-const BullishPrediction = {
+var BullishPrediction = {
     predict(ticks, checkMode) {
         if (!checkMode && (Main.isBreak || Main.isProposal || Main.pauseTrading)) return;
         let lastTick = ticks[ticks.length - 4];
