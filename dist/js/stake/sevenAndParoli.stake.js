@@ -22,7 +22,7 @@ var SevenAndParoliStake = {
     if (!model.winStreak) {
       this.paroliStake = this.stake[0];
     } else {
-      this.paroliStake = this.stake[model.winStreak+(model.doParoli-1)];
+      this.paroliStake *= 2;
       let expectedWin = this.paroliStake + (this.paroliStake * 0.94);
       if(expectedWin > (Math.abs(model.profit) * 2)) this.paroliStake = Math.abs(model.profit) * 2;
     }
