@@ -1,6 +1,6 @@
 var BullishPrediction = {
     predict(ticks, checkMode) {
-        if (!checkMode && (Main.isBreak || Main.isProposal || Main.pauseTrading)) return;
+        if (!checkMode && (!MockMode.toTrade|| Main.isBreak || Main.isProposal || Main.pauseTrading)) return;
         let lastTick = ticks[ticks.length - 4];
         let previousTick = ticks[ticks.length - 2];
         let currentTick = ticks[ticks.length - 1];

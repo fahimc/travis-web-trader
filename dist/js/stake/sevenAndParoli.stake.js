@@ -20,9 +20,11 @@ var SevenAndParoliStake = {
   paroliStake: 0,
   paroli(model) {
     if (!model.winStreak) {
-      this.paroliStake = this.stake[model.doParoli-1];
+      this.paroliStake = this.stake[0];
     } else {
-      this.paroliStake *= 2;
+      this.paroliStake = this.stake[model.winStreak+(model.doParoli-1)];
+      let expectedWin = this.paroliStake + (this.paroliStake * 0.94);
+      if(expectedWin > (Math.abs(model.profit) * 2)) this.paroliStake = Math.abs(model.profit) * 2;
     }
     return this.paroliStake;
   },

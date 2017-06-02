@@ -421,7 +421,7 @@ const Main = {
   onMessage(event) {
     if (this.ended) return;
     var data = JSON.parse(event.data);
-    if (data.msg_type != 'tick') console.log('onMessage', data);
+    //if (data.msg_type != 'tick') console.log('onMessage', data);
     switch (data.msg_type) {
       case 'authorize':
         //this.addFunds();
@@ -447,7 +447,7 @@ const Main = {
         }
         this.accountBalance = data.balance.balance;
         this.setDefaultStake();
-        this.lossLimit = -(this.accountBalance - 10); //dynamic lose limit
+        //this.lossLimit = -(this.accountBalance - 10); //dynamic lose limit
         this.setLossLimit();
         if (!this.started) this.getAvailableAssets();
 
@@ -544,7 +544,7 @@ const Main = {
             lowestPrice: highLowClose.lowest,
             highestPrice: highLowClose.highest
           });
-          //this.proposalCompleteCheck();
+          this.proposalCompleteCheck();
           MockMode.run(this.currentPrice);
           Volatility.check(this.currentPrice);
           //if (this.idleStartTime) this.checkIdleTime();
@@ -605,7 +605,7 @@ const Main = {
     if (this.isProposal) {
       if (this.proposalTickCount > this.stakeTicks + 5) {
         console.log('proposalCompleteCheck');
-        this.doTransaction();
+        this.isProposal=false;
       } else {
         this.proposalTickCount++;
       }
@@ -641,6 +641,7 @@ const Main = {
       if (this.doParoli) {
         if (this.profit >= 0) {
           this.doParoli = 0;
+        }else{
         }
       }
     }
@@ -662,7 +663,7 @@ const Main = {
 
       this.end(ignore, duration);
     }
-    if (this.lossStreakLimit && this.lossStreak >= this.lossStreakLimit) {
+    if (this.lossStreakLimit && (this.lossStreak % this.lossStreakLimit)==0) {
       this.doParoli++;
     }
     if (this.profit >=0) this.end();
