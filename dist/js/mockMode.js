@@ -6,12 +6,15 @@ let MockMode = {
     winCount: 0,
     lossCount: 0,
     winPercentage: 0,
+    currentWinPercentage: 0,
     transactionCollection: [],
     countCollection: [],
-    initialWinPercentageCap: 0.55,
-    tightWinPercentageCap: 0.65,
-    currentWinPercentageCap: 0.55,
+    initialWinPercentageCap: 0.56,
+    tightWinPercentageCap: 0.60,
+    currentWinPercentageCap: 0.56,
+    shortWinPercentage: 0.65,
     gettingHistory: false,
+    longTermWinRatio: 0.69,
     assetCollection: [
         'R_100',
         'R_10',
@@ -23,9 +26,13 @@ let MockMode = {
     lossStreak: 0,
     assetResultCollection: [],
     checkTimer: null,
+    isAboveCap: false,
+    currentisAboveCap: false,
+    longWinCap: false,
+    longWinRatio: 0,
     run(currentPrice) {
         this.checkTransactions(currentPrice);
-
+        //console.log('overall win ratio is ',this.checkWinPercentageOverPeriod(100).toFixed(2) + '%');
         //console.log('CURRENT WIN RATIO IS',this.winCount,this.lossCount,this.winCount/(this.winCount+this.lossCount));
         this.checkTrade();
         if (this.assetResultCollection.length >= this.assetCollection.length) {
@@ -45,7 +52,7 @@ let MockMode = {
         this.assetResultCollection.forEach((item) => {
             if (item.winPercentage > best.winPercentage) best = item;
         });
-        //  console.log('BEST ASSET', best);
+        console.log('BEST ASSET', best);
         if (!Main.isProposal && best.asset !== Main.ASSET_NAME) {
             Main.changeAsset(best.asset);
             this.assetResultCollection = [];
@@ -69,17 +76,53 @@ let MockMode = {
     restart() {
         this.countCollection = [];
     },
+    getMessage() {
+        let message = 'Number of transactions ' + this.countCollection.length;
+        if (!this.longWinCap) return 'long term win percentage is ' + (this.longWinRatio * 100).toFixed(2) + '%';
+        if (!this.isAboveCap) return 'win percentage is ' + (this.winPercentage * 100).toFixed(2) + '%';
+        if (!this.currentisAboveCap) return 'short win percentage is ' + (this.currentWinPercentage * 100).toFixed(2) + '%';
+        return message;
+    },
     checkTrade() {
-
         let total = this.countCollection.length;
         let wins = this.numberOfWins();
         this.winPercentage = wins / total;
         if (isNaN(this.winPercentage)) this.winPercentage = 0;
-        this.toTrade = Main.lossStreak >= 3 ? this.winPercentage >= this.tightWinPercentageCap : this.winPercentage >= this.currentWinPercentageCap;
+        this.isAboveCap = Main.lossStreak >= 3 ? this.winPercentage >= this.tightWinPercentageCap : this.winPercentage >= this.currentWinPercentageCap;
+        this.currentisAboveCap = this.isWinsByIndex(3, this.shortWinPercentage);
+        this.longWinCap = true;
+        if(Main.lossStreak>6)
+        {
+           this.longWinRatio = this.checkWinPercentageOverPeriod(200);
+           this.longWinCap = this.longWinRatio > this.longTermWinRatio;
+        }
+          this.toTrade = this.isAboveCap && this.currentisAboveCap && this.longWinCap;
+        
+        this.updateToTrade();
+        //this.toTrade = false;
     },
-    numberOfWins() {
+    updateToTrade() {
+        if (!this.toTrade) {
+            Main.pauseTrading = true;
+            View.updateVolatile(true, this.getMessage());
+        } else {
+            Main.pauseTrading = false;
+            View.updateVolatile(false, '');
+        }
+    },
+    isWinsByIndex(count, percentage) {
+        let collection = this.countCollection.slice(this.countCollection.length - (count + 1), this.countCollection.length);
         let wins = 0;
-        this.countCollection.forEach((isWin) => {
+        collection.forEach((isWin) => {
+            if (isWin) wins++;
+        });
+        this.currentWinPercentage = (wins / collection.length);
+        return this.currentWinPercentage > percentage;
+    },
+    numberOfWins(collection) {
+        let wins = 0;
+        if(!collection)collection = this.countCollection;
+        collection.forEach((isWin) => {
             if (isWin) wins++;
         });
         return wins;
@@ -102,11 +145,34 @@ let MockMode = {
         });
 
     },
-    predict(currentPrice, collection) {
+    checkWinPercentageOverPeriod(count) {
+        let results = [];
+        let transactions = [];
+        let collection = Main.history.slice(Main.history.length - (count + 1), Main.history.length);
+        collection.forEach((currentPrice, index) => {
+            currentPrice = Number(currentPrice);
+            for (let a = 0; a < transactions.length; a++) {
+                let transaction = transactions[a];
+                let result = transaction.run(currentPrice, true);
+                if (result !== undefined) {
+                    results.push(result)
+                }
+            }
+            let h = collection.slice(0, index);
+            let transaction = this.predict(currentPrice, h,true);
+            if(transaction)transactions.push(transaction);
+        });
+        return this.numberOfWins(results)/results.length;
+    },
+    predict(currentPrice, collection, returnResult) {
         this.prediction = Main.predictionModel ? window[Main.predictionModel].predict(collection, true) : BullishPrediction.predict(collection, true);
         if (this.prediction) {
             let transaction = new TransactionMock(this.prediction.type, currentPrice, Main.stakeTicks);
-            this.transactionCollection.push(transaction);
+            if (returnResult) {
+              return transaction;
+            } else {
+                this.transactionCollection.push(transaction);
+            }
         }
     }
 };
@@ -115,10 +181,11 @@ class TransactionMock {
     constructor(prediction, price, tickDuration) {
         this.complete = false;
         this.prediction = prediction;
-        this.purchasedPrice = price;
-        this.tickCount = tickDuration - 1;
+        this.purchasedPrice = null;
+        this.tickCount = tickDuration;
     }
     run(price, returnResult) {
+        if (!this.purchasedPrice) this.purchasedPrice = price;
         this.tickCount--;
         if (!this.tickCount) {
             return this.checkPurchase(price, returnResult);
@@ -132,8 +199,9 @@ class TransactionMock {
         this.complete = true;
         if (returnResult) {
             return win;
+        } else {
+            MockMode.countCollection.push(win);
         }
-        MockMode.countCollection.push(win);
     }
 
 }

@@ -9,6 +9,7 @@ const Storage = {
         streaks: 'streaks',
         historicalItemIndex: 'historicalItemIndex',
         historicalIndex: 'historicalIndex',
+        lowestPrices: 'lowestPrices',
     },
     testPrefix: 'test_',
     streaks: {
@@ -17,9 +18,10 @@ const Storage = {
     wins: 0,
     loses: 0,
     lossArray: [],
+    lowestPrices: {},
     hitLossLimit: 0,
     init() {
-        this.show();
+
         let str = this.get(this.keys.streaks);
         if (str && str != 'undefined') this.streaks = JSON.parse(str);
 
@@ -35,6 +37,9 @@ const Storage = {
         str = this.get(this.keys.lossArray);
         if (str && str != 'undefined') this.lossArray = JSON.parse(str);
 
+        str = this.get(this.keys.lowestPrices);
+        if (str && str != 'undefined') this.lowestPrices = JSON.parse(str);
+        this.show();
     },
     show() {
         let str = this.get(this.keys.streaks);
@@ -63,6 +68,12 @@ const Storage = {
             table.push({ name: 'win percentage', value: percentage });
         }
         console.table(table);
+        let arr = [];
+        for (let key in this.lowestPrices) {
+            arr.push({ asset: key, lowestPrice: this.lowestPrices[key] });
+        }
+        console.table(arr);
+
     },
     get(key) {
         if (Tester.isTesting || TestModel.ENABLED) {
@@ -82,10 +93,15 @@ const Storage = {
         this.streaks[key]++;
         this.set(this.keys.streaks, JSON.stringify(this.streaks));
     },
-    setLossArray(key){
-        if(this.lossArray.length >= 5)this.lossArray.shift();
+    setLossArray(key) {
+        if (this.lossArray.length >= 5) this.lossArray.shift();
         this.lossArray.push(key);
-        this.set(this.keys.lossArray,JSON.stringify(this.lossArray));
+        this.set(this.keys.lossArray, JSON.stringify(this.lossArray));
+    },
+    setLowestPrices(key, value) {
+        if (this.lowestPrices[key] == undefined) this.lowestPrices[key] = Number(value);
+        if (Number(value) < Number(this.lowestPrices[key])) this.lowestPrices[key] = Number(value);
+        this.set(this.keys.lowestPrices, JSON.stringify(this.lowestPrices));
     },
     setWins(count, loses) {
         this.wins += count;
@@ -93,10 +109,10 @@ const Storage = {
         this.set(this.keys.wins, this.wins);
         this.set(this.keys.loses, this.loses);
     },
-    getLossArray(){
+    getLossArray() {
         return this.lossArray;
     },
-    clearLossArray(){
+    clearLossArray() {
         this.set(this.keys.lossArray, []);
     },
     setLossLimit() {

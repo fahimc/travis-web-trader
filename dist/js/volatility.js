@@ -33,14 +33,14 @@ const Volatility = {
         let changeCount = this.numberOfChanges(collection);
        // if (!MockMode.toTrade || changeCount > this.changeLimit||change) {
         if (!MockMode.toTrade) {
-            Main.pauseTrading = true;
+           // Main.pauseTrading = true;
             change = change?change:0;
             let message = changeCount > this.changeLimit ? 'direction changes:' + changeCount : 'price change: ' + change.toFixed(2);
-            if(!MockMode.toTrade)message = 'win percentage is ' + (MockMode.winPercentage * 100).toFixed(2) + '%';
-            View.updateVolatile(true, message);
+            if(!MockMode.toTrade)message = '<br>' + MockMode.getMessage();
+           // View.updateVolatile(true, message); 
         } else {
-            Main.pauseTrading = false;
-            View.updateVolatile(false, '');
+           // Main.pauseTrading = false;
+            //View.updateVolatile(false, '');
         }
         this.timer = null;
         this.tickCollection = [];

@@ -2,6 +2,7 @@ const Balance = require('../module/Balance.js');
 const Transaction = require('../module/transaction.js');
 
 const RunnerModel = {
+  ASSET_NAME:'R_100',
   STARTING_BALANCE: 1100,
   LOSS_CAP: 4,
   balance: 0,
@@ -16,6 +17,9 @@ const RunnerModel = {
   transactionCollection: [],
   highestNumberOfTransactions: 0,
   doParoli: false,
+  lowestPrices:{
+    'R_100':0
+  },
   hasTransaction() {
     return this.transactionCollection.length;
   },
@@ -47,7 +51,7 @@ const RunnerModel = {
           }
           this.lossCount++;
           if (this.LOSS_CAP && this.lossStreak >= this.LOSS_CAP) {
-           this.doParoli++;
+           //this.doParoli++;
           }
         }
       }

@@ -195,7 +195,7 @@ let ChartComponent = {
             this.config.data.labels.shift();
         }
         let barrier = Main.assetModel ?Main.assetModel.chartBarrier:20;
-        this.config.options.scales.yAxes[0].ticks.min = item.lowestPrice ? item.lowestPrice - barrier : 0;
+        this.config.options.scales.yAxes[0].ticks.min = item.lowestPrice ? (item.lowestPrice - barrier) : 0;
         this.chart.update();
     },
     updateClose(item) {
@@ -206,7 +206,7 @@ let ChartComponent = {
             this.closeConfig.data.labels.shift();
         }
         let barrier = Main.assetModel ?Main.assetModel.chartBarrier:20;
-        this.closeConfig.options.scales.yAxes[0].ticks.min = item.lowestPrice ? item.lowestPrice - barrier : 0;
+        this.closeConfig.options.scales.yAxes[0].ticks.min = item.lowestPrice ? (item.lowestPrice - barrier) : 0;
         this.closechart.update();
     },
     updatePredictionChart(collection, lowestPrice, highestPrice) {

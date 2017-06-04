@@ -2,6 +2,7 @@ const Main = {
   isVirtual: true,
   isTarget: false,
   disableFahimgale: false,
+  IS_DYNAMIC_LOSS_CAP: true,
   DEFAULT_TICK_LENGTH: 6,
   LONG_TICK_LENGTH: 10,
   stakeTicks: 6,
@@ -86,6 +87,7 @@ const Main = {
   doParoli: 0,
   config: null,
   assetModel: null,
+  durationUnit:'t',
   historyCallback: [],
   log: {
 
@@ -159,7 +161,10 @@ const Main = {
     if (apiKey && appID) {
       this.createConfig(isVirtual, apiKey, appID, stakeType);
     }
-    if (asset) this.ASSET_NAME = asset;
+    if (asset) {
+      this.ASSET_NAME = asset;
+      this.assetModel = window[this.ASSET_NAME + 'Model'];
+    } 
     console.log(this.ASSET_NAME);
   },
   createConfig(isVirtual, apiKey, appID, stakeType) {
@@ -366,8 +371,9 @@ const Main = {
       type: 'PUT'
     };
   },
-  getPriceProposal(type, duration) {
+  getPriceProposal(type, duration,unit) {
     if (!type || this.isProposal) return;
+    console.log('getPriceProposal');
     this.isProposal = true;
     this.proposalTickCount = 0;
     this.lastBalance = this.accountBalance;
@@ -379,7 +385,7 @@ const Main = {
       "contract_type": type ? type : "CALL",
       "currency": this.isVirtual ? "USD" : 'GBP',
       "duration": duration ? duration : String(this.stakeTicks),
-      "duration_unit": "t",
+      "duration_unit": unit?unit:this.durationUnit,
       "symbol": this.ASSET_NAME
     }));
   },
@@ -447,7 +453,7 @@ const Main = {
         }
         this.accountBalance = data.balance.balance;
         this.setDefaultStake();
-        //this.lossLimit = -(this.accountBalance - 10); //dynamic lose limit
+        if(this.IS_DYNAMIC_LOSS_CAP)this.lossLimit = -(this.accountBalance - 10); //dynamic lose limit
         this.setLossLimit();
         if (!this.started) this.getAvailableAssets();
 
@@ -484,7 +490,7 @@ const Main = {
         }
         break;
       case 'proposal':
-        // console.log('proposal', data);
+         //console.log('proposal', data);
         if (!data.proposal) return;
         this.proposalID = data.proposal.id;
         this.payout = data.proposal.payout;
@@ -493,10 +499,13 @@ const Main = {
         break;
       case 'buy':
         // console.log('buy', data);
+         Model.purchasePrice(data.buy);
         break;
       case 'transaction':
+     // console.log('transaction',data);
         if (data.transaction && data.transaction.action && data.transaction.action == 'sell') {
           //stop transaction timer
+          Model.completeTransaction(data.transaction);
           this.isTransaction = false;
           clearTimeout(this.transactionTimer);
           let isLoss = false;
@@ -507,6 +516,7 @@ const Main = {
 
         } else if (data.transaction && data.transaction.action && data.transaction.action == 'buy') {
           this.isTransaction = true;
+          Model.purchaseTransaction(data.transaction);
         }
         break;
       case 'forget_all':
@@ -516,14 +526,15 @@ const Main = {
         if (data.tick) {
           this.currentTick++;
           this.history.push(data.tick.quote);
+          if(this.history.length>5000)this.history.shift();
           this.historyTimes.push(data.tick.epoch);
+          if(this.historyTimes.length>5000)this.historyTimes.shift();
           //console.log('ticks update',this.history.length);
           this.currentPrice = data.tick.quote;
+          Storage.setLowestPrices(this.ASSET_NAME,this.currentPrice);
           this.setPositions();
 
-          if (this.isTrading) {
-            this.doPrediction();
-          }
+         
           let collection = this.history.slice(this.history.length - 200, this.history.length);
           let collectionClose = this.history.slice(this.history.length - 30, this.history.length);
 
@@ -547,6 +558,9 @@ const Main = {
           this.proposalCompleteCheck();
           MockMode.run(this.currentPrice);
           Volatility.check(this.currentPrice);
+           if (this.isTrading) {
+            this.doPrediction();
+          }
           //if (this.idleStartTime) this.checkIdleTime();
         }
         break;
@@ -602,7 +616,7 @@ const Main = {
     // if (dif >= 300000) location.reload();
   },
   proposalCompleteCheck() {
-    if (this.isProposal) {
+    if (this.isProposal && this.durationUnit == 't') {
       if (this.proposalTickCount > this.stakeTicks + 5) {
         console.log('proposalCompleteCheck');
         this.isProposal=false;
@@ -666,7 +680,7 @@ const Main = {
     if (this.lossStreakLimit && (this.lossStreak % this.lossStreakLimit)==0) {
       this.doParoli++;
     }
-    if (this.profit >=0) this.end();
+    if (!isLoss||this.profit >=0) this.end();
     this.setStake(isLoss);
     if (this.assetChangeStreak && this.isAssetChangeIndex()) this.changeAsset();
     this.isProposal = false;
@@ -782,12 +796,12 @@ const Main = {
     }
     return this.log[type];
   },
-  setPrediction(proposal, predictionType, duration) {
+  setPrediction(proposal, predictionType, duration,unit) {
     if (this.assetModel.payout[proposal] !== 0.94) {
       let dif = 0.94 - this.assetModel.payout[proposal];
       if (dif > 0) this.currentStake += this.currentStake * dif;
     }
-    this.getPriceProposal(proposal, duration);
+    this.getPriceProposal(proposal, duration,unit);
     View.updatePredictionType(predictionType);
     this.predictionType = predictionType;
   }

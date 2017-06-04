@@ -7,30 +7,29 @@ var BullishPrediction = {
         let highest = currentTick;
         let lowest = currentTick;
         let found = false;
-        if (lastTick < previousTick && previousTick < currentTick) {
-            this.isGoingInDirections(ticks.slice(ticks.length - 4, ticks.length), 'RAISE');
+        let collection = ticks.slice(ticks.length - 5, ticks.length);
+        if (lastTick < previousTick && previousTick < currentTick && this.isGoingInDirections(collection, 'RAISE')) {
+            
             proposal = 'CALL';
             predictionType = 'BULL_UP';
             found = true;
             highest = currentTick;
             lowest = previousTick;
-        } else if (lastTick > previousTick && previousTick > currentTick) {
-            this.isGoingInDirections(ticks.slice(ticks.length - 4, ticks.length), 'FALL');
+        } else if (lastTick > previousTick && previousTick > currentTick && this.isGoingInDirections(collection, 'FALL')) {
+            
             proposal = 'PUT';
             predictionType = 'BULL_DOWN';
             found = true;
             highest = previousTick;
             lowest = currentTick;
         }
-
         if (found) {
-            Main.currentTrendItem = {
-                predictionType: predictionType,
-                type: proposal
-            };
+            // Main.currentTrendItem = {
+            //     predictionType: predictionType,
+            //     type: proposal
+            // };
             if (!checkMode) {
-               ChartComponent.updatePredictionChart(ticks.slice(ticks.length - 4, ticks.length), lowest, highest);
-               Main.setPrediction(proposal, predictionType, checkMode);
+              Model.createTransaction(proposal,predictionType,currentTick,ticks.slice(ticks.length - 4, ticks.length));
             } else {
                 return {
                     predictionType: predictionType,
@@ -50,6 +49,6 @@ var BullishPrediction = {
             if (direction == 'FALL' && collection[0] > price) count++;
         });
 
-        //console.log(count, count / collection.length, direction);
+        return (count / collection.length) >=0.5;
     }
 }
