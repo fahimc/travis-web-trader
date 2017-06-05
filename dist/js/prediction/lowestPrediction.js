@@ -1,26 +1,34 @@
 var LowestPrediction = {
-    predict(ticks, checkMode) {
-        if (!checkMode && (Main.isBreak || Main.isProposal || Main.pauseTrading)) return;
-        let found = false;
-        let proposal = '';
-        let currentTick = Number(ticks[ticks.length - 1]);
-        let predictionType = 'LOWEST_PRICE';
-        if (Storage.lowestPrices[Main.ASSET_NAME] <= currentTick) {
-            found = true;
-            proposal = 'CALL';
-        }
-        if (found) {
-            if (!checkMode) {
-              Main.durationUnit = 's';
-                Model.createTransaction(proposal, predictionType, currentTick, ticks.slice(ticks.length - 4, ticks.length), '30', 's');
-            } else {
-                return {
-                    predictionType: predictionType,
-                    type: proposal
-                }
-            }
-        }
-
-        return found;
+    prediction:'',
+    predict(price, history, model) {
+    if (model.transactionCollection.length >= 1 || history.length < 1000) {
+      return;
     }
+    let collection = history.slice(history.length-1000,history.length);
+    let lowestPrice = this.getLowestPrice(collection);
+    let highestPrice = this.getHighestPrice(collection);
+    let currentPrice = history[history.length-1];
+    let previousPrice = history[history.length-2]
+    if(previousPrice <= lowestPrice &&  previousPrice <= currentPrice )this.prediction = { prediction:  'PUT', type: 'LOWEST_PRICE' };
+    if(previousPrice >= highestPrice &&  previousPrice >= currentPrice)this.prediction = { prediction:  'CALL', type: 'LOWEST_PRICE' };
+    return this.prediction;
+  },
+  getLowestPrice(history){
+    let lowestPrice = Number(history[0]);
+    history.forEach((price)=>{
+      price = Number(price);
+      if(price < lowestPrice)lowestPrice = price;
+    });
+
+    return lowestPrice;
+  },
+  getHighestPrice(history){
+    let highestPrice = Number(history[0]);
+    history.forEach((price)=>{
+      price = Number(price);
+      if(price > highestPrice)highestPrice = price;
+    });
+
+    return highestPrice;
+  }
 }

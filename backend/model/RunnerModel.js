@@ -4,7 +4,8 @@ const Transaction = require('../module/transaction.js');
 const RunnerModel = {
   ASSET_NAME:'R_100',
   STARTING_BALANCE: 1100,
-  LOSS_CAP: 4,
+  TRANSACTION_DURATION: 6,
+  LOSS_CAP: 9,
   balance: 0,
   numberOfTicks: 0,
   lossCollection: {},
@@ -17,6 +18,8 @@ const RunnerModel = {
   transactionCollection: [],
   highestNumberOfTransactions: 0,
   doParoli: false,
+  paroliIndex: 0,
+  maxParoliIndex:0,
   lowestPrices:{
     'R_100':0
   },
@@ -35,8 +38,10 @@ const RunnerModel = {
           this.winCount++;
           this.winStreak++;
           if (this.doParoli) {
-            if (this.balance - this.STARTING_BALANCE >= 0) {
-                this.doParoli=0;
+                this.paroliIndex++;
+
+            if ( this.balance - this.STARTING_BALANCE >= 0) {
+              this.doParoli=false;
             } else {
               
             }
@@ -51,7 +56,13 @@ const RunnerModel = {
           }
           this.lossCount++;
           if (this.LOSS_CAP && this.lossStreak >= this.LOSS_CAP) {
-           //this.doParoli++;
+                 // this.lossStreak=0;
+            this.paroliIndex=0;
+            this.doParoli=true;
+           //this.profit=0;
+          // this.lossStreak=0;
+            
+            if(this.maxParoliIndex < this.paroliIndex)this.maxParoliIndex = this.paroliIndex;
           }
         }
       }
@@ -71,7 +82,7 @@ const RunnerModel = {
   setWin(transaction) {
     let winnings = transaction.cost + (transaction.cost * 0.94);
     this.balance += winnings;
-    if(this.profit>=0)this.profit = 0;
+    this.profit = 0;
   }
 };
 

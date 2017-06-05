@@ -14,7 +14,7 @@ class Transaction {
       this.purchasePrice = price;
     }
     this.tickCount++;
-    if (this.tickCount >= 15) {
+    if (this.tickCount >= model.TRANSACTION_DURATION) {
       this.isWin = (this.purchasePrice < price && this.prediction.prediction == 'CALL' || this.purchasePrice > price && this.prediction.prediction == 'PUT');
       this.ended = true;
     }

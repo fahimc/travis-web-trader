@@ -6,7 +6,7 @@ const LowestPredictor = require('./prediction/lowest.js');
 const Model = require('./model/RunnerModel.js');
 
 const Runner = {
-    PREDICTOR: LowestPredictor,
+    PREDICTOR: DirectionPredictor,
     init() {
         this.run();
     },
@@ -19,7 +19,6 @@ const Runner = {
             if (prediction) {
                 Model.createTransaction(prediction);
             }
-            if (!Model.lowestPrices.R_100  || Model.lowestPrices.R_100 > Number(price)) Model.lowestPrices.R_100 = price;
             Model.numberOfTicks = index;
             if (index % 10000 == 0) {
                 console.log('days: ', ((((index * 2) / 60) / 60) / 24).toFixed(2));
@@ -27,9 +26,12 @@ const Runner = {
                 console.log('wins: ', Model.winCount, '/ loses:', Model.lossCount);
                 console.log('win ratio: ', Model.winCount / (Model.winCount + Model.lossCount));
                 console.log('streak: ', Model.lossCollection);
+                console.log('maxParoliIndex: ', Model.maxParoliIndex);
                 console.log('highestStake: £', Model.highestStake);
                 console.log('max transactions: ', Model.highestNumberOfTransactions);
-                console.log('profit: £', Model.balance.toFixed(2) - Model.STARTING_BALANCE);
+                let profit = Model.balance.toFixed(2) - Model.STARTING_BALANCE;
+                console.log('profit: £', (profit));
+                console.log('balance: £', Model.balance.toFixed(2));
             }
 
         });
