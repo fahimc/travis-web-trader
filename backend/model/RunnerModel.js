@@ -1,8 +1,8 @@
-const Balance = require('../module/Balance.js');
+const Balance = require('../module/atila_balance.js');
 const Transaction = require('../module/transaction.js');
 
 const RunnerModel = {
-  ASSET_NAME:'R_100',
+  ASSET_NAME: 'R_100',
   STARTING_BALANCE: 1100,
   TRANSACTION_DURATION: 6,
   LOSS_CAP: 9,
@@ -19,55 +19,42 @@ const RunnerModel = {
   highestNumberOfTransactions: 0,
   doParoli: false,
   paroliIndex: 0,
-  maxParoliIndex:0,
-  lowestPrices:{
-    'R_100':0
+  maxParoliIndex: 0,
+  lowestPrices: {
+    'R_100': 0
   },
+  lowestProfit:99999,
   hasTransaction() {
     return this.transactionCollection.length;
   },
   runTransactions(price) {
-    let removeCollection  = [];
+    let removeCollection = [];
     this.transactionCollection.forEach((transaction, index) => {
       transaction.run(price, this);
       if (transaction.ended) {
         removeCollection.push(index);
         if (transaction.isWin) {
           this.setWin(transaction);
+          Balance.setWin();
           this.lossStreak = 0;
           this.winCount++;
           this.winStreak++;
-          if (this.doParoli) {
-                this.paroliIndex++;
-
-            if ( this.balance - this.STARTING_BALANCE >= 0) {
-              this.doParoli=false;
-            } else {
-              
-            }
-          }
 
         } else {
           this.lossStreak++;
           this.winStreak = 0;
+          Balance.setLoss();
           if (this.lossStreak) {
             if (!this.lossCollection[this.lossStreak]) this.lossCollection[this.lossStreak] = 0;
             this.lossCollection[this.lossStreak]++;
           }
           this.lossCount++;
           if (this.LOSS_CAP && this.lossStreak >= this.LOSS_CAP) {
-                 // this.lossStreak=0;
-            this.paroliIndex=0;
-            this.doParoli=true;
-           //this.profit=0;
-          // this.lossStreak=0;
-            
-            if(this.maxParoliIndex < this.paroliIndex)this.maxParoliIndex = this.paroliIndex;
           }
         }
       }
     });
-    removeCollection.forEach((index)=>{
+    removeCollection.forEach((index) => {
       this.transactionCollection.splice(index, 1);
     });
   },
@@ -76,8 +63,15 @@ const RunnerModel = {
     let cost = Balance.purchase(this);
     if (cost > this.highestStake) this.highestStake = cost;
     transaction.cost = cost;
+    this.setBalance(cost);
     this.transactionCollection.push(transaction);
     if (this.transactionCollection.length > this.highestNumberOfTransactions) this.highestNumberOfTransactions = this.transactionCollection.length;
+  },
+  setBalance(cost) {
+    if (!this.balance) this.balance = this.STARTING_BALANCE;
+    this.profit -= cost;
+    if(this.lowestProfit > this.profit)this.lowestProfit = this.profit;
+    this.balance -= cost;
   },
   setWin(transaction) {
     let winnings = transaction.cost + (transaction.cost * 0.94);

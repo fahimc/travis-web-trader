@@ -28,15 +28,12 @@ const Balance = {
         return this.paroliStake;
     },
     purchase(model) {
-        if (!model.balance) model.balance = model.STARTING_BALANCE;
         let cost = 0;
         if (model.doParoli) {
             cost = this.stake[model.lossStreak - 2] ? this.stake[model.lossStreak - 2] : this.stake[model.lossStreak]
         } else {
             cost = this.stake[model.lossStreak] ? this.stake[model.lossStreak] : Math.abs(model.profit) * 2;
         }
-        model.profit -= cost;
-        model.balance -= cost;
         return cost;
     }
 }
