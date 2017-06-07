@@ -20,9 +20,12 @@ const Main = {
     let yCollection = linear[1];
     let highLow = this.getHighLow(yCollection);
     let change = Math.abs(yCollection[0]-yCollection[yCollection.length-1]);
-    console.log('change',change);
-    console.log(change/yCollection[0]);
+    let changePercentage = change/yCollection[0];
+    console.log('change',(changePercentage * 100 )+ '%');
     this.drawLinearRegression(linear[0],linear[1]);
+    let changeCollection = this.calculateChangeBetweenTicks();
+    console.log(changeCollection);
+    this.calculateMean(changeCollection);
 
   },
   getHighLow(collection){
@@ -36,6 +39,20 @@ const Main = {
   		lowest:lowest,
   		highest:highest
   	}
+  },
+  calculateChangeBetweenTicks(){
+  	let c = [];
+  	this.collection.forEach((price,index)=>{
+  		if(index)c.push(Math.abs(price - this.collection[index-1]));
+  	});
+  	return c;
+  },
+  calculateMean(collection){
+  	let sum = 0;
+  	collection.forEach((change)=>{
+  		sum+=change;
+  	});
+  	console.log(sum/collection.length);
   },
   getXCollection() {
     let xCollection = [];
