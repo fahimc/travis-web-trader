@@ -4,7 +4,7 @@ const Main = {
   width: 500,
   height: 200,
   xIncrement: 10,
-  collection: [200],
+  collection: [],
   init() {
     document.addEventListener('DOMContentLoaded', this.onLoaded.bind(this));
   },
@@ -14,19 +14,57 @@ const Main = {
     this.canvas.width = this.width;
     this.canvas.height = this.height;
     this.context = this.canvas.getContext("2d");
-    this.drawChart();
+    
 
-    let linear = this.findLineByLeastSquares(this.getXCollection(), this.collection);
-    let yCollection = linear[1];
-    let highLow = this.getHighLow(yCollection);
-    let change = Math.abs(yCollection[0]-yCollection[yCollection.length-1]);
-    let changePercentage = change/yCollection[0];
-    console.log('change',(changePercentage * 100 )+ '%');
-    this.drawLinearRegression(linear[0],linear[1]);
-    let changeCollection = this.calculateChangeBetweenTicks();
-    console.log(changeCollection);
-    this.calculateMean(changeCollection);
-
+    // let linear = this.findLineByLeastSquares(this.getXCollection(), this.collection);
+    // let yCollection = linear[1];
+    // let highLow = this.getHighLow(yCollection);
+    // let change = Math.abs(yCollection[0]-yCollection[yCollection.length-1]);
+    // let changePercentage = change/yCollection[0];
+    // console.log('change',(changePercentage * 100 )+ '%');
+    // this.drawLinearRegression(linear[0],linear[1]);
+    // let changeCollection = this.calculateChangeBetweenTicks();
+    // console.log(changeCollection);
+    // this.calculateMean(changeCollection);
+let ticks = [
+  8831.73,
+  8829.03,
+  8828.81,
+  8831.76,
+  8832.10,
+  8831.51,
+  8833.51,
+  8836.29,
+  8836.74,
+  8836.57,
+  8835.60,
+  8834.26,
+  8833.80,
+  8832.45,
+  8830.45,
+  8829.48,
+  8829.68,
+  8826.57,
+  8829.21,
+  8829.01,
+  8827.37,
+  8828.53,
+  8827.07,
+  8825.66,
+  8827.12,
+  8824.96,
+  8826.02,
+  8831.48,
+  8831.76,
+  8832.81,
+  8831.20,
+];
+this.drawChart(ticks);
+    let tradeChart = new TradeChart('stage2');
+    tradeChart.setLinearRegression(true);
+    tradeChart.renderChart(ticks);
+    let changePercentage = tradeChart.getChangePercentage();
+    console.log(changePercentage);
   },
   getHighLow(collection){
   	let lowest = collection[0];
@@ -61,7 +99,7 @@ const Main = {
     }
     return xCollection;
   },
-  drawChart() {
+  drawChart(ticks) {
     let x = 0;
     let y = this.height;
     let increment = 10;
@@ -91,69 +129,7 @@ const Main = {
     this.context.strokeStyle=color?color:"black";
     this.context.stroke();
   },
-  findLineByLeastSquares(values_x, values_y) {
-    var sum_x = 0;
-    var sum_y = 0;
-    var sum_xy = 0;
-    var sum_xx = 0;
-    var count = 0;
-
-    /*
-     * We'll use those variables for faster read/write access.
-     */
-    var x = 0;
-    var y = 0;
-    var values_length = values_x.length;
-
-    if (values_length != values_y.length) {
-      throw new Error('The parameters values_x and values_y need to have same size!');
-    }
-
-    /*
-     * Nothing to do.
-     */
-    if (values_length === 0) {
-      return [
-        [],
-        []
-      ];
-    }
-
-    /*
-     * Calculate the sum for each of the parts necessary.
-     */
-    for (var v = 0; v < values_length; v++) {
-      x = values_x[v];
-      y = values_y[v];
-      sum_x += x;
-      sum_y += y;
-      sum_xx += x * x;
-      sum_xy += x * y;
-      count++;
-    }
-
-    /*
-     * Calculate m and b for the formular:
-     * y = x * m + b
-     */
-    var m = (count * sum_xy - sum_x * sum_y) / (count * sum_xx - sum_x * sum_x);
-    var b = (sum_y / count) - (m * sum_x) / count;
-
-    /*
-     * We will make the x and y result line now
-     */
-    var result_values_x = [];
-    var result_values_y = [];
-
-    for (var v = 0; v < values_length; v++) {
-      x = values_x[v];
-      y = x * m + b;
-      result_values_x.push(x);
-      result_values_y.push(y);
-    }
-
-    return [result_values_x, result_values_y];
-  },
+  
   setNumbers() {
     for (let a = 0; a < 30; a++) {
       let negative = Math.floor(Math.random() * (10 - -100 + 1) + -100);
