@@ -33,6 +33,7 @@ class TradeChart {
         let highLow = this.getHighestLowest(this.linearCollection);
         let change = Math.abs((this.linearCollection[0] - highLow.lowest) - (this.linearCollection[this.linearCollection.length - 1] - highLow.lowest));
        let changePercentage = (change ) * (highLow.highest - highLow.lowest);
+       console.log(change , highLow.highest ,highLow.lowest);
         return changePercentage;
     }
     getLinearDirection(){

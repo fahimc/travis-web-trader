@@ -31,7 +31,6 @@ const Main = {
   startBalance: 0,
   accountBalance: 0,
   payout: 0.94,
-  lossStreak: 0,
   winStreak: 0,
   maxLossStreak: 0,
   started: false,
