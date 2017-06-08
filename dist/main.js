@@ -530,6 +530,7 @@ const Main = {
           this.historyTimes.push(data.tick.epoch);
           if(this.historyTimes.length>5000)this.historyTimes.shift();
           //console.log('ticks update',this.history.length);
+          ChartComponent.updateTradeChart(this.history);
           this.currentPrice = data.tick.quote;
           Storage.setLowestPrices(this.ASSET_NAME,this.currentPrice);
           this.setPositions();

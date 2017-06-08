@@ -30,8 +30,8 @@ var DirectionPrediction = {
 
         let total = ups + downs;
         let limit = 0.7;
-        if (model.lossStreak > 3) {
-            limit = 0.75;
+        if (model.lossStreak > 7) {
+            limit = 0.85;
             Main.stakeTicks = Main.LONG_TICK_LENGTH;
         }
 

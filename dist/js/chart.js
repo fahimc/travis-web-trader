@@ -176,6 +176,10 @@ let ChartComponent = {
             this.closechart = new Chart(cctx, this.closeConfig);
         }
 
+        this.tradeChart = new TradeChart('stage');
+        this.tradeChart.setLinearRegression(true);
+    
+
     },
     setCloseData(collection) {
         this.closeConfig.data.labels = collection.concat([]);
@@ -197,6 +201,12 @@ let ChartComponent = {
         let barrier = Main.assetModel ?Main.assetModel.chartBarrier:20;
         this.config.options.scales.yAxes[0].ticks.min = item.lowestPrice ? (item.lowestPrice - barrier) : 0;
         this.chart.update();
+
+
+    },
+    updateTradeChart(history){
+        let collection = history.slice(history.length-30,history.length);
+         this.tradeChart.renderChart(collection);
     },
     updateClose(item) {
         this.closeConfig.data.labels.push(Number(item.price));
