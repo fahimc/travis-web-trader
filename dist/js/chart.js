@@ -204,8 +204,7 @@ let ChartComponent = {
 
 
     },
-    updateTradeChart(history){
-        let collection = history.slice(history.length-30,history.length);
+    updateTradeChart(collection){
          this.tradeChart.renderChart(collection);
     },
     updateClose(item) {

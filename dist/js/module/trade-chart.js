@@ -10,9 +10,10 @@ class TradeChart {
         this.linearCollection = [];
     }
     getHighestLowest(collection) {
-        let lowest = collection[0];
-        let highest = collection[0];
+        let lowest = Number(collection[0]);
+        let highest = Number(collection[0]);
         collection.forEach((price) => {
+            price= Number(price);
             if (price < lowest) lowest = price;
             if (price > highest) highest = price;
         });
@@ -62,6 +63,7 @@ class TradeChart {
         let highLow = this.getHighestLowest(highestCollection ? highestCollection : collection);
         let arr = [];
         collection.forEach((num, index) => {
+            num=Number(num);
             arr.push((num - highLow.lowest )/ (highLow.highest - highLow.lowest));
         });
       
@@ -103,6 +105,7 @@ class TradeChart {
         let y = this.height;
 
         collection.forEach((num, index) => {
+            num = Number(num);
             let nextY = this.height - (this.height * num);
             let nextX = index * xIncrement;
             if (!index) y = nextY;
@@ -176,8 +179,8 @@ class TradeChart {
          * Calculate the sum for each of the parts necessary.
          */
         for (var v = 0; v < values_length; v++) {
-            x = values_x[v];
-            y = values_y[v];
+            x = Number(values_x[v]);
+            y = Number(values_y[v]);
             sum_x += x;
             sum_y += y;
             sum_xx += x * x;
@@ -199,7 +202,7 @@ class TradeChart {
         var result_values_y = [];
 
         for (var v = 0; v < values_length; v++) {
-            x = values_x[v];
+            x = Number(values_x[v]);
             y = x * m + b;
             result_values_x.push(x);
             result_values_y.push(y);

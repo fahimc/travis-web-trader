@@ -530,7 +530,6 @@ const Main = {
           this.historyTimes.push(data.tick.epoch);
           if(this.historyTimes.length>5000)this.historyTimes.shift();
           //console.log('ticks update',this.history.length);
-          ChartComponent.updateTradeChart(this.history);
           this.currentPrice = data.tick.quote;
           Storage.setLowestPrices(this.ASSET_NAME,this.currentPrice);
           this.setPositions();
@@ -538,6 +537,7 @@ const Main = {
          
           let collection = this.history.slice(this.history.length - 200, this.history.length);
           let collectionClose = this.history.slice(this.history.length - 30, this.history.length);
+          ChartComponent.updateTradeChart(collectionClose);
 
           let highLow = Util.getHighLow(collection);
           let highLowClose = Util.getHighLow(collectionClose);
