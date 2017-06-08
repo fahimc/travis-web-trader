@@ -5,16 +5,11 @@ const Balance = {
     1,
     1,
     1,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1
   ],
-  nextCollection: [1,1,1,1,1,1,1,1,1],
+  initialCollection: [1,1,1],
+  nextCollection: [1,1,1],
   index: 0,
-  setWin() {
+  setWin(model) {
     /*
     let obj = this.nextCollection[this.nextCollection.length - 1];
     if (obj !== undefined) {
@@ -41,14 +36,21 @@ const Balance = {
         }
     }
     */
-    this.nextCollection.unshift(1);
-    if (this.nextCollection.length > 9) this.nextCollection.pop();
+    if(model.profit>=0)
+    {
+        this.stakeCollection = this.nextCollection = this.initialCollection.slice();
+        this.index=0;
+    }else{
+         this.nextCollection.unshift(1);
+    if (this.nextCollection.length > 3) this.nextCollection.pop();
+    }
+   
     //console.log('after',this.nextCollection);
   },
   setLoss() {
     let nextStake = this.currentStake + 1;
     this.nextCollection.unshift(nextStake);
-    if (this.nextCollection.length > 9) this.nextCollection.pop();
+    if (this.nextCollection.length > 3) this.nextCollection.pop();
     //console.log(this.nextCollection);
   },
   restart() {
@@ -62,7 +64,7 @@ const Balance = {
       this.stakeCollection = this.nextCollection.slice();
       this.index = 0;
     }
-    //console.log(this.stakeCollection);
+   // console.log(this.stakeCollection);
     return this.stakeCollection[this.index];
   }
 }

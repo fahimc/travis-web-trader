@@ -35,7 +35,7 @@ const RunnerModel = {
         removeCollection.push(index);
         if (transaction.isWin) {
           this.setWin(transaction);
-          Balance.setWin();
+          Balance.setWin(this);
           this.lossStreak = 0;
           this.winCount++;
           this.winStreak++;
