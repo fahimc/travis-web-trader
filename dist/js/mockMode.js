@@ -9,9 +9,9 @@ let MockMode = {
     currentWinPercentage: 0,
     transactionCollection: [],
     countCollection: [],
-    initialWinPercentageCap: 0.52,
-    tightWinPercentageCap: 0.60,
-    currentWinPercentageCap: 0.52,
+    initialWinPercentageCap: 0.50,
+    tightWinPercentageCap: 0.55,
+    currentWinPercentageCap: 0.50,
     shortWinPercentage: 0.55,
     gettingHistory: false,
     longTermWinRatio: 0.65,
@@ -54,7 +54,7 @@ let MockMode = {
         });
         console.log('BEST ASSET', best);
         if (!Main.isProposal && best.asset !== Main.ASSET_NAME) {
-            Main.changeAsset(best.asset);
+           // Main.changeAsset(best.asset);
             this.assetResultCollection = [];
             this.gettingHistory = false;
             console.log('SWITCH TO', best);

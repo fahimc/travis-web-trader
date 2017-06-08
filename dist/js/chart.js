@@ -4,8 +4,8 @@ let ChartComponent = {
     config: {
         type: 'line',
         options: {
-            title:{
-                display:false
+            title: {
+                display: false
             },
             scales: {
                 yAxes: [{
@@ -57,8 +57,8 @@ let ChartComponent = {
     closeConfig: {
         type: 'line',
         options: {
-            title:{
-                display:false
+            title: {
+                display: false
             },
             scales: {
                 yAxes: [{
@@ -110,8 +110,8 @@ let ChartComponent = {
     predictionConfig: {
         type: 'line',
         options: {
-            title:{
-                display:false
+            title: {
+                display: false
             },
             scales: {
                 yAxes: [{
@@ -176,10 +176,22 @@ let ChartComponent = {
             this.closechart = new Chart(cctx, this.closeConfig);
         }
 
-        this.tradeChart = new TradeChart('stage');
-        this.tradeChart.setLinearRegression(true);
-    
+        this.createTradeCharts();
 
+    },
+    createTradeCharts() {
+        this.tradeChart100 = new TradeChart('stage-100');
+        this.tradeChart100.setLinearRegression(true);
+
+        this.tradeChart30 = new TradeChart('stage-30');
+        this.tradeChart30.setLinearRegression(true);
+
+        this.tradeChart10 = new TradeChart('stage-10');
+        this.tradeChart10.setLinearRegression(true);
+
+    },
+    setPurchase(value) {
+        this.tradeChart10.setPurchase(value);
     },
     setCloseData(collection) {
         this.closeConfig.data.labels = collection.concat([]);
@@ -198,14 +210,19 @@ let ChartComponent = {
             this.config.data.datasets[0].data.shift();
             this.config.data.labels.shift();
         }
-        let barrier = Main.assetModel ?Main.assetModel.chartBarrier:20;
+        let barrier = Main.assetModel ? Main.assetModel.chartBarrier : 20;
         this.config.options.scales.yAxes[0].ticks.min = item.lowestPrice ? (item.lowestPrice - barrier) : 0;
         this.chart.update();
 
 
     },
-    updateTradeChart(collection){
-         this.tradeChart.renderChart(collection);
+    updateTradeChart(history) {
+        let collection100 = history.slice(history.length - 100, history.length);
+        let collectionClose = history.slice(history.length - 30, history.length);
+        let collection10 = history.slice(history.length - 10, history.length);
+        this.tradeChart100.renderChart(collection100);
+        this.tradeChart30.renderChart(collectionClose);
+        this.tradeChart10.renderChart(collection10);
     },
     updateClose(item) {
         this.closeConfig.data.labels.push(Number(item.price));
@@ -214,14 +231,14 @@ let ChartComponent = {
             this.closeConfig.data.datasets[0].data.shift();
             this.closeConfig.data.labels.shift();
         }
-        let barrier = Main.assetModel ?Main.assetModel.chartBarrier:20;
+        let barrier = Main.assetModel ? Main.assetModel.chartBarrier : 20;
         this.closeConfig.options.scales.yAxes[0].ticks.min = item.lowestPrice ? (item.lowestPrice - barrier) : 0;
         this.closechart.update();
     },
     updatePredictionChart(collection, lowestPrice, highestPrice) {
         this.predictionConfig.data.labels = collection.concat([]);
         this.predictionConfig.data.datasets[0].data = collection.concat([]);
-        let barrier = Main.assetModel ?Main.assetModel.chartBarrier:20;
+        let barrier = Main.assetModel ? Main.assetModel.chartBarrier : 20;
         if (lowestPrice) this.predictionConfig.options.scales.yAxes[0].ticks.min = lowestPrice - barrier;
         //if(highestPrice)this.predictionConfig.options.scales.yAxes[0].ticks.max = highestPrice + 5;
         //this.predictionConfig.options.scales.yAxes[0].ticks.max = highestPrice + 1;

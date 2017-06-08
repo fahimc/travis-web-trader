@@ -1,6 +1,6 @@
 var LinearPrediction = {
     predict(ticks, checkMode) {
-        if (!checkMode && (Main.isBreak || Main.isProposal || Main.pauseTrading)) return;
+        if (!checkMode && (!MockMode.toTrade || Main.isBreak || Main.isProposal || Main.pauseTrading)) return;
         let lastTick = ticks[ticks.length - 4];
         let previousTick = ticks[ticks.length - 2];
         let currentTick = ticks[ticks.length - 1];
@@ -8,20 +8,21 @@ var LinearPrediction = {
         let lowest = currentTick;
         let found = false;
         let collection = ticks.slice(ticks.length - 5, ticks.length);
-        let change = ChartComponent.tradeChart.getChangePercentage();
-        let changeLimit = 40;
-        if(Main.lossStreak > 6)changeLimit=70;
-        console.log('change',change);
-        let isChange = change > changeLimit;
-        let isDirectionUp = ChartComponent.tradeChart.getLinearDirection();
-        if (isDirectionUp && isChange) {
+        let change = ChartComponent.tradeChart30.getLinearChange();
+        let isDirectionUp = ChartComponent.tradeChart30.getLinearDirection();
+        let isShortDirectionUp = ChartComponent.tradeChart10.getLinearDirection();
+        let changeLimit = Main.assetModel.linearChangeLimit;
+        if(Main.lossStreak > 6)changeLimit=Main.assetModel.linearChangeLimit*2;
+        let isChange = change >= changeLimit;
+        console.log(change);
+        if (checkMode && isDirectionUp >= 0 && isShortDirectionUp >= 0 || isDirectionUp >= 0 && isShortDirectionUp >= 0 && isChange) {
             
             proposal = 'CALL';
             predictionType = 'LINEAR_UP';
             found = true;
             highest = currentTick;
             lowest = previousTick;
-        } else if (isDirectionUp < 0 && isChange) {
+        } else if (checkMode && isDirectionUp < 0 && isShortDirectionUp < 0 || isDirectionUp < 0 && isShortDirectionUp < 0 && isChange) {
             
             proposal = 'PUT';
             predictionType = 'LINEAR_DOWN';

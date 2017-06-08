@@ -8,12 +8,13 @@ class TradeChart {
         this.showLinearRegression = false;
         this.chartCollection = [];
         this.linearCollection = [];
+        this.purchasePrice = 0;
     }
     getHighestLowest(collection) {
         let lowest = Number(collection[0]);
         let highest = Number(collection[0]);
         collection.forEach((price) => {
-            price= Number(price);
+            price = Number(price);
             if (price < lowest) lowest = price;
             if (price > highest) highest = price;
         });
@@ -31,13 +32,22 @@ class TradeChart {
     getChangePercentage() {
         if (!this.linearCollection.length) return;
         let highLow = this.getHighestLowest(this.linearCollection);
-        let change = Math.abs((this.linearCollection[0] - highLow.lowest) - (this.linearCollection[this.linearCollection.length - 1] - highLow.lowest));
-       let changePercentage = (change ) * (highLow.highest - highLow.lowest);
-       console.log(change , highLow.highest ,highLow.lowest);
+        let change = Math.abs((highLow.highest - highLow.lowest) - (highLow.highest - highLow.lowest));
+        let changePercentage = (change) * (highLow.highest - highLow.lowest);
+        console.log(change, changePercentage);
         return changePercentage;
     }
-    getLinearDirection(){
-        return this.linearCollection[this.linearCollection.length - 1] - this.linearCollection[0] ;
+    setPurchase(value) {
+        if (!value||!this.purchasePrice) this.purchasePrice = Number(value);
+    }
+    getLinearChange() {
+        if (!this.linearCollection.length) return;
+        let highLow = this.getHighestLowest(this.linearCollection);
+        let change = Math.abs((this.linearCollection[0] - highLow.lowest) - (this.linearCollection[this.linearCollection.length - 1] - highLow.lowest));
+        return change;
+    }
+    getLinearDirection() {
+        return this.linearCollection[this.linearCollection.length - 1] - this.linearCollection[0];
     }
     getIndexedCollection(collection, highestCollection) {
         let highLow = this.getHighestLowest(highestCollection ? highestCollection : collection);
@@ -47,18 +57,18 @@ class TradeChart {
         //     arr.push(num / highLow.highest);
         // });
         collection.forEach((num, index) => {
-           // console.log(num, highLow.highest, num / highLow.highest);
-            arr.push({num:num,xIndex:index});
+            // console.log(num, highLow.highest, num / highLow.highest);
+            arr.push({ num: num, xIndex: index });
         });
-        arr.sort((obj,obj2)=>{
-          return obj.num - obj2.num;
+        arr.sort((obj, obj2) => {
+            return obj.num - obj2.num;
         });
         arr.forEach((obj, index) => {
-           // console.log(num, highLow.highest, num / highLow.highest);
-            arr[index].yIndex=index;
+            // console.log(num, highLow.highest, num / highLow.highest);
+            arr[index].yIndex = index;
         });
-        arr.sort((obj,obj2)=>{
-          return obj.xIndex - obj2.xIndex;
+        arr.sort((obj, obj2) => {
+            return obj.xIndex - obj2.xIndex;
         });
         return arr;
     }
@@ -66,10 +76,10 @@ class TradeChart {
         let highLow = this.getHighestLowest(highestCollection ? highestCollection : collection);
         let arr = [];
         collection.forEach((num, index) => {
-            num=Number(num);
-            arr.push((num - highLow.lowest )/ (highLow.highest - highLow.lowest));
+            num = Number(num);
+            arr.push((num - highLow.lowest) / (highLow.highest - highLow.lowest));
         });
-      
+
         return arr;
     }
     renderLinearRegression() {
@@ -83,16 +93,24 @@ class TradeChart {
         this.drawGrid();
         this.renderPercentage(_collection);
         if (this.showLinearRegression) this.renderLinearRegression();
+        if (this.purchasePrice) this.renderPurchase();
+    }
+    renderPurchase() {
+        let highLow = this.getHighestLowest(this.chartCollection);
+        let y = (this.purchasePrice - highLow.lowest) / (highLow.highest - highLow.lowest);
+        //console.log(this.purchasePrice,highLow.highest,y);
+        y = this.height - (y * this.height);
+        this.drawLine(0, y, this.width, y, 'red', true)
     }
     render(_collection, highestCollection, color) {
         let collection = this.getIndexedCollection(_collection, highestCollection);
-        let xIncrement = ( this.width/collection.length) ;
-        let yIncrement = ( this.height/this.chartCollection.length);
+        let xIncrement = (this.width / collection.length);
+        let yIncrement = (this.height / this.chartCollection.length);
         let x = 0;
         let y = this.height;
 
         collection.forEach((obj, index) => {
-            let nextY = this.height -  (obj.yIndex * yIncrement);
+            let nextY = this.height - (obj.yIndex * yIncrement);
             let nextX = (obj.xIndex) * xIncrement;
             if (!index) y = nextY;
             this.drawLine(x, y, nextX, nextY, color ? color : this.strokeColor);
@@ -100,10 +118,10 @@ class TradeChart {
             y = nextY;
         });
     }
-    renderPercentage(_collection, highestCollection, color,indexed) {
+    renderPercentage(_collection, highestCollection, color, indexed) {
         let collection = this.getPercentageCollection(_collection, highestCollection);
-        let xIncrement = ( this.width/collection.length) ;
-        let yIncrement = ( this.height/this.chartCollection.length);
+        let xIncrement = (this.width / collection.length);
+        let yIncrement = (this.height / this.chartCollection.length);
         let x = 0;
         let y = this.height;
 
@@ -123,9 +141,9 @@ class TradeChart {
     drawGrid(xCount, yCount) {
         let x = 0;
         let y = 0;
-        let xIncrement = (this.width/this.chartCollection.length) ;
-       // console.log(this.width,xIncrement,this.chartCollection.length);
-        let yIncrement = ( this.height/this.chartCollection.length);
+        let xIncrement = (this.width / this.chartCollection.length);
+        // console.log(this.width,xIncrement,this.chartCollection.length);
+        let yIncrement = (this.height / this.chartCollection.length);
         this.chartCollection.forEach((num, index) => {
             let nextX = x + xIncrement;
             let nextY = y + yIncrement;
@@ -135,8 +153,11 @@ class TradeChart {
             y = nextY;
         });
     }
-    drawLine(moveX, moveY, lineX, lineY, color) {
+    drawLine(moveX, moveY, lineX, lineY, color, dotted) {
         this.context.beginPath();
+        let dashes = [];
+        if (dotted) dashes = [2, 2]
+        this.context.setLineDash(dashes);
         this.context.moveTo(moveX, moveY);
         this.context.lineTo(lineX, lineY);
         this.context.strokeStyle = color ? color : "black";
@@ -144,7 +165,7 @@ class TradeChart {
     }
     getXCollection() {
         let xCollection = [];
-        let xIncrement = (this.width/this.chartCollection.length ) ;
+        let xIncrement = (this.width / this.chartCollection.length);
         for (let a = 0; a < this.chartCollection.length; a++) {
             xCollection.push(a * xIncrement);
         }

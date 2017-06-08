@@ -372,11 +372,11 @@ const Main = {
   },
   getPriceProposal(type, duration,unit) {
     if (!type || this.isProposal) return;
-    console.log('getPriceProposal');
     this.isProposal = true;
     this.proposalTickCount = 0;
     this.lastBalance = this.accountBalance;
     View.updatePrediction(type, this.startPricePosition, this.currentPrice);
+    
     this.ws.send(JSON.stringify({
       "proposal": 1,
       "amount": this.currentStake,
@@ -506,6 +506,7 @@ const Main = {
           //stop transaction timer
           Model.completeTransaction(data.transaction);
           this.isTransaction = false;
+           ChartComponent.setPurchase(null);
           clearTimeout(this.transactionTimer);
           let isLoss = false;
           if (data.transaction.amount === '0.00') {
@@ -536,7 +537,7 @@ const Main = {
          
           let collection = this.history.slice(this.history.length - 200, this.history.length);
           let collectionClose = this.history.slice(this.history.length - 30, this.history.length);
-          ChartComponent.updateTradeChart(collectionClose);
+          ChartComponent.updateTradeChart(this.history);
 
           let highLow = Util.getHighLow(collection);
           let highLowClose = Util.getHighLow(collectionClose);
@@ -561,6 +562,7 @@ const Main = {
            if (this.isTrading) {
             this.doPrediction();
           }
+          if(this.isProposal)ChartComponent.setPurchase(this.currentPrice);
           //if (this.idleStartTime) this.checkIdleTime();
         }
         break;
