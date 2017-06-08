@@ -32,9 +32,11 @@ class TradeChart {
         if (!this.linearCollection.length) return;
         let highLow = this.getHighestLowest(this.linearCollection);
         let change = Math.abs((this.linearCollection[0] - highLow.lowest) - (this.linearCollection[this.linearCollection.length - 1] - highLow.lowest));
-       // let changePercentage = (change) / (this.linearCollection[0] - highLow.lowest);
-        //console.log(change,highLow.highest,highLow.lowest);
-        return change;
+       let changePercentage = (change ) * (highLow.highest - highLow.lowest);
+        return changePercentage;
+    }
+    getLinearDirection(){
+        return this.linearCollection[this.linearCollection.length - 1] - this.linearCollection[0] ;
     }
     getIndexedCollection(collection, highestCollection) {
         let highLow = this.getHighestLowest(highestCollection ? highestCollection : collection);
@@ -126,8 +128,8 @@ class TradeChart {
         this.chartCollection.forEach((num, index) => {
             let nextX = x + xIncrement;
             let nextY = y + yIncrement;
-            this.drawLine(0, nextY, this.width, nextY, 'rgba(224, 224, 224,0.5)');
-            this.drawLine(nextX, 0, nextX, this.height, 'rgba(224, 224, 224,0.5)');
+            this.drawLine(0, nextY, this.width, nextY, 'rgba(224, 224, 224,0.3)');
+            this.drawLine(nextX, 0, nextX, this.height, 'rgba(224, 224, 224,0.3)');
             x = nextX;
             y = nextY;
         });

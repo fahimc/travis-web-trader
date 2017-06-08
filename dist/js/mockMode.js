@@ -9,10 +9,10 @@ let MockMode = {
     currentWinPercentage: 0,
     transactionCollection: [],
     countCollection: [],
-    initialWinPercentageCap: 0.56,
+    initialWinPercentageCap: 0.52,
     tightWinPercentageCap: 0.60,
-    currentWinPercentageCap: 0.56,
-    shortWinPercentage: 0.65,
+    currentWinPercentageCap: 0.52,
+    shortWinPercentage: 0.55,
     gettingHistory: false,
     longTermWinRatio: 0.65,
     assetCollection: [
