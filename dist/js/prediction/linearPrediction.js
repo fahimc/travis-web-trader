@@ -14,7 +14,7 @@ var LinearPrediction = {
         let changeLimit = Main.assetModel.linearChangeLimit;
         if(Main.lossStreak > 6)changeLimit=Main.assetModel.linearChangeLimit*2;
         let isChange = change >= changeLimit;
-        console.log(change);
+       // console.log(change);
         if (checkMode && isDirectionUp >= 0 && isShortDirectionUp >= 0 || isDirectionUp >= 0 && isShortDirectionUp >= 0 && isChange) {
             
             proposal = 'CALL';
