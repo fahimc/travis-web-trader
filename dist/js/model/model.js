@@ -14,7 +14,7 @@ const Model = {
                 transaction.transaction = transactionData;
             }
         });
-        ChartComponent.updatePredictionChart(found.ticks, found.boundary.lowest, found.boundary.highest);
+        if(found)ChartComponent.updatePredictionChart(found.ticks, found.boundary.lowest, found.boundary.highest);
 
     },
     purchasePrice(buy) {
