@@ -160,11 +160,10 @@ let ChartComponent = {
 
     },
     create() {
-        let myChart = document.getElementById("myChart");
         let pChart = document.getElementById("pChart");
+        /*
+        let myChart = document.getElementById("myChart");
         let closeChart = document.getElementById("closeChart");
-        //myChart.width = document.body.clientWidth; //document.width is obsolete
-        //document.getElementById("myChart").height = document.body.clientHeight; //document.height is obsolete
         var ctx = myChart.getContext("2d");
         var optionsNoAnimation = { animation: false }
         this.chart = new Chart(ctx, this.config);
@@ -175,6 +174,10 @@ let ChartComponent = {
             var cctx = closeChart.getContext("2d");
             this.closechart = new Chart(cctx, this.closeConfig);
         }
+        */
+
+        var pctx = pChart.getContext("2d");
+        this.pchart = new Chart(pctx, this.predictionConfig);
 
         this.createTradeCharts();
 
@@ -190,20 +193,23 @@ let ChartComponent = {
         this.tradeChart10.setLinearRegression(true);
 
     },
-    setPurchase(value) {
-        this.tradeChart10.setPurchase(value);
+    setPurchase(value,type) {
+        this.tradeChart10.setPurchase(value,type);
     },
     setCloseData(collection) {
+        return;
         this.closeConfig.data.labels = collection.concat([]);
         this.closeConfig.data.datasets[0].data = collection.concat([]);;
         this.closechart.update();
     },
     setData(collection) {
+        return;
         this.config.data.labels = collection.concat([]);;
         this.config.data.datasets[0].data = collection.concat([]);;
         this.chart.update();
     },
     update(item) {
+        return;
         this.config.data.labels.push(Number(item.price));
         this.config.data.datasets[0].data.push(Number(item.price));
         if (this.config.data.datasets[0].data.length >= 200) {
@@ -225,6 +231,7 @@ let ChartComponent = {
         this.tradeChart10.renderChart(collection10);
     },
     updateClose(item) {
+        return;
         this.closeConfig.data.labels.push(Number(item.price));
         this.closeConfig.data.datasets[0].data.push(Number(item.price));
         if (this.closeConfig.data.datasets[0].data.length >= 30) {

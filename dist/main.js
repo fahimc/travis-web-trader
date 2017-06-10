@@ -8,7 +8,7 @@ const Main = {
   stakeTicks: 6,
   profitLimit: 100, //DEBUG
   lossLimit: -500,
-  lossStreakLimit: 4,
+  lossStreakLimit: 11,
   volatilityLimit: 5,
   assetChangeStreak: [2, 5, 7, 9],
   stake: 0.5,
@@ -86,6 +86,7 @@ const Main = {
   doParoli: 0,
   config: null,
   assetModel: null,
+  transactionType: '',
   durationUnit:'t',
   historyCallback: [],
   log: {
@@ -376,7 +377,8 @@ const Main = {
     this.proposalTickCount = 0;
     this.lastBalance = this.accountBalance;
     View.updatePrediction(type, this.startPricePosition, this.currentPrice);
-    
+    this.transactionType = type;
+    console.log('transactionType',this.transactionType);
     this.ws.send(JSON.stringify({
       "proposal": 1,
       "amount": this.currentStake,
@@ -506,7 +508,7 @@ const Main = {
           //stop transaction timer
           Model.completeTransaction(data.transaction);
           this.isTransaction = false;
-           ChartComponent.setPurchase(null);
+           ChartComponent.setPurchase(null,'');
           clearTimeout(this.transactionTimer);
           let isLoss = false;
           if (data.transaction.amount === '0.00') {
@@ -562,7 +564,10 @@ const Main = {
            if (this.isTrading) {
             this.doPrediction();
           }
-          if(this.isProposal)ChartComponent.setPurchase(this.currentPrice);
+          if(this.isProposal) { 
+            console.log('transactionType',this.transactionType);
+            ChartComponent.setPurchase(this.currentPrice,this.transactionType);
+          }
           //if (this.idleStartTime) this.checkIdleTime();
         }
         break;
@@ -646,6 +651,7 @@ const Main = {
       this.lossCount++;
       if (this.isShort) this.shortLossStreak++;
       this.setFail();
+      Storage.setAssetLoss(this.ASSET_NAME);
     } else if (isLoss == false) {
       this.winStreak++;
       if (this.lossStreak) Storage.setLossArray(this.lossStreak);
@@ -679,12 +685,12 @@ const Main = {
 
       this.end(ignore, duration);
     }
-    if (this.lossStreakLimit && (this.lossStreak % this.lossStreakLimit)==0) {
-      this.doParoli++;
+    if (this.lossStreakLimit && (this.lossStreak >= this.lossStreakLimit)) {
+       this.end();
     }
     if (!isLoss||this.profit >=0) this.end();
     this.setStake(isLoss);
-    if (this.assetChangeStreak && this.isAssetChangeIndex()) this.changeAsset();
+    //if (this.assetChangeStreak && this.isAssetChangeIndex()) this.changeAsset();
     this.isProposal = false;
   },
   isAssetChangeIndex() {

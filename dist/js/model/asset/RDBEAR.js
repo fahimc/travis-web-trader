@@ -1,6 +1,6 @@
 var RDBEARModel = {
   chartBarrier:2,
-  linearChangeLimit: 1.6,
+  linearChangeLimit: 2.5,
   priceChangeBarrier:2.5,
   payout:{
     CALL:0.94,

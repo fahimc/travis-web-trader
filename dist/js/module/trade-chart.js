@@ -1,14 +1,25 @@
 class TradeChart {
     constructor(canvasID) {
         this.canvas = document.querySelector('#' + canvasID);
-        this.height = this.canvas.height;
-        this.width = this.canvas.width;
         this.context = this.canvas.getContext("2d");
-        this.strokeColor = 'black';
+        this.strokeColor = 'rgba(75,192,192,0.4)';
+        this.strokeWidth = '2';
         this.showLinearRegression = false;
         this.chartCollection = [];
         this.linearCollection = [];
         this.purchasePrice = 0;
+        this.purchaseType = '';
+
+        window.addEventListener('resize', this.resize.bind(this));
+        setTimeout(()=>{
+            this.resize();
+        },1000);
+    }
+    resize() {
+        this.height = this.canvas.parentElement.getBoundingClientRect().height;
+       this.height = this.canvas.height = 220;
+        this.width = this.canvas.parentElement.getBoundingClientRect().width - 40;
+        this.canvas.width = this.width;
     }
     getHighestLowest(collection) {
         let lowest = Number(collection[0]);
@@ -34,11 +45,14 @@ class TradeChart {
         let highLow = this.getHighestLowest(this.linearCollection);
         let change = Math.abs((highLow.highest - highLow.lowest) - (highLow.highest - highLow.lowest));
         let changePercentage = (change) * (highLow.highest - highLow.lowest);
-        console.log(change, changePercentage);
+        //console.log(change, changePercentage);
         return changePercentage;
     }
-    setPurchase(value) {
-        if (!value||!this.purchasePrice) this.purchasePrice = Number(value);
+    setPurchase(value, type) {
+        if (!value || !this.purchasePrice) {
+            this.purchasePrice = Number(value);
+            this.purchaseType = type;
+        }
     }
     getLinearChange() {
         if (!this.linearCollection.length) return;
@@ -85,22 +99,33 @@ class TradeChart {
     renderLinearRegression() {
         let linear = this.findLineByLeastSquares(this.getXCollection(), this.chartCollection);
         this.linearCollection = linear[1];
-        this.renderPercentage(this.linearCollection, this.chartCollection, 'blue');
+        this.renderPercentage(this.linearCollection, this.chartCollection, '#999');
     }
     renderChart(_collection) {
         this.chartCollection = _collection;
         this.clear();
-        this.drawGrid();
+        //this.drawGrid();
+        if (this.purchasePrice) {
+            let y = this.renderPurchase();
+            this.renderPurchaseType(y);
+        }
         this.renderPercentage(_collection);
         if (this.showLinearRegression) this.renderLinearRegression();
-        if (this.purchasePrice) this.renderPurchase();
+
+    }
+    renderPurchaseType(y) {
+        this.context.fillStyle = "rgba(255,0,0,0.1)";
+        let startY = this.purchaseType == 'CALL' ? y : 0;
+        let endY = this.purchaseType == 'CALL' ? this.height : y;
+        this.context.fillRect(0, startY, this.width, endY);
     }
     renderPurchase() {
         let highLow = this.getHighestLowest(this.chartCollection);
         let y = (this.purchasePrice - highLow.lowest) / (highLow.highest - highLow.lowest);
         //console.log(this.purchasePrice,highLow.highest,y);
         y = this.height - (y * this.height);
-        this.drawLine(0, y, this.width, y, 'red', true)
+        this.drawLine(0, y, this.width, y, 'rgb(255,165,0)', true);
+        return y;
     }
     render(_collection, highestCollection, color) {
         let collection = this.getIndexedCollection(_collection, highestCollection);
@@ -147,8 +172,8 @@ class TradeChart {
         this.chartCollection.forEach((num, index) => {
             let nextX = x + xIncrement;
             let nextY = y + yIncrement;
-            this.drawLine(0, nextY, this.width, nextY, 'rgba(224, 224, 224,0.3)');
-            this.drawLine(nextX, 0, nextX, this.height, 'rgba(224, 224, 224,0.3)');
+            this.drawLine(0, nextY, this.width, nextY, 'rgba(224, 224, 224,0.05)');
+            this.drawLine(nextX, 0, nextX, this.height, 'rgba(224, 224, 224,0.05)');
             x = nextX;
             y = nextY;
         });
@@ -161,6 +186,7 @@ class TradeChart {
         this.context.moveTo(moveX, moveY);
         this.context.lineTo(lineX, lineY);
         this.context.strokeStyle = color ? color : "black";
+        this.context.lineWidth = this.strokeWidth;
         this.context.stroke();
     }
     getXCollection() {

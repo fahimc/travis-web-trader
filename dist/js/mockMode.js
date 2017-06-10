@@ -54,7 +54,7 @@ let MockMode = {
         });
         console.log('BEST ASSET', best);
         if (!Main.isProposal && best.asset !== Main.ASSET_NAME) {
-           // Main.changeAsset(best.asset);
+           Main.changeAsset(best.asset);
             this.assetResultCollection = [];
             this.gettingHistory = false;
             console.log('SWITCH TO', best);

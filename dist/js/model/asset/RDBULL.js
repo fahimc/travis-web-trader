@@ -1,6 +1,6 @@
 var RDBULLModel = {
   chartBarrier:2,
-  linearChangeLimit: 1.7,
+  linearChangeLimit: 2.5,
   priceChangeBarrier:2.5,
   payout:{
     CALL:0.91,

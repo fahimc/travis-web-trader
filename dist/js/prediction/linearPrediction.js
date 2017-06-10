@@ -1,4 +1,5 @@
 var LinearPrediction = {
+    isShowChange: false,
     predict(ticks, checkMode) {
         if (!checkMode && (!MockMode.toTrade || Main.isBreak || Main.isProposal || Main.pauseTrading)) return;
         let lastTick = ticks[ticks.length - 4];
@@ -12,18 +13,18 @@ var LinearPrediction = {
         let isDirectionUp = ChartComponent.tradeChart30.getLinearDirection();
         let isShortDirectionUp = ChartComponent.tradeChart10.getLinearDirection();
         let changeLimit = Main.assetModel.linearChangeLimit;
-        if(Main.lossStreak > 6)changeLimit=Main.assetModel.linearChangeLimit*2;
+        if (Main.lossStreak > 6) changeLimit = Main.assetModel.linearChangeLimit * 2;
         let isChange = change >= changeLimit;
-       // console.log(change);
+        if (this.isShowChange) console.log(change);
         if (checkMode && isDirectionUp >= 0 && isShortDirectionUp >= 0 || isDirectionUp >= 0 && isShortDirectionUp >= 0 && isChange) {
-            
+
             proposal = 'CALL';
             predictionType = 'LINEAR_UP';
             found = true;
             highest = currentTick;
             lowest = previousTick;
         } else if (checkMode && isDirectionUp < 0 && isShortDirectionUp < 0 || isDirectionUp < 0 && isShortDirectionUp < 0 && isChange) {
-            
+
             proposal = 'PUT';
             predictionType = 'LINEAR_DOWN';
             found = true;
@@ -36,7 +37,7 @@ var LinearPrediction = {
             //     type: proposal
             // };
             if (!checkMode) {
-              Model.createTransaction(proposal,predictionType,currentTick,ticks.slice(ticks.length - 4, ticks.length));
+                Model.createTransaction(proposal, predictionType, currentTick, ticks.slice(ticks.length - 4, ticks.length));
             } else {
                 return {
                     predictionType: predictionType,
@@ -56,6 +57,6 @@ var LinearPrediction = {
             if (direction == 'FALL' && collection[0] > price) count++;
         });
 
-        return (count / collection.length) >=0.5;
+        return (count / collection.length) >= 0.5;
     }
 }

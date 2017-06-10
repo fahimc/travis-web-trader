@@ -10,6 +10,7 @@ const Storage = {
         historicalItemIndex: 'historicalItemIndex',
         historicalIndex: 'historicalIndex',
         lowestPrices: 'lowestPrices',
+        assetLoses: 'assetLoses',
     },
     testPrefix: 'test_',
     streaks: {
@@ -19,6 +20,7 @@ const Storage = {
     loses: 0,
     lossArray: [],
     lowestPrices: {},
+    assetLoses: {},
     hitLossLimit: 0,
     init() {
 
@@ -39,6 +41,10 @@ const Storage = {
 
         str = this.get(this.keys.lowestPrices);
         if (str && str != 'undefined') this.lowestPrices = JSON.parse(str);
+
+        str = this.get(this.keys.assetLoses);
+        if (str && str != 'undefined') this.assetLoses = JSON.parse(str);
+
         this.show();
     },
     show() {
@@ -74,6 +80,12 @@ const Storage = {
         }
         console.table(arr);
 
+        arr = [];
+        for (let key in this.assetLoses) {
+            arr.push({ asset: key, assetLoses: this.assetLoses[key] });
+        }
+        console.table(arr);
+
     },
     get(key) {
         if (Tester.isTesting || TestModel.ENABLED) {
@@ -102,6 +114,11 @@ const Storage = {
         if (this.lowestPrices[key] == undefined) this.lowestPrices[key] = Number(value);
         if (Number(value) < Number(this.lowestPrices[key])) this.lowestPrices[key] = Number(value);
         this.set(this.keys.lowestPrices, JSON.stringify(this.lowestPrices));
+    },
+    setAssetLoss(key) {
+        if (this.assetLoses[key] == undefined) this.assetLoses[key] =0;
+        this.assetLoses[key]++;
+        this.set(this.keys.assetLoses, JSON.stringify(this.assetLoses));
     },
     setWins(count, loses) {
         this.wins += count;
