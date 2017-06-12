@@ -296,7 +296,7 @@ const Main = {
           this.setNextAsset();
           window.location.search = "asset=" + this.ASSET_NAME;
         } else {
-          location.reload();
+          window.location.search = "asset=" + this.ASSET_NAME;
         }
       }, duration ? duration : 10);
       View.setBreak(true);
@@ -378,7 +378,6 @@ const Main = {
     this.lastBalance = this.accountBalance;
     View.updatePrediction(type, this.startPricePosition, this.currentPrice);
     this.transactionType = type;
-    console.log('transactionType',this.transactionType);
     this.ws.send(JSON.stringify({
       "proposal": 1,
       "amount": this.currentStake,
@@ -565,7 +564,6 @@ const Main = {
             this.doPrediction();
           }
           if(this.isProposal) { 
-            console.log('transactionType',this.transactionType);
             ChartComponent.setPurchase(this.currentPrice,this.transactionType);
           }
           //if (this.idleStartTime) this.checkIdleTime();
@@ -651,9 +649,11 @@ const Main = {
       this.lossCount++;
       if (this.isShort) this.shortLossStreak++;
       this.setFail();
+      Storage.setAssetRatio(this.ASSET_NAME,false,true);
       Storage.setAssetLoss(this.ASSET_NAME);
     } else if (isLoss == false) {
       this.winStreak++;
+      Storage.setAssetRatio(this.ASSET_NAME,true,false);
       if (this.lossStreak) Storage.setLossArray(this.lossStreak);
       this.lossStreak = 0;
       Volatility.changeLimit = Volatility.defaultChangeLimit;
