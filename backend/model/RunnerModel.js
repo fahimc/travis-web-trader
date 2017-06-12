@@ -5,6 +5,7 @@ const RunnerModel = {
   ASSET_NAME: 'R_100',
   STARTING_BALANCE: 1100,
   TRANSACTION_DURATION: 6,
+  predictor: null,
   LOSS_CAP: 9,
   balance: 0,
   numberOfTicks: 0,

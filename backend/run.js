@@ -3,6 +3,7 @@ const DirectionPredictor = require('./prediction/direction.js');
 const BullishPredictor = require('./prediction/bullish.js');
 const PatternPredictor = require('./prediction/pattern.js');
 const LowestPredictor = require('./prediction/lowest.js');
+const Volatility = require('./module/volatility.js');
 const Model = require('./model/RunnerModel.js');
 
 const Runner = {
@@ -14,8 +15,10 @@ const Runner = {
 
         HISTORY.forEach((price, index) => {
             Model.runTransactions(price);
+            Model.predictor = this.PREDICTOR;
             let history = HISTORY.slice(0, index + 1);
             let prediction = this.PREDICTOR.predict(price, history, Model);
+            Volatility.run(history,Model);
             if (prediction) {
                 Model.createTransaction(prediction);
             }
@@ -33,6 +36,7 @@ const Runner = {
                 console.log('profit: £', (profit));
                 console.log('balance: £', Model.balance.toFixed(2));
                 console.log('lowest profit: £', Model.lowestProfit.toFixed(2));
+                console.log('Volatility win ratio', Volatility.winRatio);
             }
 
         });
