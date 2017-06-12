@@ -2,6 +2,7 @@ const Model = {
     transactionCollection: [],
     createTransaction(proposal, predictionType, predictionPrice, ticks,duration,unit) {
         let transaction = new Transaction(proposal, predictionType, predictionPrice, ticks);
+        if(Main.config.stakeType == 'KellyStake')Main.setStake();
         Main.setPrediction(transaction.prediction, transaction.predictionType,duration,unit);
         this.transactionCollection.push(transaction);
     },

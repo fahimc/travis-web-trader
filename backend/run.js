@@ -7,7 +7,7 @@ const Volatility = require('./module/volatility.js');
 const Model = require('./model/RunnerModel.js');
 
 const Runner = {
-    PREDICTOR: BullishPredictor,
+    PREDICTOR: DirectionPredictor,
     init() {
         this.run();
     },
@@ -19,7 +19,7 @@ const Runner = {
             let history = HISTORY.slice(0, index + 1);
             let prediction = this.PREDICTOR.predict(price, history, Model);
             Volatility.run(history,Model);
-            if (prediction) {
+            if (Volatility.winRatio >= 0.5 && prediction) {
                 Model.createTransaction(prediction);
             }
             Model.numberOfTicks = index;

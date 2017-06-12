@@ -1,5 +1,5 @@
 const KellyBalance = {
-  maxStake:50,
+  maxStake:100,
   setWin(model) {
 
   },
@@ -15,8 +15,8 @@ const KellyBalance = {
     let odds = 2 - 1;
     let percentage = (probability * odds - failure) / odds ;
     let stake = this.maxStake * percentage;
-    console.log(stake);
-    if(stake)return stake;
+     if (stake < 0.5) stake = 0.5;
+     return stake;
   }
 }
 
