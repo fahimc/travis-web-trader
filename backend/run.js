@@ -33,10 +33,10 @@ const Runner = {
                 console.log('highestStake: £', Model.highestStake);
                 console.log('max transactions: ', Model.highestNumberOfTransactions);
                 let profit = Model.balance.toFixed(2) - Model.STARTING_BALANCE;
-                console.log('profit: £', (profit));
-                console.log('balance: £', Model.balance.toFixed(2));
                 console.log('lowest profit: £', Model.lowestProfit.toFixed(2));
                 console.log('Volatility win ratio', Volatility.winRatio);
+                console.log('balance: £', Model.balance.toFixed(2));
+                console.log('profit: £', (profit));
             }
 
         });

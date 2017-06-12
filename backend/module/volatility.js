@@ -24,7 +24,7 @@ const Volatility = {
             	transactions.push(transaction);
             }
         });
-        this.winRatio= results.length ? this.numberOfWins(results)/results.length : 0;
+        model.winRatio =  this.winRatio= results.length ? this.numberOfWins(results)/results.length : 0;
     },
     numberOfWins(collection) {
         let wins = 0;

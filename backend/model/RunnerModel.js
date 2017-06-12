@@ -1,4 +1,4 @@
-const Balance = require('../module/atila_balance.js');
+const Balance = require('../module/kelly_balance.js');
 const Transaction = require('../module/transaction.js');
 
 const RunnerModel = {
@@ -60,8 +60,9 @@ const RunnerModel = {
     });
   },
   createTransaction(prediction) {
-    let transaction = new Transaction(prediction, this);
     let cost = Balance.purchase(this);
+    if(!cost)return;
+    let transaction = new Transaction(prediction, this);
     if (cost > this.highestStake) this.highestStake = cost;
     transaction.cost = cost;
     this.setBalance(cost);
