@@ -12,18 +12,22 @@ var LinearPrediction = {
         let change = ChartComponent.tradeChart30.getLinearChange();
         let isDirectionUp = ChartComponent.tradeChart30.getLinearDirection();
         let isShortDirectionUp = ChartComponent.tradeChart10.getLinearDirection();
+        let isLongDirectionUp = true;
         let changeLimit = Main.assetModel.linearChangeLimit;
-        if (Main.lossStreak > 6) changeLimit = Main.assetModel.linearChangeLimit * 2;
+        if (Main.lossStreak > 4) {
+            changeLimit = Main.assetModel.linearChangeLimit * 2;
+            isLongDirectionUp = ChartComponent.tradeChart100.getLinearDirection();
+        }
         let isChange = change >= changeLimit;
         if (this.isShowChange) console.log(change);
-        if (checkMode && isDirectionUp >= 0 && isShortDirectionUp >= 0 || isDirectionUp >= 0 && isShortDirectionUp >= 0 && isChange) {
+        if (checkMode && isLongDirectionUp >=0 && isDirectionUp >= 0 && isShortDirectionUp >= 0 || isLongDirectionUp >=0 && isDirectionUp >= 0 && isShortDirectionUp >= 0 && isChange) {
 
             proposal = 'CALL';
             predictionType = 'LINEAR_UP';
             found = true;
             highest = currentTick;
             lowest = previousTick;
-        } else if (checkMode && isDirectionUp < 0 && isShortDirectionUp < 0 || isDirectionUp < 0 && isShortDirectionUp < 0 && isChange) {
+        } else if (checkMode && isLongDirectionUp <0 && isDirectionUp < 0 && isShortDirectionUp < 0 || isLongDirectionUp >=0 && isDirectionUp < 0 && isShortDirectionUp < 0 && isChange) {
 
             proposal = 'PUT';
             predictionType = 'LINEAR_DOWN';
@@ -37,7 +41,7 @@ var LinearPrediction = {
             //     type: proposal
             // };
             if (!checkMode) {
-                Model.createTransaction(proposal, predictionType, currentTick, ticks.slice(ticks.length - 4, ticks.length));
+                Model.createTransaction(proposal, predictionType, currentTick, ticks.slice(ticks.length - 30, ticks.length));
             } else {
                 return {
                     predictionType: predictionType,
