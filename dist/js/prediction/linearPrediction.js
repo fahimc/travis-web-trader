@@ -10,24 +10,30 @@ var LinearPrediction = {
         let found = false;
         let collection = ticks.slice(ticks.length - 5, ticks.length);
         let change = ChartComponent.tradeChart30.getLinearChange();
+        let longChange = Main.assetModel.linearChangeLimit;
         let isDirectionUp = ChartComponent.tradeChart30.getLinearDirection();
         let isShortDirectionUp = ChartComponent.tradeChart10.getLinearDirection();
         let isLongDirectionUp = true;
         let changeLimit = Main.assetModel.linearChangeLimit;
-        if (Main.lossStreak > 4) {
+        let isLongChangeLimit = true;
+        if (Main.lossStreak >= 3) {
             changeLimit = Main.assetModel.linearChangeLimit * 2;
             isLongDirectionUp = ChartComponent.tradeChart100.getLinearDirection();
+            longChange = ChartComponent.tradeChart100.getLinearChange();
+            isLongChangeLimit = longChange >= changeLimit;
         }
         let isChange = change >= changeLimit;
+        let isLongUpValid = isLongDirectionUp >= 0 && isLongChangeLimit;
+        let isLongDownValid = isLongDirectionUp < 0 && isLongChangeLimit;
         if (this.isShowChange) console.log(change);
-        if (checkMode && isLongDirectionUp >=0 && isDirectionUp >= 0 && isShortDirectionUp >= 0 || isLongDirectionUp >=0 && isDirectionUp >= 0 && isShortDirectionUp >= 0 && isChange) {
+        if (checkMode && isLongUpValid && isDirectionUp >= 0 && isShortDirectionUp >= 0 || isLongUpValid && isDirectionUp >= 0 && isShortDirectionUp >= 0 && isChange) {
 
             proposal = 'CALL';
             predictionType = 'LINEAR_UP';
             found = true;
             highest = currentTick;
             lowest = previousTick;
-        } else if (checkMode && isLongDirectionUp <0 && isDirectionUp < 0 && isShortDirectionUp < 0 || isLongDirectionUp >=0 && isDirectionUp < 0 && isShortDirectionUp < 0 && isChange) {
+        } else if (checkMode && isLongDownValid && isDirectionUp < 0 && isShortDirectionUp < 0 || isLongDownValid && isDirectionUp < 0 && isShortDirectionUp < 0 && isChange) {
 
             proposal = 'PUT';
             predictionType = 'LINEAR_DOWN';
