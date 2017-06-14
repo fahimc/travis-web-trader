@@ -27,7 +27,7 @@ var LinearPrediction = {
             found = true;
             highest = currentTick;
             lowest = previousTick;
-        } else if (checkMode && isLongDirectionUp <0 && isDirectionUp < 0 && isShortDirectionUp < 0 || isLongDirectionUp >=0 && isDirectionUp < 0 && isShortDirectionUp < 0 && isChange) {
+        } else if (checkMode && isLongDirectionUp < 0 && isDirectionUp < 0 && isShortDirectionUp < 0 || isLongDirectionUp < 0 && isDirectionUp < 0 && isShortDirectionUp < 0 && isChange) {
 
             proposal = 'PUT';
             predictionType = 'LINEAR_DOWN';
