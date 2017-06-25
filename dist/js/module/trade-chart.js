@@ -11,13 +11,13 @@ class TradeChart {
         this.purchaseType = '';
 
         window.addEventListener('resize', this.resize.bind(this));
-        setTimeout(()=>{
+        setTimeout(() => {
             this.resize();
-        },1000);
+        }, 1000);
     }
     resize() {
         this.height = this.canvas.parentElement.getBoundingClientRect().height;
-       this.height = this.canvas.height = 220;
+        this.height = this.canvas.height = 220;
         this.width = this.canvas.parentElement.getBoundingClientRect().width - 40;
         this.canvas.width = this.width;
     }
@@ -56,9 +56,19 @@ class TradeChart {
     }
     getLinearChange() {
         if (!this.linearCollection.length) return;
-        let highLow = this.getHighestLowest(this.linearCollection);
-        let change = Math.abs((this.linearCollection[0] - highLow.lowest) - (this.linearCollection[this.linearCollection.length - 1] - highLow.lowest));
+        let highLow = this.getHighestLowest(this.chartCollection);
+        let last = Number(this.linearCollection[this.linearCollection.length - 1]);
+        let per = (last - highLow.lowest) / (highLow.highest - highLow.lowest);
+        let change = Math.abs(per - 0.5);
         return change;
+    }
+    getLinearFirstChange() {
+        if (!this.linearCollection.length) return;
+        let highLow = this.getHighestLowest(this.chartCollection);
+        let first = Number(this.linearCollection[0]);
+        let fper = (first - highLow.lowest) / (highLow.highest - highLow.lowest);
+        let firstChange = Math.abs(fper - 0.5);
+        return firstChange;
     }
     getLinearDirection() {
         return this.linearCollection[this.linearCollection.length - 1] - this.linearCollection[0];

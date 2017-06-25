@@ -14,7 +14,7 @@ let MockMode = {
     currentWinPercentageCap: 0.50,
     shortWinPercentage: 0.55,
     gettingHistory: false,
-    longTermWinRatio: 0.55,
+    longTermWinRatio: 0.65,
     assetCollection: [
         'R_100',
         'R_10',
@@ -93,8 +93,8 @@ let MockMode = {
         this.longWinCap = true;
         if(Main.lossStreak>6)
         {
-           //this.longWinRatio = this.checkWinPercentageOverPeriod(100);
-          // this.longWinCap = this.longWinRatio > this.longTermWinRatio;
+           this.longWinRatio = this.checkWinPercentageOverPeriod(100);
+           this.longWinCap = this.longWinRatio > this.longTermWinRatio;
         }
           this.toTrade = this.isAboveCap && this.currentisAboveCap && this.longWinCap;
         
